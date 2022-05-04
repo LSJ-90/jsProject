@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.miso.persistence.HomeDao">
+	<select id="selectEmpInfo" resultType="com.miso.web.vo.EmpVo">
+		SELECT EMPLOYEE_ID empId,
+       		   FIRST_NAME || ' ' || LAST_NAME name,
+       		   EMAIL email,
+       		   PHONE phone,
+       		   HIRE_DATE hireDate,
+       		   MANAGER_ID magId,
+       		   JOB_TITLE jobTitle
+		FROM SJ_EMPLOYEES
+		WHERE EMPLOYEE_ID = 1
+	</select>
+
+</mapper>
