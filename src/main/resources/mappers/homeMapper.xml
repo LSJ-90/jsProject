@@ -12,5 +12,16 @@
 		FROM SJ_EMPLOYEES
 		WHERE EMPLOYEE_ID = 1
 	</select>
-
+	
+	<select id="selectAllEmpInfo" resultType="com.miso.web.vo.EmpVo">
+		SELECT EMPLOYEE_ID empId,
+       		   FIRST_NAME || ' ' || LAST_NAME name,
+       		   EMAIL email,
+       		   PHONE phone,
+       		   HIRE_DATE hireDate,
+       		   MANAGER_ID magId,
+       		   JOB_TITLE jobTitle
+		FROM SJ_EMPLOYEES
+        ORDER BY EMPLOYEE_ID
+	</select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.miso.persistence;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
@@ -13,13 +15,26 @@ public class HomeDaoImpl implements HomeDao {
 	@Inject
 	private SqlSession sqlSession;
 	
-	private static final String namespace = "com.miso.mapper.HomeMapper";
-	
 	@Override
 	public EmpVo selectEmpInfo() {
+		
 		EmpVo empInfo = sqlSession.selectOne("selectEmpInfo");
-		System.out.println(empInfo.toString());
+		
+		// System.out.println(empInfo.toString());
+		
 		return empInfo;
+	}
+
+	@Override
+	public List<EmpVo> selectAllEmpInfo() {
+		
+		List<EmpVo> empInfos = sqlSession.selectList("selectAllEmpInfo");
+		
+//		for (EmpVo empInfo : empInfos) {
+//			System.out.println(empInfo.toString());
+//		}
+		
+		return empInfos;
 	}
 
 }

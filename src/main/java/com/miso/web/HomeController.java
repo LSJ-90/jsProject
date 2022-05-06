@@ -2,6 +2,7 @@ package com.miso.web;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.slf4j.Logger;
@@ -42,6 +43,10 @@ public class HomeController {
 		
 		EmpVo empInfo = homeDao.selectEmpInfo();
 		model.addAttribute("empInfo", empInfo );
+		
+		List<EmpVo> empInfos = homeDao.selectAllEmpInfo();
+		System.out.println(empInfos.toString());
+		model.addAttribute("empInfos", empInfos );
 		
 		return "home";
 	}
