@@ -41,14 +41,26 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
+		return "home";
+	}
+	
+	@RequestMapping(value = "/javascript/practice", method = RequestMethod.GET)
+	public String practiceInit(Model model) {
+		
 		EmpVo empInfo = homeDao.selectEmpInfo();
 		model.addAttribute("empInfo", empInfo );
 		
 		List<EmpVo> empInfos = homeDao.selectAllEmpInfo();
-		System.out.println(empInfos.toString());
+		// System.out.println(empInfos.toString());
 		model.addAttribute("empInfos", empInfos );
 		
-		return "home";
+		return "javascript/practice";
+	}
+	
+	@RequestMapping(value = "/javascript/hoisting", method = RequestMethod.GET)
+	public String hoistingInit() {
+		
+		return "javascript/hoisting";
 	}
 	
 }
