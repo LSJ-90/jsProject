@@ -24,4 +24,23 @@
 		FROM SJ_EMPLOYEES
         ORDER BY EMPLOYEE_ID
 	</select>
+	
+	<select id="selectPhoneByName" 	parameterType="String" resultType="String">
+		SELECT PHONE phone
+		FROM SJ_EMPLOYEES
+		WHERE upper(FIRST_NAME || ' ' || LAST_NAME) = upper(#{name})
+	</select>
+	
+	<select id="selectEmpInfos" parameterType="String" resultType="com.miso.web.vo.EmpVo">
+		SELECT EMPLOYEE_ID empId,
+       		   FIRST_NAME || ' ' || LAST_NAME name,
+       		   EMAIL email,
+       		   PHONE phone,
+       		   HIRE_DATE hireDate,
+      		   MANAGER_ID magId,
+       		   JOB_TITLE jobTitle
+		FROM SJ_EMPLOYEES
+		WHERE upper(FIRST_NAME || ' ' || LAST_NAME) LIKE upper('%' || #{value} || '%')
+		ORDER BY EMPLOYEE_ID
+	</select>
 </mapper>

@@ -2,13 +2,15 @@ package com.miso.web.vo;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class EmpVo {
 	
 	private int empId;
 	private String name;
 	private String email;
 	private String phone;
-	private Date hireDate;
+	@JsonFormat(pattern = "yyyy-MM-dd") private Date hireDate;
 	private int magId;
 	private String jobTitle;
 	
