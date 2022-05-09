@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.miso.persistence.HomeDao;
 import com.miso.web.vo.EmpVo;
+import com.miso.web.vo.SearchEmpInfosForm;
 
 /**
  * Handles requests for the application home page.
@@ -65,6 +67,18 @@ public class HomeController {
 	public String hoistingInit() {
 		
 		return "javascript/hoisting";
+	}
+	
+	@RequestMapping(value = "/javascript/practice/searchEmpInfos", method = RequestMethod.GET)
+	public String selectEmpInfos(SearchEmpInfosForm form, Model model) {
+		
+		logger.info("SearchEmpInfosForm: " + form.getSearchKey() + " " + form.getSearchValue());
+		
+		List<EmpVo> empInfos = homeDao.selectEmpInfos(form);
+		model.addAttribute("empInfos", empInfos);
+		logger.info("empInfos: " + empInfos);
+			
+		return "javascript/practice";
 	}
 }
 

@@ -39,7 +39,6 @@ public class AjaxTestController {
 		return returnMap;
 	}
 	
-	@ResponseBody
 	@RequestMapping(value = "/javascript/practice/searchEmpInfos", method = RequestMethod.POST)
 	public List<EmpVo> selectEmpInfos(@RequestBody SearchEmpInfosForm form) {
 		
