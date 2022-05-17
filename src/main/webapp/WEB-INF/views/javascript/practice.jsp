@@ -1,7 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Home</title>
@@ -61,7 +62,7 @@
 	</table> 
 	-->
 	
-	<form method="get" action="" 
+	<form method="get" action="/javascript/practice" 
 		  id="searchEmpInfosForm" name="searchEmpInfosForm">
 		<select name="searchKey">
 			<option value="name">이름</option>
@@ -70,7 +71,7 @@
 		</select>
 		<input type="text" id="searchValue" name="searchValue"/>
 		<button type="button" id=searchEmpInfosBtn>검색</button>
-		<!-- <button type="button" id=searchEmpInfosFormBtn>GET검색</button> -->
+		<button type="submit" id=searchEmpInfosFormBtn>GET검색</button>
 	</form>
 	 
 	<table>
@@ -244,7 +245,7 @@
 					    	const result = xhr.response;
 					    	// 성공시 resolve 이행(fulfilled)
 					    	resolve(result);
-					    	console.log("resolve json : " + JSON.stringify(result));
+					    	// console.log("resolve json : " + JSON.stringify(result));
 					    	
 					      } else {
 					    	// console.log("json : " + JSON.stringify(result));
@@ -259,7 +260,7 @@
 			
 			myFirstPromise
 				.then(function(result) {
-					 console.log('then result : ' + JSON.stringify(result));
+					// console.log('then result : ' + JSON.stringify(result));
 			        document.getElementById('name2').innerHTML = result.name;
 			        document.getElementById('phone2').innerHTML = result.phone;
 				})
@@ -279,6 +280,8 @@
 		    });
 		}
 		*/
+		
+		/*
 		new Promise(function(resolve, reject){
 			  setTimeout(function() {
 			    resolve(1);
@@ -295,11 +298,15 @@
 			.then(function(result) {
 			  console.log(result); // 31
 			});
+		 */
 		 
 		// 테이블 검색(제이쿼리사용)
 		$('#searchEmpInfosBtn').click(function() {
 			const searchKey = $('select[name=searchKey]').val(),
 				  searchValue = $('#searchValue').val();
+			
+			const formData = $("#searchEmpInfosForm").serialize();
+			console.log(formData);
 			// console.log(searchKey);	
 			// console.log(searchValue);
 			
@@ -307,7 +314,7 @@
 						  'searchKey': searchKey,
 						  'searchValue' : searchValue
 						 };
-			// console.log(data);	
+			// console.log(data);
 			
 			const jsonText = JSON.stringify(data);
 			// console.log("jsonText: " + jsonText);	
@@ -376,7 +383,7 @@
 		// es버전 확인하는 방법: 엔진자체는 보통 최신화 되어있음 >> webhack 최신버전으로 맞추기도 가능..!?
 		// scope알아보기, 함수표기법 알아보기, 호이스팅, (async, await 짝꿍), filiter, splice, subString
 		// setTimeOut(),setTimeClear() 둘이 짝궁 비동기처리 메소드이기때문에 콜백함수 대신하여 사용하는게 아님.
-		// getElementsByClassName 은 배열로 생성되기 떄문에 classModi[0]
+		// getElementsByClassName 은 배열로 생성되기 떄문에 classModi[0]으로 선택해야함
 		// 자동완성 html태그 중에 있음 찾아보자!
 		// 여러가지 방법을 많이 알아야 한다.
 	</script>

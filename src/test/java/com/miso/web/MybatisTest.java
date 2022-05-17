@@ -15,21 +15,21 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 public class MybatisTest {
 
-	@Inject
-	private SqlSessionFactory sqlFactory;
-	
-	@Test
-	public void testFactory() {
-		System.out.println(sqlFactory);
-	}
-	
-	@Test
-	public void testSession() throws Exception {
-		
-		try(SqlSession session = sqlFactory.openSession()) {
-			System.out.println(session);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
+//	@Inject
+//	private SqlSessionFactory sqlFactory;
+//	
+//	@Test
+//	public void testFactory() {
+//		System.out.println(sqlFactory);
+//	}
+//	
+//	@Test
+//	public void testSession() throws Exception {
+//		
+//		try(SqlSession session = sqlFactory.openSession()) {
+//			System.out.println(session);
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
 }

@@ -1,4 +1,4 @@
-package com.miso.persistence;
+package com.miso.web.persistence.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.miso.web.persistence.HomeDao;
 import com.miso.web.vo.EmpVo;
 import com.miso.web.vo.SearchEmpInfosForm;
 
@@ -51,7 +52,7 @@ public class HomeDaoImpl implements HomeDao {
 	@Override
 	public List<EmpVo> selectEmpInfos(@RequestBody SearchEmpInfosForm form) {
 		
-		List<EmpVo> empInfos = new ArrayList<>();
+		List<EmpVo> empInfos = new ArrayList<EmpVo>();
 		
 		if (form.getSearchKey().equals("name")) {
 			empInfos = sqlSession.selectList("selectEmpInfos", form.getSearchValue());			

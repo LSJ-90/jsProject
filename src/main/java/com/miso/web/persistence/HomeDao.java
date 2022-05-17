@@ -1,4 +1,4 @@
-package com.miso.persistence;
+package com.miso.web.persistence;
 
 import java.util.List;
 

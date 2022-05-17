@@ -76,7 +76,7 @@
 </head>
 <header>
 	<!-- href: hypertext reference -->
-	<a href="../home"><img src="../resources/images/logo.png" alt=""></a>
+	<a href="./home"><img src="../resources/images/logo.png" alt=""></a>
 	<ul id="navbar">
 		<li>
 			<h1><a href="#">HTML</a></h1>
@@ -86,7 +86,6 @@
 				<li><a href="html/selectBox.html">selectBox tag</a></li>
 				<li><a href="html/input.html">input tag</a></li>
 				<li><a href="html/tableTag.html">table tag</a></li>
-				<li><a href="html/hTag.html">h tag</a></li>
 				<li><a href="html/formattingTag.html">formatting tag</a></li>
 			</ul>	
 		</li>
@@ -104,6 +103,12 @@
 			<ul class="menu">
 				<li><a href="javascript/hoisting">hoisting</a></li>
 				<li><a href="javascript/practice">practice</a></li>
+			</ul>	
+		</li>
+		<li>
+			<h1><a href="#">mybatis</a></h1>
+			<ul class="menu">
+				<li><a href="mybatis/mybatisTest">mybatisTest</a></li>
 			</ul>	
 		</li>
 		<li>

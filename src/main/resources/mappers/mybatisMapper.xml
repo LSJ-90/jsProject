@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.miso.persistence.MybatisDao">
+	<resultMap id="empVoResultMap" type="com.miso.web.vo.EmpVoOfMybatis">
+		<id column="EMPNO" property="empNo"/> 
+		<result column="ENAME" property="name"/> 
+		<result column="JOB" property="job"/> 
+		<result column="MGR" property="mgrNo"/> 
+		<result column="HIREDATE" property="hireDate"/> 
+		<result column="SAL" property="salary"/> 
+		<result column="COMM" property="commission"/> 
+		<result column="DEPTNO" property="deptNo"/> 
+	</resultMap>
+	
+	<!-- <sql id="ManpowerDevelop.selectManpowerDevelopListWhereClause">
+	</sql> -->
+	
+	<select id="selectAllEmpInfos" resultMap="empVoResultMap">
+		SELECT EMPNO, 
+			   ENAME, 
+			   JOB, 
+			   MGR, 
+			   HIREDATE, 
+			   SAL, 
+			   NVL(COMM , 0) COMM, 
+			   DEPTNO
+		FROM EMP
+		ORDER BY EMPNO
+	</select>
+	
+	<select id="selectDeptNosByDistinct" resultType="int">
+		SELECT DISTINCT DEPTNO
+		FROM EMP
+		ORDER BY DEPTNO
+	</select>
+	
+	<select id="selectJobsByDistinct" resultType="string">
+		SELECT DISTINCT JOB
+		FROM EMP
+		ORDER BY JOB
+	</select>
+	
+	<select id="selectEmpsByDeptNo" parameterType="int" resultMap="empVoResultMap">
+		SELECT EMPNO, 
+		       ENAME, 
+		       JOB, 
+		       NVL(MGR , 0) MGR, 
+		       HIREDATE, 
+		       SAL, 
+		       NVL(COMM , 0) COMM, 
+		       DEPTNO
+		FROM EMP
+		WHERE DEPTNO = #{deptNo}
+		ORDER BY EMPNO
+	</select>
+	
+	<select id="selectEmpsByJob" parameterType="String" resultMap="empVoResultMap">
+		SELECT EMPNO, 
+		       ENAME, 
+		       JOB, 
+		       NVL(MGR , 0) MGR, 
+		       HIREDATE, 
+		       SAL, 
+		       NVL(COMM , 0) COMM, 
+		       DEPTNO
+		FROM EMP
+		WHERE JOB = #{job}
+		ORDER BY EMPNO
+	</select>
+	
+	
+	
+	
+	
+
+
+</mapper>

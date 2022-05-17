@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.miso.persistence.HomeDao">
+	<!-- <resultMap id="empVoResultMap" type="com.miso.web.vo.EmpVo">
+		<result column="EMPLOYEE_ID" property="empId"/> 
+		<result column="FIRST_NAME || ' ' || LAST_NAME" property="name"/> 
+		<result column="EMAIL" property="email"/> 
+		<result column="PHONE" property="phone"/> 
+		<result column="HIRE_DATE" property="hireDate"/> 
+		<result column="MANAGER_ID" property="magId"/> 
+		<result column="MANAGJOB_TITLEER_ID" property="jobTitle"/> 
+	</resultMap> -->
+	
 	<select id="selectEmpInfo" resultType="com.miso.web.vo.EmpVo">
 		SELECT EMPLOYEE_ID empId,
        		   FIRST_NAME || ' ' || LAST_NAME name,
