@@ -41,4 +41,9 @@ public class MybatisDaoImpl implements MybatisDao {
 	public List<EmpVoOfMybatis> selectEmpsByJob(String job) {
 		return sqlSession.selectList("selectEmpsByJob", job);
 	}
+
+	@Override
+	public List<EmpVoOfMybatis> searchEmpByValue(SearchValueOfMybatis value) {
+		return sqlSession.selectList("searchEmpByValue", value);
+	}
 }

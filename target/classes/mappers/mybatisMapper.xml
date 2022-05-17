@@ -19,7 +19,7 @@
 		SELECT EMPNO, 
 			   ENAME, 
 			   JOB, 
-			   MGR, 
+			   NVL(MGR , 0) MGR, 
 			   HIREDATE, 
 			   SAL, 
 			   NVL(COMM , 0) COMM, 
@@ -65,6 +65,37 @@
 		       DEPTNO
 		FROM EMP
 		WHERE JOB = #{job}
+		ORDER BY EMPNO
+	</select>
+	
+	<select id="searchEmpByValue" parameterType="com.miso.web.vo.SearchValueOfMybatis" resultMap="empVoResultMap">
+		SELECT EMPNO, 
+		       ENAME, 
+		       JOB, 
+		       NVL(MGR , 0) MGR, 
+		       HIREDATE, 
+		       SAL, 
+		       NVL(COMM , 0) COMM, 
+		       DEPTNO
+		FROM EMP
+		WHERE 1=1
+			<if test="deptNo2 != null and deptNo2 != ''">
+				AND DEPTNO = #{deptNo2}
+			</if>
+			<if test="job2 != null and job2 != ''">
+				AND JOB = #{job2}
+			</if>
+		
+		
+<!-- 			<choose> -->
+<!-- 				<when test="deptNo2 != null and deptNo2 != ''"> -->
+<!-- 					AND DEPTNO = #{deptNo2} -->
+<!-- 				</when> -->
+<!-- 				<when test="job2 != null and job2 != ''"> -->
+<!-- 					AND JOB = #{job2} -->
+<!-- 				</when> -->
+<!-- 			</choose> -->
+		
 		ORDER BY EMPNO
 	</select>
 	

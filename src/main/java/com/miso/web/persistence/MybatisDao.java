@@ -13,7 +13,9 @@ public interface MybatisDao {
 	
 	public List<String> selectJobsByDistinct();
 
-	List<EmpVoOfMybatis> selectEmpsByDeptNo(int deptNo);
+	public List<EmpVoOfMybatis> selectEmpsByDeptNo(int deptNo);
 	
-	List<EmpVoOfMybatis> selectEmpsByJob(String job);
+	public List<EmpVoOfMybatis> selectEmpsByJob(String job);
+
+	public List<EmpVoOfMybatis> searchEmpByValue(SearchValueOfMybatis value);
 }
