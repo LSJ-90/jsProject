@@ -33,8 +33,8 @@ public class MybatisDaoImpl implements MybatisDao {
 	}
 
 	@Override
-	public List<EmpVoOfMybatis> selectEmpsByDeptNo(int deptNo) {
-		return sqlSession.selectList("selectEmpsByDeptNo", deptNo);
+	public List<EmpVoOfMybatis> selectEmpsByDeptNo(List<Integer> deptNos) {
+		return sqlSession.selectList("selectEmpsByDeptNo", deptNos);
 	}
 	
 	@Override
@@ -45,5 +45,10 @@ public class MybatisDaoImpl implements MybatisDao {
 	@Override
 	public List<EmpVoOfMybatis> searchEmpByValue(SearchValueOfMybatis value) {
 		return sqlSession.selectList("searchEmpByValue", value);
+	}
+
+	@Override
+	public void insertEmpInfo(EmpVoOfMybatis emp) {
+		sqlSession.insert("insertEmpInfo", emp);
 	}
 }
