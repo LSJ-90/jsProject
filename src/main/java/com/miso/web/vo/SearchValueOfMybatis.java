@@ -17,4 +17,9 @@ public class SearchValueOfMybatis {
 	public void setJob2(String job2) {
 		this.job2 = job2;
 	}
+	
+	@Override
+	public String toString() {
+		return "SearchValueOfMybatis [deptNo2=" + deptNo2 + ", job2=" + job2 + "]";
+	}
 }

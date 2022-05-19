@@ -42,6 +42,19 @@
 			(#{empNo}, #{name}, #{job}, #{mgrNo}, SYSDATE, #{salary}, #{commission}, #{deptNo})
 	</insert>
 	
+	<update id="updateEmpInfo" parameterType="java.util.List">
+		<foreach collection="list" item="empInfo" index="index" separator=";" open="DECLARE BEGIN" close="; END;"> 
+			UPDATE EMP 
+			SET 
+			    ENAME = #{empInfo.name},
+			    JOB = #{empInfo.job},
+			    SAL = #{empInfo.salary},
+			    COMM = #{empInfo.commission},
+			    DEPTNO = #{empInfo.deptNo}
+			WHERE EMPNO = #{empInfo.empNo}
+		</foreach>
+	</update>
+	
 	<select id="selectAllEmpInfos" resultMap="empVoResultMap">
 		SELECT EMPNO, 
 			   ENAME, 
