@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -130,13 +131,19 @@ public class MybatisController {
 	}
 	
 	@RequestMapping(value = "/mybatis/searchEmpByAjax", method = RequestMethod.POST)
-	public @ResponseBody List<EmpVoOfMybatis> searchEmpByAjax(@RequestBody SearchValueOfMybatis value) {
-		System.out.println(value.getDeptNo2());
-		System.out.println(value.getJob2());
+	public String searchEmpByAjax(@RequestBody SearchValueOfMybatis value, Model model) {
+		logger.info(value.toString());
 		
-		List<EmpVoOfMybatis> empInfos = mybatisDao.searchEmpByValue(value);
+		List<EmpVoOfMybatis> empInfos3 = mybatisDao.searchEmpByValue(value);
+		model.addAttribute("empInfos3", empInfos3);
+		logger.info(empInfos3.toString());
 		
-		return empInfos;
+		List<Integer> deptNos = mybatisDao.selectDeptNosByDistinct();
+		List<String> jobs = mybatisDao.selectJobsByDistinct();
+		model.addAttribute("deptNos", deptNos);
+		model.addAttribute("jobs", jobs);
+		
+		return "mybatis/testAjaxView";
 	}
 	
 	@RequestMapping(value = "/mybatis/insertEmpInfo", method = RequestMethod.GET)
@@ -145,5 +152,12 @@ public class MybatisController {
 		mybatisDao.insertEmpInfo(emp);
 		
 		return "redirect:/mybatis/mybatisTest";
+	}
+	
+	@RequestMapping(value = "/mybatis/updateEmpInfo", method = RequestMethod.POST)
+	public void updateEmpInfo(@RequestBody List<EmpVoOfMybatis> empInfos) {
+		logger.info(empInfos.toString());
+		mybatisDao.updateEmpInfo(empInfos);
+		// return "redirect:/mybatis/mybatisTest";
 	}
 }

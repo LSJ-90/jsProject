@@ -20,4 +20,6 @@ public interface MybatisDao {
 	public List<EmpVoOfMybatis> searchEmpByValue(SearchValueOfMybatis value);
 
 	public void insertEmpInfo(EmpVoOfMybatis emp);
+
+	public void updateEmpInfo(List<EmpVoOfMybatis> empInfos);
 }

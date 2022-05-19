@@ -51,4 +51,9 @@ public class MybatisDaoImpl implements MybatisDao {
 	public void insertEmpInfo(EmpVoOfMybatis emp) {
 		sqlSession.insert("insertEmpInfo", emp);
 	}
+
+	@Override
+	public void updateEmpInfo(List<EmpVoOfMybatis> empInfos) {
+		sqlSession.update("updateEmpInfo", empInfos);
+	}
 }
