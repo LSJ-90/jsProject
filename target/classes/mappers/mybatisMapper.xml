@@ -27,6 +27,13 @@
 		-->
 	</sql>
 	
+	<sql id="whereByEmpNo">
+		WHERE EMPNO IN
+		<foreach collection="list" item="empNo" open="(" separator="," close=")"> 
+			#{empNo}
+		</foreach>
+	</sql>
+	
 	<sql id="whereByJob">
 		WHERE JOB = #{job}
 	</sql>
@@ -80,6 +87,20 @@
 		ORDER BY JOB
 	</select>
 	
+	<select id="selectEmpsByEmpNo" parameterType="java.util.List" resultMap="empVoResultMap">
+		SELECT EMPNO, 
+		       ENAME, 
+		       JOB, 
+		       NVL(MGR , 0) MGR, 
+		       HIREDATE, 
+		       SAL, 
+		       NVL(COMM , 0) COMM, 
+		       DEPTNO
+		FROM EMP
+		<include refid="whereByEmpNo"></include>
+		ORDER BY EMPNO
+	</select>
+	
 	<select id="selectEmpsByDeptNo" parameterType="java.util.List" resultMap="empVoResultMap">
 		SELECT EMPNO, 
 		       ENAME, 
@@ -108,7 +129,7 @@
 		ORDER BY EMPNO
 	</select>
 	
-	<select id="searchEmpByValue" parameterType="com.miso.web.vo.SearchValueOfMybatis" resultMap="empVoResultMap">
+	<select id="selectEmpByValue" parameterType="com.miso.web.vo.SearchValueOfMybatis" resultMap="empVoResultMap">
 		SELECT EMPNO, 
 		       ENAME, 
 		       JOB, 
