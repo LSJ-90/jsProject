@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,8 +60,16 @@ public class MybatisController {
 		return "/mybatis/mybatisTest";
 	}
 	
-	@RequestMapping(value = "/mybatis/searchEmpByDeptNo", method = RequestMethod.GET)
-	public String searchEmpByDeptNo(@RequestParam(value="deptNo1") String deptNo, Model model) {
+	@RequestMapping(value = "/mybatis/insertEmpInfo", method = RequestMethod.GET)
+	public String insertEmpInfo(EmpVoOfMybatis emp) {
+		// System.out.println(emp.toString());
+		mybatisDao.insertEmpInfo(emp);
+		
+		return "redirect:/mybatis/mybatisTest";
+	}
+	
+	@RequestMapping(value = "/mybatis/selectEmpByDeptNo", method = RequestMethod.GET)
+	public String selectEmpByDeptNo(@RequestParam(value="deptNo1") String deptNo, Model model) {
 		// System.out.println(deptNo);
 		
 		// TODO: 형변환 필요할까??
@@ -93,8 +102,8 @@ public class MybatisController {
 		return "/mybatis/mybatisTest";
 	}
 	
-	@RequestMapping(value = "/mybatis/searchEmpByJob", method = RequestMethod.GET)
-	public String searchEmpByJob(@RequestParam(value="job1") String job, Model model) {
+	@RequestMapping(value = "/mybatis/selectEmpByJob", method = RequestMethod.GET)
+	public String selectEmpByJob(@RequestParam(value="job1") String job, Model model) {
 		
 		List<EmpVoOfMybatis> empInfos1 = mybatisDao.selectEmpsByJob(job);
 		List<EmpVoOfMybatis> empInfos2 = mybatisDao.selectAllEmpInfos();
@@ -111,12 +120,12 @@ public class MybatisController {
 		return "/mybatis/mybatisTest";
 	}
 	
-	@RequestMapping(value = "/mybatis/searchEmpByValue", method = RequestMethod.GET)
-	public String searchEmpByValue(SearchValueOfMybatis value, Model model) {
+	@RequestMapping(value = "/mybatis/selectEmpByValue", method = RequestMethod.GET)
+	public String selectEmpByValue(SearchValueOfMybatis value, Model model) {
 		// System.out.println(value.getDeptNo2());
 		// System.out.println(value.getJob2());
 		List<EmpVoOfMybatis> empInfos1 = mybatisDao.selectAllEmpInfos();
-		List<EmpVoOfMybatis> empInfos2 = mybatisDao.searchEmpByValue(value);
+		List<EmpVoOfMybatis> empInfos2 = mybatisDao.selectEmpByValue(value);
 		List<EmpVoOfMybatis> empInfos3 = mybatisDao.selectAllEmpInfos();
 		model.addAttribute("empInfos1", empInfos1);
 		model.addAttribute("empInfos2", empInfos2);
@@ -130,13 +139,13 @@ public class MybatisController {
 		return "/mybatis/mybatisTest";
 	}
 	
-	@RequestMapping(value = "/mybatis/searchEmpByAjax", method = RequestMethod.POST)
-	public String searchEmpByAjax(@RequestBody SearchValueOfMybatis value, Model model) {
-		logger.info(value.toString());
+	@RequestMapping(value = "/mybatis/selectEmpByAjax", method = RequestMethod.POST)
+	public String selectEmpByAjax(@RequestBody SearchValueOfMybatis value, Model model) {
+		// logger.info(value.toString());
 		
-		List<EmpVoOfMybatis> empInfos3 = mybatisDao.searchEmpByValue(value);
+		List<EmpVoOfMybatis> empInfos3 = mybatisDao.selectEmpByValue(value);
 		model.addAttribute("empInfos3", empInfos3);
-		logger.info(empInfos3.toString());
+		// logger.info(empInfos3.toString());
 		
 		List<Integer> deptNos = mybatisDao.selectDeptNosByDistinct();
 		List<String> jobs = mybatisDao.selectJobsByDistinct();
@@ -146,18 +155,28 @@ public class MybatisController {
 		return "mybatis/testAjaxView";
 	}
 	
-	@RequestMapping(value = "/mybatis/insertEmpInfo", method = RequestMethod.GET)
-	public String insertEmpInfo(EmpVoOfMybatis emp) {
-		System.out.println(emp.toString());
-		mybatisDao.insertEmpInfo(emp);
-		
-		return "redirect:/mybatis/mybatisTest";
-	}
-	
 	@RequestMapping(value = "/mybatis/updateEmpInfo", method = RequestMethod.POST)
-	public void updateEmpInfo(@RequestBody List<EmpVoOfMybatis> empInfos) {
-		logger.info(empInfos.toString());
+	public String updateEmpInfo(@RequestBody List<EmpVoOfMybatis> empInfos, Model model) {
+		// logger.info(empInfos.toString());
+		
 		mybatisDao.updateEmpInfo(empInfos);
-		// return "redirect:/mybatis/mybatisTest";
+		
+		List<Integer> empNos = new ArrayList<Integer>();
+		for (EmpVoOfMybatis empInfo : empInfos) {
+			int empNo = empInfo.getEmpNo();
+			empNos.add(empNo);
+		}
+		// logger.info(empNos.toString());
+		
+		List<EmpVoOfMybatis> empInfos3 = mybatisDao.selectEmpsByEmpNo(empNos);
+		model.addAttribute("empInfos3", empInfos3);
+		// logger.info(empInfos3.toString());
+		
+		List<Integer> deptNos = mybatisDao.selectDeptNosByDistinct();
+		List<String> jobs = mybatisDao.selectJobsByDistinct();
+		model.addAttribute("deptNos", deptNos);
+		model.addAttribute("jobs", jobs);
+		
+		return "mybatis/testAjaxView";
 	}
 }

@@ -31,6 +31,11 @@ public class MybatisDaoImpl implements MybatisDao {
 	public List<String> selectJobsByDistinct() {
 		return sqlSession.selectList("selectJobsByDistinct");
 	}
+	
+	@Override
+	public List<EmpVoOfMybatis> selectEmpsByEmpNo(List<Integer> empNos) {
+		return sqlSession.selectList("selectEmpsByEmpNo", empNos);
+	}
 
 	@Override
 	public List<EmpVoOfMybatis> selectEmpsByDeptNo(List<Integer> deptNos) {
@@ -43,8 +48,8 @@ public class MybatisDaoImpl implements MybatisDao {
 	}
 
 	@Override
-	public List<EmpVoOfMybatis> searchEmpByValue(SearchValueOfMybatis value) {
-		return sqlSession.selectList("searchEmpByValue", value);
+	public List<EmpVoOfMybatis> selectEmpByValue(SearchValueOfMybatis value) {
+		return sqlSession.selectList("selectEmpByValue", value);
 	}
 
 	@Override

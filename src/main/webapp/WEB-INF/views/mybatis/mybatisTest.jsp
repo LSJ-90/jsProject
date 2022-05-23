@@ -72,6 +72,10 @@
 		#updateAjaxBtn {
 			float: right;
 		}
+		
+		.container {
+			display: none;
+		}
 	</style>
 </head>
 <body>
@@ -112,10 +116,10 @@
 	<section>
 		<h1>
 			1. 다른 FORM, 다른 BTN
-			<button class="hideContentBtn">숨기기</button>
+			<button class="hideContentBtn">펼치기</button>
 		</h1>
 		<div class="container">
-			<form method="get" action="/mybatis/searchEmpByDeptNo">
+			<form method="get" action="/mybatis/selectEmpByDeptNo">
 				<label for="deptNoSelectBox1">Choose a deptNo:</label>
 				<select name="deptNo1" id="deptNoSelectBox1">
 					<option value="-1">--부서번호--</option>
@@ -127,7 +131,7 @@
 				<button type="submit">부서번호 검색</button>
 			</form>
 			
-			<form method="get" action="/mybatis/searchEmpByJob">
+			<form method="get" action="/mybatis/selectEmpByJob">
 				<label for="jobSelectBox1">Choose a job:</label>
 				<select name="job1" id="jobSelectBox1">
 					<option value="">--담당업무--</option>
@@ -174,15 +178,15 @@
 	<section>
 		<h1>
 			2. 같은 FORM, 같은 BTN
-			<button class="hideContentBtn">숨기기</button>
+			<button class="hideContentBtn">펼치기</button>
 		</h1>
 		<div class="container">
-			<form method="get" action="/mybatis/searchEmpByValue">
+			<form method="get" action="/mybatis/selectEmpByValue" id="searchForm2">
 				<label for="deptNoSelectBox2">Choose a deptNo:</label>
 				<select name="deptNo2" id="deptNoSelectBox2">
 						<option value=-1>--부서번호--</option>
 					<c:forEach items="${deptNos }" var="deptNo">
-						<option value="${deptNo }" ${deptNo == empInfos2[0].deptNo ? 'selected' : ''}><c:out value="${deptNo }"/></option>
+						<option value="${deptNo }"><c:out value="${deptNo }"/></option>
 					</c:forEach>
 				</select>
 				
@@ -232,7 +236,7 @@
 	<section>
 		<h1>
 			3. Ajax TODO: ing..
-			<button class="hideContentBtn">숨기기</button>
+			<button class="hideContentBtn">펼치기</button>
 		</h1>
 		<div class="container">
 			<form>
@@ -284,6 +288,7 @@
 								</td>
 								<td><c:out value="${empInfo.mgrNo }"/></td>
 								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${empInfo.hireDate }"/></td>
+<%-- 								<td><input type="text" name="salary" value="<fmt:formatNumber value='${empInfo.salary }' pattern='##,###'/>"/></td> --%>
 								<td><input type="number" name="salary" value="<c:out value="${empInfo.salary }"/>"/></td>
 								<td><input type="number" name="commission" value="<c:out value="${empInfo.commission }"/>"/></td>
 								<td>
@@ -304,17 +309,18 @@
 	</section>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script>
+		/* 사원 검색 */
 		$('#searchAjaxBtn').click(function() {
 			const deptNo2 = $('#deptNoSelectBox3 option:selected').val();
 			const job2 = $('#jobSelectBox3 option:selected').val();
 			
-			const data = {'deptNo2':deptNo2, 'job2':job2};
-			const jsonText = JSON.stringify(data);
+			const searchData = {'deptNo2':deptNo2, 'job2':job2};
+			const jsonSearchData = JSON.stringify(searchData);
 			
 			$.ajax({
 				type: 'post',
-				url: '/mybatis/searchEmpByAjax',
-				data: jsonText,
+				url: '/mybatis/selectEmpByAjax',
+				data: jsonSearchData,
 				contentType: 'application/json; charset=utf-8',
 				dataType: 'text',
 				success: function(result) {
@@ -331,7 +337,16 @@
 			});
 		});
 		
+		/* 사원정보 업데이트 TODO: 수정된 값일 경우만 업데이트 로직 타게 만들어보기(요청데이터 줄이기) */
 		$('#updateAjaxBtn').click(function() {
+			/* 검색 값 가져오기 
+			const deptNo2 = $('#deptNoSelectBox3 option:selected').val();
+			const job2 = $('#jobSelectBox3 option:selected').val();
+			const searchData = {'deptNo2':deptNo2, 'job2':job2};
+			const jsonSearchData = JSON.stringify(searchData);
+			*/
+			
+			/* 값을 가져올 태그 선택 */
 			const empNoInputTag = $('#empInfosTbody input[name=empNo]');
 			const nameInputTag = $('#empInfosTbody input[name=name]');
 			const jobInputTag = $('.jobSelectBox option:selected');
@@ -339,8 +354,7 @@
 			const commissionInputTag = $('#empInfosTbody input[name=commission]');
 			const deptNoInputTag = $('.deptNoSelectBox option:selected');
 			
-			// console.log(nameInputTag);
-			
+			/* 각 데이터에 대한 배열 생성 */
 			const empNos = new Array();
 			const names = new Array();
 			const jobs = new Array();
@@ -348,9 +362,8 @@
 			const commissions = new Array();
 			const deptNos = new Array();
 		
+			/* 각 태그에 입력된 값 뽑기 TODO: 함수화 */
 			$.each(empNoInputTag, function (index, value) {
-				// console.log($(value).attr("name"));
-				// console.log($(value).val());
 				empNos.push($(value).val());
 			});
 			$.each(nameInputTag, function (index, value) {
@@ -368,42 +381,44 @@
 			$.each(deptNoInputTag, function (index, value) {
 				deptNos.push($(value).val());
 			});
-			
-			// console.log(empNos[0]);
 	
- 			const dataList = new Array();
-			
- 			for (let i=0; i<empNos.length; i++) {
- 				
- 				let data = new Object();
+			/* 각 데이터 겍체화 후 하나의 배열로 생성 */
+			const empInfos = new Array();
+ 			for (let i=0; i<empNos.length; i++) {	
+ 				let empInfo = new Object();
 				
- 				data.empNo = empNos[i];
- 				data.name = names[i];
- 				data.job = jobs[i];
- 				data.salary = salaries[i];
- 				data.commission = commissions[i];
- 				data.deptNo = deptNos[i];
- 				
- 				// console.log(data);
+ 				empInfo.empNo = empNos[i];
+ 				empInfo.name = names[i];
+ 				empInfo.job = jobs[i];
+ 				empInfo.salary = salaries[i];
+ 				empInfo.commission = commissions[i];
+ 				empInfo.deptNo = deptNos[i];
 				
- 				dataList.push(data);
+ 				empInfos.push(empInfo);
  			}
-			
- 			// console.log(dataList);
+ 			// console.log(empInfos);
  			
- 			const jsonArray = JSON.stringify(dataList);
+ 			/* JSON 직렬화 처리*/
+ 			const jsonEmpInfos = JSON.stringify(empInfos);
+ 			// console.log(jsonEmpInfos);
  			
- 			console.log(jsonArray);
-			
+ 			/* 검색값, 사원정보 객체화 후 JSON 직렬화 처리
+ 			const updateData = {'value': searchData, 'empInfos':empInfos};
+ 			const jsonUpdateData = JSON.stringify(updateData);
+ 			console.log(updateData);
+ 			console.log(jsonUpdateData);
+ 			*/
+ 			
  			$.ajax({
 				type: 'post',
 				url: '/mybatis/updateEmpInfo',
-				data: jsonArray,
+				data: jsonEmpInfos,
 				contentType: 'application/json; charset=utf-8',
-				dataType: 'json',
+				dataType: 'text',
 				success: function(result) {
-					 alert("성공");
-					 console.log(result); 
+					 alert("수정 성공");
+					 // console.log(result); 
+					 $('#empInfosTbody').html(result);
 				},
 				error:function(jqXHR, textStatus, errorThrown) {
 					console.log(jqXHR);
@@ -416,14 +431,38 @@
 		
 		$('.hideContentBtn').click(function(e) {
 			const $targetContainer = $(e.target).parent().next();
-		    if ($targetContainer.css('display') == 'block') {
-			   $targetContainer.css('display', 'none');
-			   $(this).text('펼치기');
+		    if ($targetContainer.css('display') == 'none') {
+			   $targetContainer.css('display', 'block');
+			   $(this).text('숨기기');
 	        } else {
-	        	$targetContainer.css('display', 'block');
-	        	$(this).text('숨기기');
+	        	$targetContainer.css('display', 'none');
+	        	$(this).text('펼치기');
 	        }
 		});
+		
+	 	
+		
+ 		
+		$(function() {
+			
+				const url = new URL($(location).attr('href'));
+				const queryStringValues = new URLSearchParams(url.search);
+	 			
+				for (const queryStringValue of queryStringValues.entries()) {
+					console.log($.isEmptyObject(queryStringValue).);
+					if ($.isEmptyObject(queryStringValue) == false) {
+		 				$('.container').css('display', 'block');
+		 			}
+	 			}
+				
+	 			
+		
+		});
+		
+		
+		
+		
+		// $('#deptNoSelectBox2')
 	</script>
 </body>
 </html>
