@@ -36,17 +36,15 @@ public class MybatisController {
 	@RequestMapping(value = "/mybatis/mybatisTest", method = RequestMethod.GET)
 	public String mybatisTestInti(Model model) {
 		
-		List<EmpVoOfMybatis> empInfos1 = mybatisDao.selectAllEmpInfos();
-		List<EmpVoOfMybatis> empInfos2 = mybatisDao.selectAllEmpInfos();
 		List<EmpVoOfMybatis> empInfos3 = mybatisDao.selectAllEmpInfos();
-		model.addAttribute("empInfos1", empInfos1);
-		model.addAttribute("empInfos2", empInfos2);
 		model.addAttribute("empInfos3", empInfos3);
 
 		List<Integer> deptNos = mybatisDao.selectDeptNosByDistinct();
 		List<String> jobs = mybatisDao.selectJobsByDistinct();
+		List<Integer> mgrNos = mybatisDao.selectMgrNosByDistinct();
 		model.addAttribute("deptNos", deptNos);
 		model.addAttribute("jobs", jobs);
+		model.addAttribute("mgrNos", mgrNos);
 		
 //		for (EmpVoOfMybatis empInfo : empInfos) {
 //			System.out.println(empInfo.toString());
@@ -62,7 +60,7 @@ public class MybatisController {
 	
 	@RequestMapping(value = "/mybatis/insertEmpInfo", method = RequestMethod.GET)
 	public String insertEmpInfo(EmpVoOfMybatis emp) {
-		// System.out.println(emp.toString());
+		System.out.println(emp.toString());
 		mybatisDao.insertEmpInfo(emp);
 		
 		return "redirect:/mybatis/mybatisTest";
@@ -74,6 +72,7 @@ public class MybatisController {
 		
 		// TODO: 형변환 필요할까??
 		List<Integer> parseIntDeptNo = new ArrayList<Integer>();
+		List<EmpVoOfMybatis> empInfos1 = new ArrayList<EmpVoOfMybatis>();
 		
 		if (deptNo.contains(",")) {
 			String[] splitBydeptNoArray = deptNo.split(",");
@@ -85,19 +84,23 @@ public class MybatisController {
 		} else {
 			parseIntDeptNo.add(Integer.valueOf(deptNo));
 		}
-		// System.out.println(parseIntDeptNo.get(0) + "//" + parseIntDeptNo.get(1));
 		
-		List<EmpVoOfMybatis> empInfos1 = mybatisDao.selectEmpsByDeptNo(parseIntDeptNo);
-		List<EmpVoOfMybatis> empInfos2 = mybatisDao.selectAllEmpInfos();
+		if (parseIntDeptNo.contains(-1)) {
+			empInfos1 = mybatisDao.selectAllEmpInfos();
+		} else {
+			empInfos1 = mybatisDao.selectEmpsByDeptNo(parseIntDeptNo);
+		}
+
 		List<EmpVoOfMybatis> empInfos3 = mybatisDao.selectAllEmpInfos();
 		model.addAttribute("empInfos1", empInfos1);
-		model.addAttribute("empInfos2", empInfos2);
 		model.addAttribute("empInfos3", empInfos3);
-
+		
 		List<Integer> deptNos = mybatisDao.selectDeptNosByDistinct();
 		List<String> jobs = mybatisDao.selectJobsByDistinct();
+		List<Integer> mgrNos = mybatisDao.selectMgrNosByDistinct();
 		model.addAttribute("deptNos", deptNos);
 		model.addAttribute("jobs", jobs);
+		model.addAttribute("mgrNos", mgrNos);
 		
 		return "/mybatis/mybatisTest";
 	}
@@ -106,16 +109,16 @@ public class MybatisController {
 	public String selectEmpByJob(@RequestParam(value="job1") String job, Model model) {
 		
 		List<EmpVoOfMybatis> empInfos1 = mybatisDao.selectEmpsByJob(job);
-		List<EmpVoOfMybatis> empInfos2 = mybatisDao.selectAllEmpInfos();
 		List<EmpVoOfMybatis> empInfos3 = mybatisDao.selectAllEmpInfos();
 		model.addAttribute("empInfos1", empInfos1);
-		model.addAttribute("empInfos2", empInfos2);
 		model.addAttribute("empInfos3", empInfos3);
 		
 		List<Integer> deptNos = mybatisDao.selectDeptNosByDistinct();
 		List<String> jobs = mybatisDao.selectJobsByDistinct();
+		List<Integer> mgrNos = mybatisDao.selectMgrNosByDistinct();
 		model.addAttribute("deptNos", deptNos);
 		model.addAttribute("jobs", jobs);
+		model.addAttribute("mgrNos", mgrNos);
 		
 		return "/mybatis/mybatisTest";
 	}
@@ -124,17 +127,17 @@ public class MybatisController {
 	public String selectEmpByValue(SearchValueOfMybatis value, Model model) {
 		// System.out.println(value.getDeptNo2());
 		// System.out.println(value.getJob2());
-		List<EmpVoOfMybatis> empInfos1 = mybatisDao.selectAllEmpInfos();
 		List<EmpVoOfMybatis> empInfos2 = mybatisDao.selectEmpByValue(value);
 		List<EmpVoOfMybatis> empInfos3 = mybatisDao.selectAllEmpInfos();
-		model.addAttribute("empInfos1", empInfos1);
 		model.addAttribute("empInfos2", empInfos2);
 		model.addAttribute("empInfos3", empInfos3);
 		
 		List<Integer> deptNos = mybatisDao.selectDeptNosByDistinct();
 		List<String> jobs = mybatisDao.selectJobsByDistinct();
+		List<Integer> mgrNos = mybatisDao.selectMgrNosByDistinct();
 		model.addAttribute("deptNos", deptNos);
 		model.addAttribute("jobs", jobs);
+		model.addAttribute("mgrNos", mgrNos);
 		
 		return "/mybatis/mybatisTest";
 	}
@@ -149,8 +152,10 @@ public class MybatisController {
 		
 		List<Integer> deptNos = mybatisDao.selectDeptNosByDistinct();
 		List<String> jobs = mybatisDao.selectJobsByDistinct();
+		List<Integer> mgrNos = mybatisDao.selectMgrNosByDistinct();
 		model.addAttribute("deptNos", deptNos);
 		model.addAttribute("jobs", jobs);
+		model.addAttribute("mgrNos", mgrNos);
 		
 		return "mybatis/testAjaxView";
 	}
@@ -174,8 +179,10 @@ public class MybatisController {
 		
 		List<Integer> deptNos = mybatisDao.selectDeptNosByDistinct();
 		List<String> jobs = mybatisDao.selectJobsByDistinct();
+		List<Integer> mgrNos = mybatisDao.selectMgrNosByDistinct();
 		model.addAttribute("deptNos", deptNos);
 		model.addAttribute("jobs", jobs);
+		model.addAttribute("mgrNos", mgrNos);
 		
 		return "mybatis/testAjaxView";
 	}

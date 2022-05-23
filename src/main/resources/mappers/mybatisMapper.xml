@@ -43,6 +43,10 @@
         	SELECT MAX(EMPNO)+1 as empNo
         	FROM EMP
     	</selectKey>
+    	<!-- 
+			order 값이 before 일 경우: insert문을 수행하기전 selectKey가 먼저 실행된 후 insert문 수행
+			order 값이 after 일 경우: insert문을 수행 후 selectKey를 수행
+		-->
 		INSERT INTO EMP
 			(EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO) 
 		VALUES 
@@ -50,16 +54,32 @@
 	</insert>
 	
 	<update id="updateEmpInfo" parameterType="java.util.List">
-		<foreach collection="list" item="empInfo" index="index" separator=";" open="DECLARE BEGIN" close="; END;"> 
+		<foreach collection="list" item="empInfo" index="index" open="DECLARE BEGIN" separator=";" close="; END;"> 
 			UPDATE EMP 
 			SET 
 			    ENAME = #{empInfo.name},
 			    JOB = #{empInfo.job},
+			    MGR = #{empInfo.mgrNo},
 			    SAL = #{empInfo.salary},
 			    COMM = #{empInfo.commission},
 			    DEPTNO = #{empInfo.deptNo}
 			WHERE EMPNO = #{empInfo.empNo}
 		</foreach>
+		<!-- 
+			##PL/SQL의 특징인 블록단위 실행을 이용하여 SystaxErrorException을 방지 한다.
+				PL/SQL: 오라클에서 제공하는 SQL을 확장한 프로그래밍 언어
+				DECLARE(선언부) 
+					*변수 혹은 상수를 정의 할 수 있다.
+					*옵션 부분으로 생략가능
+				BEGIN(쿼리 실행부)
+					* 각 쿼리는 반드시 ;으로 구분되어야 한다.
+					EXCEPTION이라는 예외처리에 대한 로직을 옵션으로 넣을 수 있음(생략가능)
+				END;(쿼리 종료부)
+			
+			##mysql, mariaDB일 경우 다중쿼리
+				connection 설정 시 url 에 ?allowMultiQueries=true 를 추가한다.
+				ex) "jdbc:log4jdbc:mysql://url?allowMultiQueries=true"
+		-->
 	</update>
 	
 	<select id="selectAllEmpInfos" resultMap="empVoResultMap">
@@ -76,7 +96,7 @@
 	</select>
 	
 	<select id="selectDeptNosByDistinct" resultType="int">
-		SELECT DISTINCT DEPTNO
+		SELECT DISTINCT NVL(DEPTNO , 0) DEPTNO
 		FROM EMP
 		ORDER BY DEPTNO
 	</select>
@@ -85,6 +105,12 @@
 		SELECT DISTINCT JOB
 		FROM EMP
 		ORDER BY JOB
+	</select>
+	
+	<select id="selectMgrNosByDistinct" resultType="int">
+		SELECT DISTINCT NVL(MGR , 0) MGR
+		FROM EMP
+		ORDER BY MGR
 	</select>
 	
 	<select id="selectEmpsByEmpNo" parameterType="java.util.List" resultMap="empVoResultMap">
@@ -111,7 +137,7 @@
 		       NVL(COMM , 0) COMM, 
 		       DEPTNO
 		FROM EMP
-		<include refid="whereByDeptNo"></include>
+		<include refid="whereByDeptNo"></include>		
 		ORDER BY EMPNO
 	</select>
 	

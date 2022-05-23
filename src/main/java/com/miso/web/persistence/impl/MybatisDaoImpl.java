@@ -33,6 +33,11 @@ public class MybatisDaoImpl implements MybatisDao {
 	}
 	
 	@Override
+	public List<Integer> selectMgrNosByDistinct() {
+		return sqlSession.selectList("selectMgrNosByDistinct");
+	}
+	
+	@Override
 	public List<EmpVoOfMybatis> selectEmpsByEmpNo(List<Integer> empNos) {
 		return sqlSession.selectList("selectEmpsByEmpNo", empNos);
 	}
