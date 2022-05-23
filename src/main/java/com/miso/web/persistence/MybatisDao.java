@@ -12,6 +12,8 @@ public interface MybatisDao {
 	public List<Integer> selectDeptNosByDistinct();
 	
 	public List<String> selectJobsByDistinct();
+	
+	public List<Integer> selectMgrNosByDistinct();
 
 	public List<EmpVoOfMybatis> selectEmpsByEmpNo(List<Integer> empNos);
 	
@@ -24,5 +26,4 @@ public interface MybatisDao {
 	public void insertEmpInfo(EmpVoOfMybatis emp);
 
 	public void updateEmpInfo(List<EmpVoOfMybatis> empInfos);
-
 }

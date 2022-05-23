@@ -14,8 +14,16 @@
 				</c:forEach>
 			</select>
 		</td>
-		<td><c:out value="${empInfo.mgrNo }"/></td>
+		<td>
+			<select name="mgrNo" class="mgrNoSelectBox">
+				<option value="${empInfo.mgrNo }">--<c:out value="${empInfo.mgrNo == 0 ? '없음' : empInfo.mgrNo}"/>--</option>
+				<c:forEach items="${mgrNos }" var="mgrNo">
+					<option value="${mgrNo }"><c:out value="${mgrNo }"/></option>
+				</c:forEach>
+			</select>
+		</td>
 		<td><fmt:formatDate pattern="yyyy-MM-dd" value="${empInfo.hireDate }"/></td>
+<%-- 								<td><input type="text" name="salary" value="<fmt:formatNumber value='${empInfo.salary }' pattern='##,###'/>"/></td> --%>
 		<td><input type="number" name="salary" value="<c:out value="${empInfo.salary }"/>"/></td>
 		<td><input type="number" name="commission" value="<c:out value="${empInfo.commission }"/>"/></td>
 		<td>

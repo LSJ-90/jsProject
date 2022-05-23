@@ -58,7 +58,7 @@
 			border: 1px solid black;
 		}
 		
-		.deptNoSelectBox, .jobSelectBox{
+		.deptNoSelectBox, .jobSelectBox, .mgrNoSelectBox {
 			border: none;
 			width: 100%;
 			height: 20px;
@@ -113,20 +113,26 @@
 		</form>
 	</section>
 	
-	<section>
+	<section id="section1">
 		<h1>
 			1. 다른 FORM, 다른 BTN
 			<button class="hideContentBtn">펼치기</button>
 		</h1>
-		<div class="container">
+		<div id="contentDiv1" class="container">
 			<form method="get" action="/mybatis/selectEmpByDeptNo">
 				<label for="deptNoSelectBox1">Choose a deptNo:</label>
 				<select name="deptNo1" id="deptNoSelectBox1">
-					<option value="-1">--부서번호--</option>
+						<option value="-1">
+							--부서번호--
+						</option>
 					<c:forEach items="${deptNos }" var="deptNo">
-						<option value="${deptNo }"><c:out value="${deptNo }"/></option>
+						<option value="${deptNo }" ${deptNo == empInfos1[0].deptNo ? 'selected' : '' }>
+							<c:out value="${deptNo }"/>
+						</option>
 					</c:forEach>
-						<option value="${deptNos[0] },${deptNos[1] }"><c:out value="${deptNos[0] },${deptNos[1] }"/></option>
+						<option value="${deptNos[0] },${deptNos[1] }">
+							<c:out value="${deptNos[0] },${deptNos[1] }"/>
+						</option>
 				</select>
 				<button type="submit">부서번호 검색</button>
 			</form>
@@ -136,7 +142,7 @@
 				<select name="job1" id="jobSelectBox1">
 					<option value="">--담당업무--</option>
 					<c:forEach items="${jobs }" var="job">
-						<option value="${job }"><c:out value="${job }"/></option>
+						<option value="${job }" ${job == empInfos1[0].job ? 'selected' : '' }><c:out value="${job }"/></option>
 					</c:forEach>
 				</select>
 				<button type="submit">담당업무 검색</button>
@@ -151,8 +157,8 @@
 							<th>담당업무</th>
 							<th>상사번호</th>
 							<th>고용일</th>
-							<th>급여</th>
-							<th>상여</th>
+							<th>급여($)</th>
+							<th>상여($)</th>
 							<th>부서번호</th>
 						</tr>
 					</thead>
@@ -175,18 +181,18 @@
 		</div>
 	</section>
 	
-	<section>
+	<section id="section2">
 		<h1>
 			2. 같은 FORM, 같은 BTN
 			<button class="hideContentBtn">펼치기</button>
 		</h1>
-		<div class="container">
+		<div id="contentDiv2" class="container">
 			<form method="get" action="/mybatis/selectEmpByValue" id="searchForm2">
 				<label for="deptNoSelectBox2">Choose a deptNo:</label>
 				<select name="deptNo2" id="deptNoSelectBox2">
 						<option value=-1>--부서번호--</option>
 					<c:forEach items="${deptNos }" var="deptNo">
-						<option value="${deptNo }"><c:out value="${deptNo }"/></option>
+						<option value="${deptNo }" ${deptNo == empInfos2[0].deptNo ? 'selected' : '' }><c:out value="${deptNo }"/></option>
 					</c:forEach>
 				</select>
 				
@@ -194,7 +200,7 @@
 				<select name="job2" id="jobSelectBox2">
 						<option value="">--담당업무--</option>
 					<c:forEach items="${jobs }" var="job">
-						<option value="${job }"><c:out value="${job }"/></option>
+						<option value="${job }" ${job == empInfos2[0].job ? 'selected' : '' }><c:out value="${job }"/></option>
 					</c:forEach>
 				</select>
 				<button type="submit">검색</button>
@@ -209,8 +215,8 @@
 							<th>담당업무</th>
 							<th>상사번호</th>
 							<th>고용일</th>
-							<th>급여</th>
-							<th>상여</th>
+							<th>급여($)</th>
+							<th>상여($)</th>
 							<th>부서번호</th>
 						</tr>
 					</thead>
@@ -222,8 +228,8 @@
 								<td><c:out value="${empInfo.job }"/></td>
 								<td><c:out value="${empInfo.mgrNo }"/></td>
 								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${empInfo.hireDate }"/></td>
-								<td><c:out value="${empInfo.salary }"/></td>
-								<td><c:out value="${empInfo.commission }"/></td>
+								<td><fmt:formatNumber value="${empInfo.salary }" pattern="##,###"/></td>
+								<td><fmt:formatNumber value="${empInfo.commission }" pattern="##,###"/></td>
 								<td><c:out value="${empInfo.deptNo }"/></td>
 							</tr>
 						</c:forEach>
@@ -233,12 +239,12 @@
 		</div>
 	</section>
 	
-	<section>
+	<section id="section3">
 		<h1>
 			3. Ajax TODO: ing..
 			<button class="hideContentBtn">펼치기</button>
 		</h1>
-		<div class="container">
+		<div id="contentDiv3" class="container">
 			<form>
 				<label for="deptNoSelectBox3">Choose a deptNo:</label>
 				<select name="deptNo2" id="deptNoSelectBox3">
@@ -268,8 +274,8 @@
 							<th>담당업무</th>
 							<th>상사번호</th>
 							<th>고용일</th>
-							<th>급여</th>
-							<th>상여</th>
+							<th>급여($)</th>
+							<th>상여($)</th>
 							<th>부서번호</th>
 						</tr>
 					</thead>
@@ -286,11 +292,18 @@
 										</c:forEach>
 									</select>
 								</td>
-								<td><c:out value="${empInfo.mgrNo }"/></td>
+								<td>
+									<select name="mgrNo" class="mgrNoSelectBox">
+										<option value="${empInfo.mgrNo }">--<c:out value="${empInfo.mgrNo == 0 ? '없음' : empInfo.mgrNo}"/>--</option>
+										<c:forEach items="${mgrNos }" var="mgrNo">
+											<option value="${mgrNo }"><c:out value="${mgrNo }"/></option>
+										</c:forEach>
+									</select>
+								</td>
 								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${empInfo.hireDate }"/></td>
 <%-- 								<td><input type="text" name="salary" value="<fmt:formatNumber value='${empInfo.salary }' pattern='##,###'/>"/></td> --%>
-								<td><input type="number" name="salary" value="<c:out value="${empInfo.salary }"/>"/></td>
-								<td><input type="number" name="commission" value="<c:out value="${empInfo.commission }"/>"/></td>
+								<td><input type="number" name="salary" min="0" value="<c:out value="${empInfo.salary }"/>"/></td>
+								<td><input type="number" name="commission" min="0" value="<c:out value="${empInfo.commission }"/>"/></td>
 								<td>
 									<select name="deptNo" class="deptNoSelectBox">
 										<option value="${empInfo.deptNo }">--<c:out value="${empInfo.deptNo }"/>--</option>
@@ -309,7 +322,33 @@
 	</section>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script>
-		/* 사원 검색 */
+		/* TODO: 요청데이터 혹은 응답데이터가 있을 때 펼치기 기능 on */
+		if (${!empty empInfos1}) {
+			$('#contentDiv1').css('display', 'block');
+			$('#section1 .hideContentBtn').text('숨기기');	
+		} else if (${!empty empInfos2}) {
+			$('#contentDiv2').css('display', 'block');
+			$('#section2 .hideContentBtn').text('숨기기');	
+		} else if (${!empty empInfos3}) {
+			$('#contentDiv3').css('display', 'block');
+			$('#section3 .hideContentBtn').text('숨기기');	
+		}
+		
+//		const url = new URL($(location).attr('href'));
+//		const queryStringValues = new URLSearchParams(url.search);
+		
+//		for (const queryStringValue of queryStringValues.entries()) {
+//			console.log($.isEmptyObject(queryStringValue));
+//			if ($.isEmptyObject(queryStringValue) == false) {
+//				$('.container').css('display', 'block');
+//				$('.hideContentBtn').text('숨기기');
+//			} else if ($.isEmptyObject(queryStringValue) == true) {
+//				$('.container').css('display', 'none');
+//				$('.hideContentBtn').text('펼치기');
+//			}
+//		}
+	
+		/* ajax사원 검색 */
 		$('#searchAjaxBtn').click(function() {
 			const deptNo2 = $('#deptNoSelectBox3 option:selected').val();
 			const job2 = $('#jobSelectBox3 option:selected').val();
@@ -339,49 +378,37 @@
 		
 		/* 사원정보 업데이트 TODO: 수정된 값일 경우만 업데이트 로직 타게 만들어보기(요청데이터 줄이기) */
 		$('#updateAjaxBtn').click(function() {
-			/* 검색 값 가져오기 
-			const deptNo2 = $('#deptNoSelectBox3 option:selected').val();
-			const job2 = $('#jobSelectBox3 option:selected').val();
-			const searchData = {'deptNo2':deptNo2, 'job2':job2};
-			const jsonSearchData = JSON.stringify(searchData);
-			*/
+			/* 검색 값 가져오기 */
+// 			const deptNo2 = $('#deptNoSelectBox3 option:selected').val();
+// 			const job2 = $('#jobSelectBox3 option:selected').val();
+// 			const searchData = {'deptNo2':deptNo2, 'job2':job2};
+// 			const jsonSearchData = JSON.stringify(searchData);
 			
 			/* 값을 가져올 태그 선택 */
-			const empNoInputTag = $('#empInfosTbody input[name=empNo]');
-			const nameInputTag = $('#empInfosTbody input[name=name]');
-			const jobInputTag = $('.jobSelectBox option:selected');
-			const salaryInputTag = $('#empInfosTbody input[name=salary]');
-			const commissionInputTag = $('#empInfosTbody input[name=commission]');
-			const deptNoInputTag = $('.deptNoSelectBox option:selected');
+// 			const formTag = $('#updateAjaxForm').serializeArray();
+// 			console.log(formTag);
+			const empNoInputTag = $('#empInfosTbody input[name=empNo]'),
+				  nameInputTag = $('#empInfosTbody input[name=name]'),
+				  jobInputTag = $('.jobSelectBox option:selected'),
+				  mgrNoInputTag = $('.mgrNoSelectBox option:selected'),
+			 	  salaryInputTag = $('#empInfosTbody input[name=salary]'),
+				  commissionInputTag = $('#empInfosTbody input[name=commission]'),
+			 	  deptNoInputTag = $('.deptNoSelectBox option:selected');
+			const empInfoValueTags = [empNoInputTag, nameInputTag, jobInputTag, mgrNoInputTag, salaryInputTag, commissionInputTag, deptNoInputTag];
 			
 			/* 각 데이터에 대한 배열 생성 */
-			const empNos = new Array();
-			const names = new Array();
-			const jobs = new Array();
-			const salaries = new Array();
-			const commissions = new Array();
-			const deptNos = new Array();
+			const empNos = new Array(),
+				  names = new Array(),
+			 	  jobs = new Array(),
+			 	  mgrNos = new Array(),
+			 	  salaries = new Array(),
+			 	  commissions = new Array(),
+			 	  deptNos = new Array();
+			const empInfoValueNewArraies = [empNos, names, jobs, mgrNos, salaries, commissions, deptNos];
 		
-			/* 각 태그에 입력된 값 뽑기 TODO: 함수화 */
-			$.each(empNoInputTag, function (index, value) {
-				empNos.push($(value).val());
-			});
-			$.each(nameInputTag, function (index, value) {
-				names.push($(value).val());
-			});
-			$.each(jobInputTag, function (index, value) {
-				jobs.push($(value).val());
-			});
-			$.each(salaryInputTag, function (index, value) {
-				salaries.push($(value).val());
-			});
-			$.each(commissionInputTag, function (index, value) {
-				commissions.push($(value).val());
-			});
-			$.each(deptNoInputTag, function (index, value) {
-				deptNos.push($(value).val());
-			});
-	
+			/* 각 태그에 입력된 값 뽑기 */
+			pushEmpInfoValues(empInfoValueTags, empInfoValueNewArraies);
+					
 			/* 각 데이터 겍체화 후 하나의 배열로 생성 */
 			const empInfos = new Array();
  			for (let i=0; i<empNos.length; i++) {	
@@ -390,25 +417,26 @@
  				empInfo.empNo = empNos[i];
  				empInfo.name = names[i];
  				empInfo.job = jobs[i];
+ 				empInfo.mgrNo = mgrNos[i];
  				empInfo.salary = salaries[i];
  				empInfo.commission = commissions[i];
  				empInfo.deptNo = deptNos[i];
 				
  				empInfos.push(empInfo);
  			}
- 			// console.log(empInfos);
+ 			console.log(empInfos);
  			
  			/* JSON 직렬화 처리*/
  			const jsonEmpInfos = JSON.stringify(empInfos);
- 			// console.log(jsonEmpInfos);
+ 			console.log(jsonEmpInfos);
  			
- 			/* 검색값, 사원정보 객체화 후 JSON 직렬화 처리
- 			const updateData = {'value': searchData, 'empInfos':empInfos};
- 			const jsonUpdateData = JSON.stringify(updateData);
- 			console.log(updateData);
- 			console.log(jsonUpdateData);
- 			*/
+ 			/* 검색값, 사원정보 객체화 후 JSON 직렬화 처리 */
+//  			const updateData = {'value': searchData, 'empInfos':empInfos};
+//  			const jsonUpdateData = JSON.stringify(updateData);
+//  			console.log(updateData);
+//  			console.log(jsonUpdateData);
  			
+ 			/* ajax 통신처리 */
  			$.ajax({
 				type: 'post',
 				url: '/mybatis/updateEmpInfo',
@@ -429,6 +457,7 @@
 			});
 		});
 		
+		/* 숨기기/펼치기 기능 */
 		$('.hideContentBtn').click(function(e) {
 			const $targetContainer = $(e.target).parent().next();
 		    if ($targetContainer.css('display') == 'none') {
@@ -440,29 +469,34 @@
 	        }
 		});
 		
-	 	
 		
- 		
-		$(function() {
+		
+		function pushEmpInfoValues(tags, arraies) {
+			for (let i=0; i<tags.length; i++) {
+				$.each(tags[i], function (index, valueTag) {
+					arraies[i].push($(valueTag).val());
+				});
+			}
 			
-				const url = new URL($(location).attr('href'));
-				const queryStringValues = new URLSearchParams(url.search);
-	 			
-				for (const queryStringValue of queryStringValues.entries()) {
-					console.log($.isEmptyObject(queryStringValue).);
-					if ($.isEmptyObject(queryStringValue) == false) {
-		 				$('.container').css('display', 'block');
-		 			}
-	 			}
-				
-	 			
-		
-		});
-		
-		
-		
-		
-		// $('#deptNoSelectBox2')
+// 			$.each(empNoInputTag, function (index, value) {
+//				empNos.push($(value).val());
+//			});
+//			$.each(nameInputTag, function (index, value) {
+//				names.push($(value).val());
+//			});
+//			$.each(jobInputTag, function (index, value) {
+//				jobs.push($(value).val());
+//			});
+//			$.each(salaryInputTag, function (index, value) {
+//				salaries.push($(value).val());
+//			});
+//			$.each(commissionInputTag, function (index, value) {
+//				commissions.push($(value).val());
+//			});
+//			$.each(deptNoInputTag, function (index, value) {
+//				deptNos.push($(value).val());
+//			});
+		}
 	</script>
 </body>
 </html>
