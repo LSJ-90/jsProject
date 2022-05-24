@@ -16,10 +16,9 @@
 			margin: 0;
 			padding: 0;
 		}
-
+		
 		#viewContent1 td, #viewContent2 td, #viewContent3 td {
 			border: 1px solid black;
-			
 		}
 		
 		th {
@@ -74,8 +73,13 @@
 		}
 		
 		.container {
-			display: none;
-		}
+			visibility: hidden;
+			max-height: 0vh;
+			overflow: auto;
+			transform-origin: 0px 0px;
+			transform: scaleY(0);
+			transition: all 1s;
+ 		}
 	</style>
 </head>
 <body>
@@ -126,11 +130,14 @@
 							--부서번호--
 						</option>
 					<c:forEach items="${deptNos }" var="deptNo">
-						<option value="${deptNo }" ${deptNo == empInfos1[0].deptNo ? 'selected' : '' }>
+						<option value="${deptNo }" ${deptNo eq selectedDeptNo ? 'selected' : '' }>
 							<c:out value="${deptNo }"/>
 						</option>
 					</c:forEach>
-						<option value="${deptNos[0] },${deptNos[1] }">
+						<option value="${deptNos[0] },${deptNos[1] }" 
+							<c:if test="${deptNos[0] == selectedDeptNos[0] and deptNos[1] == selectedDeptNos[1]}">
+								selected
+							</c:if>>
 							<c:out value="${deptNos[0] },${deptNos[1] }"/>
 						</option>
 				</select>
@@ -142,7 +149,7 @@
 				<select name="job1" id="jobSelectBox1">
 					<option value="">--담당업무--</option>
 					<c:forEach items="${jobs }" var="job">
-						<option value="${job }" ${job == empInfos1[0].job ? 'selected' : '' }><c:out value="${job }"/></option>
+						<option value="${job }" ${job eq selectedJob ? 'selected' : '' }><c:out value="${job }"/></option>
 					</c:forEach>
 				</select>
 				<button type="submit">담당업무 검색</button>
@@ -168,7 +175,7 @@
 								<td><c:out value="${empInfo.empNo }"/></td>
 								<td><c:out value="${empInfo.name }"/></td>
 								<td><c:out value="${empInfo.job }"/></td>
-								<td><c:out value="${empInfo.mgrNo }"/></td>
+								<td><c:out value="${empInfo.mgrNo == 0 ? '없음' : empInfo.mgrNo}"/></td>
 								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${empInfo.hireDate }"/></td>
 								<td><c:out value="${empInfo.salary }"/></td>
 								<td><c:out value="${empInfo.commission }"/></td>
@@ -192,7 +199,7 @@
 				<select name="deptNo2" id="deptNoSelectBox2">
 						<option value=-1>--부서번호--</option>
 					<c:forEach items="${deptNos }" var="deptNo">
-						<option value="${deptNo }" ${deptNo == empInfos2[0].deptNo ? 'selected' : '' }><c:out value="${deptNo }"/></option>
+						<option value="${deptNo }" ${deptNo == selectedValue.deptNo2 ? 'selected' : '' }><c:out value="${deptNo }"/></option>
 					</c:forEach>
 				</select>
 				
@@ -200,7 +207,7 @@
 				<select name="job2" id="jobSelectBox2">
 						<option value="">--담당업무--</option>
 					<c:forEach items="${jobs }" var="job">
-						<option value="${job }" ${job == empInfos2[0].job ? 'selected' : '' }><c:out value="${job }"/></option>
+						<option value="${job }" ${job == selectedValue.job2 ? 'selected' : '' }><c:out value="${job }"/></option>
 					</c:forEach>
 				</select>
 				<button type="submit">검색</button>
@@ -226,8 +233,8 @@
 								<td><c:out value="${empInfo.empNo }"/></td>
 								<td><c:out value="${empInfo.name }"/></td>
 								<td><c:out value="${empInfo.job }"/></td>
-								<td><c:out value="${empInfo.mgrNo }"/></td>
-								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${empInfo.hireDate }"/></td>
+								<td><c:out value="${empInfo.mgrNo == 0 ? '없음' : empInfo.mgrNo}"/></td>
+								<td><fmt:formatDate value="${empInfo.hireDate }" pattern="yyyy-MM-dd"/></td>
 								<td><fmt:formatNumber value="${empInfo.salary }" pattern="##,###"/></td>
 								<td><fmt:formatNumber value="${empInfo.commission }" pattern="##,###"/></td>
 								<td><c:out value="${empInfo.deptNo }"/></td>
@@ -286,29 +293,53 @@
 								<td><input type="text" name="name" value="<c:out value="${empInfo.name }"/>"/></td>
 								<td>
 									<select name="job" class="jobSelectBox">
-										<option value="${empInfo.job }">--<c:out value="${empInfo.job }"/>--</option>
 										<c:forEach items="${jobs }" var="job">
-											<option value="${job }"><c:out value="${job }"/></option>
+											<option value="${job }" ${empInfo.job == job ? 'selected' : '' }>
+												<c:out value="${empInfo.job == job ? '--' += empInfo.job += '--' : job  }"/>
+											</option>
 										</c:forEach>
 									</select>
 								</td>
 								<td>
 									<select name="mgrNo" class="mgrNoSelectBox">
-										<option value="${empInfo.mgrNo }">--<c:out value="${empInfo.mgrNo == 0 ? '없음' : empInfo.mgrNo}"/>--</option>
 										<c:forEach items="${mgrNos }" var="mgrNo">
-											<option value="${mgrNo }"><c:out value="${mgrNo }"/></option>
+											<option value="${mgrNo }" ${empInfo.mgrNo == mgrNo ? 'selected' : '' }>
+												<!-- 삼항연산자 -->
+												<c:out 
+													value="${empInfo.mgrNo == mgrNo 
+																? (empInfo.mgrNo == 0 ? '--없음--' : '--' += empInfo.mgrNo += '--') 
+																: (mgrNo == 0 ? '없음' : mgrNo)}"/>
+												<!-- choose when otherwise 사용
+												<c:choose>
+													<c:when test="${empInfo.mgrNo == mgrNo}">
+														<c:choose>
+															<c:when test="${empInfo.mgrNo == 0}">
+																<c:out value="${'--없음--' }"/>
+															</c:when>
+															<c:otherwise>
+																<c:out value="${'--' += empInfo.mgrNo += '--' }"/>
+															</c:otherwise>
+														</c:choose>
+													</c:when>
+													<c:otherwise>
+														<c:out value="${mgrNo == 0 ? '없음' : mgrNo}"/>
+													</c:otherwise>
+												</c:choose>
+												-->
+											</option>
 										</c:forEach>
 									</select>
 								</td>
 								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${empInfo.hireDate }"/></td>
-<%-- 								<td><input type="text" name="salary" value="<fmt:formatNumber value='${empInfo.salary }' pattern='##,###'/>"/></td> --%>
+							<!-- <td><input type="text" name="salary" value="<fmt:formatNumber value='${empInfo.salary }' pattern='##,###'/>"/></td> -->
 								<td><input type="number" name="salary" min="0" value="<c:out value="${empInfo.salary }"/>"/></td>
 								<td><input type="number" name="commission" min="0" value="<c:out value="${empInfo.commission }"/>"/></td>
 								<td>
 									<select name="deptNo" class="deptNoSelectBox">
-										<option value="${empInfo.deptNo }">--<c:out value="${empInfo.deptNo }"/>--</option>
 										<c:forEach items="${deptNos }" var="deptNo">
-											<option value="${deptNo }"><c:out value="${deptNo }"/></option>
+											<option value="${deptNo }" ${empInfo.deptNo == deptNo ? 'selected' : '' }>
+												<c:out value="${empInfo.deptNo == deptNo ? '--' += empInfo.deptNo += '--' : deptNo }"/>
+											</option>
 										</c:forEach>
 									</select>
 								</td>
@@ -323,30 +354,39 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script>
 		/* TODO: 요청데이터 혹은 응답데이터가 있을 때 펼치기 기능 on */
-		if (${!empty empInfos1}) {
-			$('#contentDiv1').css('display', 'block');
-			$('#section1 .hideContentBtn').text('숨기기');	
-		} else if (${!empty empInfos2}) {
-			$('#contentDiv2').css('display', 'block');
-			$('#section2 .hideContentBtn').text('숨기기');	
-		} else if (${!empty empInfos3}) {
-			$('#contentDiv3').css('display', 'block');
-			$('#section3 .hideContentBtn').text('숨기기');	
+		$(function() {
+			if (${!empty empInfos1}) {
+				$('#contentDiv1').css('visibility', 'visible');
+				$('#contentDiv1').css('transform', 'scaleY(1)');
+				$('#contentDiv1').css('max-height', '100vh');
+				$('#section1 .hideContentBtn').text('숨기기');	
+			} else if (${!empty empInfos2}) {
+				$('#contentDiv2').css('visibility', 'visible');
+				$('#contentDiv2').css('transform', 'scaleY(1)');
+				$('#contentDiv2').css('max-height', '100vh');
+				$('#section2 .hideContentBtn').text('숨기기');	
+			} else if (${!empty empInfos3}) {
+				$('#contentDiv3').css('visibility', 'visible');
+				$('#contentDiv3').css('transform', 'scaleY(1)');
+				$('#contentDiv3').css('max-height', '100vh');
+				$('#section3 .hideContentBtn').text('숨기기');	
+			}
+		});
+		/*
+		const url = new URL($(location).attr('href'));
+		const queryStringValues = new URLSearchParams(url.search);
+		
+		for (const queryStringValue of queryStringValues.entries()) {
+			console.log($.isEmptyObject(queryStringValue));
+			if ($.isEmptyObject(queryStringValue) == false) {
+				$('.container').css('display', 'block');
+				$('.hideContentBtn').text('숨기기');
+			} else if ($.isEmptyObject(queryStringValue) == true) {
+				$('.container').css('display', 'none');
+				$('.hideContentBtn').text('펼치기');
+			}
 		}
-		
-//		const url = new URL($(location).attr('href'));
-//		const queryStringValues = new URLSearchParams(url.search);
-		
-//		for (const queryStringValue of queryStringValues.entries()) {
-//			console.log($.isEmptyObject(queryStringValue));
-//			if ($.isEmptyObject(queryStringValue) == false) {
-//				$('.container').css('display', 'block');
-//				$('.hideContentBtn').text('숨기기');
-//			} else if ($.isEmptyObject(queryStringValue) == true) {
-//				$('.container').css('display', 'none');
-//				$('.hideContentBtn').text('펼치기');
-//			}
-//		}
+		*/
 	
 		/* ajax사원 검색 */
 		$('#searchAjaxBtn').click(function() {
@@ -405,10 +445,24 @@
 			 	  commissions = new Array(),
 			 	  deptNos = new Array();
 			const empInfoValueNewArraies = [empNos, names, jobs, mgrNos, salaries, commissions, deptNos];
-		
+			
 			/* 각 태그에 입력된 값 뽑기 */
 			pushEmpInfoValues(empInfoValueTags, empInfoValueNewArraies);
-					
+			
+			/* 음수 체크 */
+			for (let salary of salaries) {
+				if (salary < 0) {
+					alert('급여가 마이너스라고..!!?그러지마..');
+					return;
+				}
+			}
+			for (let commission of commissions) {
+				if (commission < 0) {
+					alert('상여가 마이너스라고..!!? 차라리 0으로 해줘!!');
+					return;
+				}
+			}
+			
 			/* 각 데이터 겍체화 후 하나의 배열로 생성 */
 			const empInfos = new Array();
  			for (let i=0; i<empNos.length; i++) {	
@@ -460,16 +514,18 @@
 		/* 숨기기/펼치기 기능 */
 		$('.hideContentBtn').click(function(e) {
 			const $targetContainer = $(e.target).parent().next();
-		    if ($targetContainer.css('display') == 'none') {
-			   $targetContainer.css('display', 'block');
+		    if ($targetContainer.css('visibility') == 'hidden') {
+			   $targetContainer.css('visibility', 'visible');
+			   $targetContainer.css('transform', 'scaleY(1)');
+			   $targetContainer.css('max-height', '100vh');
 			   $(this).text('숨기기');
 	        } else {
-	        	$targetContainer.css('display', 'none');
+	        	$targetContainer.css('visibility', 'hidden');
+	        	$targetContainer.css('transform', 'scaleY(0)');
+	        	$targetContainer.css('max-height', '0vh');
 	        	$(this).text('펼치기');
 	        }
 		});
-		
-		
 		
 		function pushEmpInfoValues(tags, arraies) {
 			for (let i=0; i<tags.length; i++) {
@@ -477,25 +533,26 @@
 					arraies[i].push($(valueTag).val());
 				});
 			}
-			
-// 			$.each(empNoInputTag, function (index, value) {
-//				empNos.push($(value).val());
-//			});
-//			$.each(nameInputTag, function (index, value) {
-//				names.push($(value).val());
-//			});
-//			$.each(jobInputTag, function (index, value) {
-//				jobs.push($(value).val());
-//			});
-//			$.each(salaryInputTag, function (index, value) {
-//				salaries.push($(value).val());
-//			});
-//			$.each(commissionInputTag, function (index, value) {
-//				commissions.push($(value).val());
-//			});
-//			$.each(deptNoInputTag, function (index, value) {
-//				deptNos.push($(value).val());
-//			});
+			/* 각 push
+			$.each(empNoInputTag, function (index, value) {
+				empNos.push($(value).val());
+			});
+			$.each(nameInputTag, function (index, value) {
+				names.push($(value).val());
+			});
+			$.each(jobInputTag, function (index, value) {
+				jobs.push($(value).val());
+			});
+			$.each(salaryInputTag, function (index, value) {
+				salaries.push($(value).val());
+			});
+			$.each(commissionInputTag, function (index, value) {
+				commissions.push($(value).val());
+			});
+			$.each(deptNoInputTag, function (index, value) {
+				deptNos.push($(value).val());
+			});
+			*/
 		}
 	</script>
 </body>
