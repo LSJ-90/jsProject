@@ -45,7 +45,8 @@
     	</selectKey>
     	<!-- 
 			order 값이 before 일 경우: insert문을 수행하기전 selectKey가 먼저 실행된 후 insert문 수행
-			order 값이 after 일 경우: insert문을 수행 후 selectKey를 수행
+			order 값이 after 일 경우: insert문을 수행 후 selectKey를 수행 >> 
+			TODO: after 한번 시도해보기
 		-->
 		INSERT INTO EMP
 			(EMPNO, ENAME, JOB, MGR, HIREDATE, SAL, COMM, DEPTNO) 

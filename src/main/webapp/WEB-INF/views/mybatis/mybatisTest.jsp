@@ -80,6 +80,20 @@
 			transform: scaleY(0);
 			transition: all 1s;
  		}
+ 		
+ 		#insertError {
+ 			color: white;
+ 			text-align: center;
+ 			border: 1px solid black;
+ 			background-color: red;
+ 		}
+ 		
+ 		#insertSuccess {
+ 			color: white;
+ 			text-align: center;
+ 			border: 1px solid black;
+ 			background-color: blue;
+ 		}
 	</style>
 </head>
 <body>
@@ -87,13 +101,21 @@
 	<a href="/mybatis/mybatisTest"><button type="button">초기화</button></a>
 	<section>
 		<h1>##사원 등록##</h1>
+		<c:choose>
+			<c:when test="${!empty insertError }">
+				<div id="insertError">${insertError }</div>
+			</c:when>
+			<c:when test="${!empty insertSuccess }">
+				<div id="insertSuccess">${insertSuccess }</div>
+			</c:when>
+		</c:choose>
+		
 		<form method="get" action="/mybatis/insertEmpInfo">
 			<label for="insertNameValue">사원이름:</label>
-			<input type="text" name="name" id="insertNameValue"/>
+			<input type="text" name="name" id="insertNameValue" required/>
 			
 			<label for="insertJobValue">담당업무:</label>
 			<select name="job" id="insertJobValue">
-				<option value="">--담당업무--</option>
 				<c:forEach items="${jobs }" var="job">
 					<option value="${job }"><c:out value="${job }"/></option>
 				</c:forEach>
@@ -107,7 +129,6 @@
 			
 			<label for="insertDeptNoValue">부서번호:</label>
 			<select name="deptNo" id="insertDeptNoValue">
-				<option value="-1">--부서번호--</option>
 				<c:forEach items="${deptNos }" var="deptNo">
 					<option value="${deptNo }"><c:out value="${deptNo }"/></option>
 				</c:forEach>
@@ -331,8 +352,12 @@
 									</select>
 								</td>
 								<td><fmt:formatDate pattern="yyyy-MM-dd" value="${empInfo.hireDate }"/></td>
-							<!-- <td><input type="text" name="salary" value="<fmt:formatNumber value='${empInfo.salary }' pattern='##,###'/>"/></td> -->
-								<td><input type="number" name="salary" min="0" value="<c:out value="${empInfo.salary }"/>"/></td>
+							<!-- <td><input type="text" name="salary" value="<fmt:formatNumber value='${empInfo.salary }' pattern='##,###'/>"/></td> 
+								<fmt:parseNumber var="i" type="number" value="${empInfo.salary }" />	
+								<c:set var="salary"><fmt:formatNumber value="${i }" pattern="##,###" /></c:set>
+								<c:out value="${salary }"/>
+							-->
+								<td><input type="number" name="salary" min="0" value="${empInfo.salary }"/></td>
 								<td><input type="number" name="commission" min="0" value="<c:out value="${empInfo.commission }"/>"/></td>
 								<td>
 									<select name="deptNo" class="deptNoSelectBox">
@@ -354,24 +379,22 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script>
 		/* TODO: 요청데이터 혹은 응답데이터가 있을 때 펼치기 기능 on */
-		$(function() {
-			if (${!empty empInfos1}) {
-				$('#contentDiv1').css('visibility', 'visible');
-				$('#contentDiv1').css('transform', 'scaleY(1)');
-				$('#contentDiv1').css('max-height', '100vh');
-				$('#section1 .hideContentBtn').text('숨기기');	
-			} else if (${!empty empInfos2}) {
-				$('#contentDiv2').css('visibility', 'visible');
-				$('#contentDiv2').css('transform', 'scaleY(1)');
-				$('#contentDiv2').css('max-height', '100vh');
-				$('#section2 .hideContentBtn').text('숨기기');	
-			} else if (${!empty empInfos3}) {
-				$('#contentDiv3').css('visibility', 'visible');
-				$('#contentDiv3').css('transform', 'scaleY(1)');
-				$('#contentDiv3').css('max-height', '100vh');
-				$('#section3 .hideContentBtn').text('숨기기');	
-			}
-		});
+		if (${!empty empInfos1}) {
+			$('#contentDiv1').css('visibility', 'visible');
+			$('#contentDiv1').css('transform', 'scaleY(1)');
+			$('#contentDiv1').css('max-height', '100vh');
+			$('#section1 .hideContentBtn').text('숨기기');	
+		} else if (${!empty empInfos2}) {
+			$('#contentDiv2').css('visibility', 'visible');
+			$('#contentDiv2').css('transform', 'scaleY(1)');
+			$('#contentDiv2').css('max-height', '100vh');
+			$('#section2 .hideContentBtn').text('숨기기');	
+		} else if (${!empty empInfos3}) {
+			$('#contentDiv3').css('visibility', 'visible');
+			$('#contentDiv3').css('transform', 'scaleY(1)');
+			$('#contentDiv3').css('max-height', '100vh');
+			$('#section3 .hideContentBtn').text('숨기기');	
+		}
 		/*
 		const url = new URL($(location).attr('href'));
 		const queryStringValues = new URLSearchParams(url.search);
@@ -462,7 +485,7 @@
 					return;
 				}
 			}
-			
+			[{key:value, },{},{}]
 			/* 각 데이터 겍체화 후 하나의 배열로 생성 */
 			const empInfos = new Array();
  			for (let i=0; i<empNos.length; i++) {	

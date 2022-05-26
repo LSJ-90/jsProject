@@ -54,11 +54,16 @@ public class MybatisController {
 	}
 	
 	@RequestMapping(value = "/mybatis/insertEmpInfo", method = RequestMethod.GET)
-	public String insertEmpInfo(EmpVoOfMybatis emp) {
+	public String insertEmpInfo(EmpVoOfMybatis emp, Model model) {
 		System.out.println(emp.toString());
-		mybatisDao.insertEmpInfo(emp);
+		if (emp.getSalary() < 0 || emp.getSalary() < 0) {
+			model.addAttribute("insertError", "FAIL!! 금여와 상여가 마이너스라고...??");
+		} else {
+			mybatisDao.insertEmpInfo(emp);
+			model.addAttribute("insertSuccess", "INSERT SUCCESS!!!!!");
+		}
 		
-		return "redirect:/mybatis/mybatisTest";
+		return "forward:/mybatis/mybatisTest";
 	}
 	
 	@RequestMapping(value = "/mybatis/selectEmpByDeptNo", method = RequestMethod.GET)
@@ -141,6 +146,10 @@ public class MybatisController {
 	@RequestMapping(value = "/mybatis/selectEmpByAjax", method = RequestMethod.POST)
 	public String selectEmpByAjax(@RequestBody SearchValueOfMybatis value, Model model) {
 		List<EmpVoOfMybatis> empInfos3 = mybatisDao.selectEmpByValue(value);
+		logger.info(empInfos3.toString());
+		if (empInfos3.isEmpty()) {
+			model.addAttribute("errorText", "조건에 맞는 사원이 없어요...T^T");
+		}
 		model.addAttribute("empInfos3", empInfos3);
 		List<Integer> deptNos = mybatisDao.selectDeptNosByDistinct();
 		model.addAttribute("deptNos", deptNos);
