@@ -156,6 +156,15 @@ public class HomeController {
 	public String pathInit() {
 		return "etc/path";
 	}
+	
+	/**
+	 * projects Init Controller
+	 * @return url
+	 */
+	@RequestMapping(value = "/projects/misostudy/home", method = RequestMethod.GET)
+	public String misoStudyInit() {
+		return "projects/misostudy/home";
+	}
 }
 
 

@@ -76,26 +76,28 @@
 </head>
 <header>
 	<!-- href: hypertext reference -->
-	<a href="./home"><img src="../resources/images/logo.png" alt=""></a>
 	<ul id="navbar">
+		<li>
+			<a href="./home"><img src="../resources/images/logo.png" alt=""></a>
+		</li>
 		<li>
 			<h1><a href="#">HTML</a></h1>
 			<ul class="menu">
-				<li><a href="html/metaTag.html">meta tag</a></li>
-				<li><a href="html/formTag.html">form tag</a></li>
-				<li><a href="html/selectBox.html">selectBox tag</a></li>
-				<li><a href="html/input.html">input tag</a></li>
-				<li><a href="html/tableTag.html">table tag</a></li>
-				<li><a href="html/formattingTag.html">formatting tag</a></li>
+				<li><a href="html/metaTag">meta tag</a></li>
+				<li><a href="html/formTag">form tag</a></li>
+				<li><a href="html/selectBox">selectBox tag</a></li>
+				<li><a href="html/input">input tag</a></li>
+				<li><a href="html/tableTag">table tag</a></li>
+				<li><a href="html/formattingTag">formatting tag</a></li>
 			</ul>	
 		</li>
 		<li>
 			<h1><a href="#">CSS</a></h1>
 			<ul class="menu">
-				<li><a href="css/block-inline.html">block_inline</a></li>
-				<li><a href="css/position.html">position</a></li>
-				<li><a href="css/ID&CLASS&NAME.html">id_class_name 차이점</a></li>
-				<li><a href="css/before-after.html">before_after</a></li>
+				<li><a href="css/block-inline">block_inline</a></li>
+				<li><a href="css/position">position</a></li>
+				<li><a href="css/ID&CLASS&NAME">id_class_name 차이점</a></li>
+				<li><a href="css/before-after">before_after</a></li>
 			</ul>	
 		</li>
 		<li>
@@ -114,8 +116,14 @@
 		<li>
 			<h1><a href="#">ETC</a></h1>
 			<ul class="menu">
-				<li><a href="etc/coding-notion.html">코딩 표기법</a></li>
-				<li><a href="etc/path.html">절대경로와 상대경로</a></li>
+				<li><a href="etc/coding-notion">코딩 표기법</a></li>
+				<li><a href="etc/path">절대경로와 상대경로</a></li>
+			</ul>
+		</li>
+		<li>
+			<h1><a href="#">PROJECTS</a></h1>
+			<ul class="menu">
+				<li><a href="projects/misostudy/home">misoStudy</a></li>
 			</ul>
 		</li>
 	</ul>
