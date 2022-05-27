@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.miso.persistence.MisoStudyDao">
+	<resultMap id="userInfoResultMap" type="com.miso.web.vo.MisoStudyUserVo">
+		<id column="USER_NO" property="userNo"/> 
+		<result column="ID" property="id"/> 
+		<result column="PWD" property="pwd"/> 
+		<result column="NAME" property="name"/> 
+		<result column="EMAIL" property="email"/> 
+		<result column="CREATED_DATE" property="createdDate"/> 
+		<result column="IS_WITHDRAWAL" property="isWithdrawal"/> 
+		<result column="WITHDRAW_DATE" property="withdrawDate"/> 
+	</resultMap>
+	
+	<sql id="whereByDeptNo">
+		WHERE DEPTNO IN
+		<foreach collection="list" item="deptNo" open="(" separator="," close=")"> 
+			#{deptNo}
+		</foreach>
+		<!-- 
+			collection="list 시에는 list로 표시 , array 시에는 array로 표시"
+			index="foreach문이 반복될때마다 1씩 증가시키면서 접근하는 값의 위치를 표시" 
+			item="사용할 속성 이름" 
+			open="해당 구문이 시작될 때 사용할 문자 추가" 
+			separator="구분자 추가" 
+			close="해당 구문이 끝날 때의 사용할 문자 추가" 
+		-->
+	</sql>
+
+	<insert id="signUp" parameterType="com.miso.web.vo.MisoStudyUserVo">
+		INSERT INTO SJ_USERS
+			(USER_NO, ID, PWD, NAME, EMAIL) 
+		VALUES 
+			(SJ_USER_SEQ.NEXTVAL, #{id}, #{pwd}, #{name}, #{email})
+	</insert>
+	
+	<select id="checkUserInfoById" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM SJ_USERS
+		WHERE ID = #{id}
+	</select>
+	
+	<select id="selectUserInfoById" parameterType="String" resultMap="userInfoResultMap">
+		SELECT USER_NO,
+			   ID,
+			   PWD,
+			   NAME,
+			   EMAIL,
+			   CREATED_DATE,
+			   IS_WITHDRAWAL,
+			   WITHDRAW_DATE
+		FROM SJ_USERS
+		WHERE ID = #{id}
+	</select>
+</mapper>
