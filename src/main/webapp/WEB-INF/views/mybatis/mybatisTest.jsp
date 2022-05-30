@@ -485,7 +485,6 @@
 					return;
 				}
 			}
-			[{key:value, },{},{}]
 			/* 각 데이터 겍체화 후 하나의 배열로 생성 */
 			const empInfos = new Array();
  			for (let i=0; i<empNos.length; i++) {	
