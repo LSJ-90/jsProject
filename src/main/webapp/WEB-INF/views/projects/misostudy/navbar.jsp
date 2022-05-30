@@ -11,10 +11,19 @@
 				<li class="nav-item"><a class="nav-link active" href="/projects/misostudy/home">Home</a></li>
 				<li class="nav-item"><a class="nav-link" href="#">게시판</a></li>
 			</ul>
-			<ul class="navbar-nav justify-content-end">
-				<li class="nav-item"><a class="nav-link" href="#" role="button" data-bs-toggle="modal" data-bs-target="#signInModal">Sign in</a></li>
-				<li class="nav-item"><a class="nav-link" href="/projects/misostudy/signUpForm" role="button">Sign up</a></li>
-			</ul>
+			<c:choose>
+				<c:when test="${!empty LOGIN_USER}">
+					<ul id="loginUl" class="navbar-nav justify-content-end">
+						<li class="nav-item"><a class="nav-link" href="/projects/misostudy/signOut" role="button">Sign out</a></li>
+					</ul>
+				</c:when>
+				<c:otherwise>
+					<ul id="loginUl" class="navbar-nav justify-content-end">
+						<li class="nav-item"><a class="nav-link" href="#" role="button" data-bs-toggle="modal" data-bs-target="#signInModal">Sign in</a></li>
+						<li class="nav-item"><a class="nav-link" href="#" role="button" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign up</a></li>
+					</ul>
+				</c:otherwise>
+			</c:choose>
 		</div>
 	</div>
 </nav>

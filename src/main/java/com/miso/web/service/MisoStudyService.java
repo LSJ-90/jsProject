@@ -1,14 +1,21 @@
 package com.miso.web.service;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.miso.web.controller.MisoStudyController;
 import com.miso.web.persistence.MisoStudyDao;
 import com.miso.web.vo.MisoStudyUserVo;
 
 @Service
 public class MisoStudyService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(MisoStudyService.class);
 	
 	@Autowired
 	private MisoStudyDao misoStudyDao;
@@ -19,24 +26,15 @@ public class MisoStudyService {
 		misoStudyDao.signUp(newUser);
 	}
 
-	public String signIn(String id, String pwd) {
+	public MisoStudyUserVo signIn(String id, String authPwd) {
 		
 		MisoStudyUserVo savedUser = misoStudyDao.selectUserInfoById(id);
 		
-		String resultUrl = "redirect:home";
-		
-		// 아이디 검사
-		if (savedUser == null || "Y".equals(savedUser.getIsWithdrawal())) {
-			resultUrl = "fail";
-		}
-		
-		// 패스워드 검사
-		String authPwd = DigestUtils.sha512Hex(pwd);
-		if (!authPwd.equals(savedUser.getPwd())) {
-			resultUrl = "fail";
-		}
-		
-		return resultUrl;
+		return savedUser;
+	}
+
+	public MisoStudyUserVo selectUserInfoById(String id) {
+		return misoStudyDao.selectUserInfoById(id);
 	}
 	
 	
