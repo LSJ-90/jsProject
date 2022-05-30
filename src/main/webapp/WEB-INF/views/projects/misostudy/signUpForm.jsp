@@ -10,23 +10,23 @@
 				</div>
 				<div class="alert alert-warning" id="signUpResultMessage"></div>
 				<div class="modal-body">
-					<div class="form-floating mt-3">
+					<div class="form-floating mb-3">
 					  <input type="text" class="form-control" id="signUpUserId" placeholder="User Id" name="id">
 					  <label for="signUpUserId">User Id</label>
 					</div>
-					<div class="form-floating ">
+					<div class="form-floating mb-3">
 					  <input type="password" class="form-control" id="signUpPassword" placeholder="Password" name="pwd">
 					  <label for="signUpPassword">Password</label>
 					</div>
-					<div class="form-floating">
+					<div class="form-floating mb-3">
 					  <input type="password" class="form-control" id="signUpPasswordConfirm" placeholder="Password Confirm" name="pwdConfirm">
 					  <label for="floatingPasswordConfirm">Password Confirm</label>
 					</div>	
-					<div class="form-floating">
+					<div class="form-floating mb-3">
 					  <input type="text" class="form-control" id="signUpName" placeholder="Name" name="name">
 					  <label for="signUpName">Name</label>
 					</div>	
-					<div class="form-floating">
+					<div class="form-floating mb-3">
 					  <input type="email" class="form-control" id="signUpEmail" placeholder="Email" name="email">
 					  <label for="signUpEmail">Email</label>
 					</div>

@@ -14,7 +14,7 @@
 					  <input type="text" class="form-control" id="signInUserId" placeholder="User Id" name="id">
 					  <label for="signInUserId">User Id</label>
 					</div>
-					<div class="form-floating">
+					<div class="form-floating mb-3">
 					  <input type="password" class="form-control" id="signInPassword" placeholder="Password" name="pwd">
 					  <label for="signInPassword">Password</label>
 					</div>
