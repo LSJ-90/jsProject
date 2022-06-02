@@ -1,6 +1,6 @@
 package com.miso.web.service;
 
-import javax.servlet.http.HttpSession;
+import java.util.List;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.miso.web.controller.MisoStudyController;
 import com.miso.web.persistence.MisoStudyDao;
+import com.miso.web.vo.MisoStudyBoardVo;
 import com.miso.web.vo.MisoStudyUserVo;
 
 @Service
@@ -26,16 +26,27 @@ public class MisoStudyService {
 		misoStudyDao.signUp(newUser);
 	}
 
-	public MisoStudyUserVo signIn(String id, String authPwd) {
-		
-		MisoStudyUserVo savedUser = misoStudyDao.selectUserInfoById(id);
-		
-		return savedUser;
-	}
-
-	public MisoStudyUserVo selectUserInfoById(String id) {
+	public MisoStudyUserVo signIn(String id) {
 		return misoStudyDao.selectUserInfoById(id);
 	}
+
+	public int checkId(String id) {
+		return misoStudyDao.countUserInfoById(id);
+	}
+
+	public int checkEmail(String email) {
+		return misoStudyDao.countUserInfoByEmail(email);
+	}
 	
-	
+	/**
+	 *
+	 * @return
+	 */
+	public List<MisoStudyBoardVo> selectAllBoards() {
+		return misoStudyDao.selectAllBoards();
+	}
+
+	public MisoStudyBoardVo selectBoardByBoardNo(String boardNo) {
+		return misoStudyDao.selectBoardByBoardNo(boardNo);
+	}
 }
