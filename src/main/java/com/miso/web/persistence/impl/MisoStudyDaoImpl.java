@@ -15,7 +15,8 @@ public class MisoStudyDaoImpl implements MisoStudyDao {
 
 	@Autowired
 	private SqlSession sqlSession;
-
+	
+	// UserAuth DaoImpl
 	@Override
 	public void signUp(MisoStudyUserVo newUser) {
 		sqlSession.insert("signUp", newUser);
@@ -37,13 +38,24 @@ public class MisoStudyDaoImpl implements MisoStudyDao {
 	}
 	
 	
+	// Board DaoImpl
 	@Override
 	public List<MisoStudyBoardVo> selectAllBoards() {
 		return sqlSession.selectList("selectAllBoards");
 	}
 
 	@Override
-	public MisoStudyBoardVo selectBoardByBoardNo(String boardNo) {
+	public MisoStudyBoardVo selectBoardByBoardNo(int boardNo) {
 		return sqlSession.selectOne("selectBoardByBoardNo", boardNo);
+	}
+
+	@Override
+	public List<MisoStudyBoardVo> selectCommentsByBoardNo(int parseIntBoardNo) {
+		return sqlSession.selectList("selectCommentsByBoardNo", parseIntBoardNo);
+	}
+
+	@Override
+	public void insertBoard(MisoStudyBoardVo newBoard) {
+		sqlSession.insert("insertBoard", newBoard);
 	}
 }

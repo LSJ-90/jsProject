@@ -1,14 +1,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" %>
-<form id="signUpForm" action="/projects/misostudy/signUpForm" method="post" accept-charset="utf-8">
-	<div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="signUpModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="signUpModalLabel">Sign Up</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
+<div class="modal fade" id="signUpModal" tabindex="-1" aria-labelledby="signUpModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="signUpModalLabel">Sign Up</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form id="signUpForm" action="/projects/misostudy/signUpForm" method="post" accept-charset="utf-8">
 					<div class="form-floating mb-3">
 					  <input type="text" class="form-control" id="signUpUserId" placeholder="User Id" name="id" autocomplete="off">
 					  <label for="signUpUserId">User Id</label>
@@ -34,15 +34,16 @@
 					  <label for="signUpEmail">Email</label>
 					  <div class="warning" id="check_email"></div>
 					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
-					<button type="button" id="signUpBtn" class="btn btn-outline-dark">Sign Up</button>
-				</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Close</button>
+				<button type="button" id="signUpBtn" class="btn btn-outline-dark">Sign Up</button>
 			</div>
 		</div>
 	</div>
-</form>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">
 	/**
