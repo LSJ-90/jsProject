@@ -34,10 +34,18 @@
 			(SJ_USER_SEQ.NEXTVAL, #{id}, #{pwd}, #{name}, #{email})
 	</insert>
 	
-	<select id="checkUserInfoById" parameterType="String" resultType="int">
+	<select id="countUserInfoById" parameterType="String" resultType="int">
 		SELECT COUNT(*)
 		FROM SJ_USERS
-		WHERE ID = #{id}
+		WHERE NOT IS_WITHDRAWAL = 'Y'
+		AND ID = #{id}
+	</select>
+	
+	<select id="countUserInfoByEmail" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM SJ_USERS
+		WHERE NOT IS_WITHDRAWAL = 'Y'
+		AND EMAIL = #{email}
 	</select>
 	
 	<select id="selectUserInfoById" parameterType="String" resultMap="userInfoResultMap">
@@ -50,6 +58,32 @@
 			   IS_WITHDRAWAL,
 			   WITHDRAW_DATE
 		FROM SJ_USERS
-		WHERE ID = #{id}
+		WHERE NOT IS_WITHDRAWAL = 'Y'
+		AND ID = #{id}
+	</select>
+	
+	<!-- Board Mapper -->
+	<select id="selectAllBoards" resultType="com.miso.web.vo.MisoStudyBoardVo">
+		SELECT 
+			A.BOARD_NO boardNo, 
+			A.WRITER_NO writerNo, 
+		    C.NAME writerName, 
+	   	    A.CREATED_DATE createdDate, 
+			A.TITLE title, 
+			A.CONTENT content, 
+			A.VIEW_COUNT viewCount, 
+			A.UPDATED_DATE updatedDate, 
+			B.UPLOAD_NO uploadNo, 
+			B.NAME uploadName
+		FROM 
+			SJ_BOARDS A
+		
+		LEFT OUTER JOIN SJ_UPLOADS B ON B.BOARD_NO = A.BOARD_NO
+		JOIN SJ_USERS C ON C.USER_NO = A.WRITER_NO
+		
+		WHERE 
+			NOT A.IS_DELETED = 'Y'
+		ORDER BY 
+			A.BOARD_NO DESC
 	</select>
 </mapper>

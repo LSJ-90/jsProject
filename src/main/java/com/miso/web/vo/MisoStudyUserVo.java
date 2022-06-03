@@ -59,12 +59,6 @@ public class MisoStudyUserVo {
 		this.email = email;
 	}
 
-//	@Override
-//	public String toString() {
-//		return "MisoStudyUserVo [userNo=" + userNo + ", id=" + id + ", pwd=" + pwd + ", name=" + name + ", email="
-//				+ email + "]";
-//	}
-
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -91,7 +85,8 @@ public class MisoStudyUserVo {
 
 	@Override
 	public String toString() {
-		return "MisoStudyUserVo [userNo=" + userNo + ", id=" + id + ", pwd=" + pwd + ", name=" + name + ", createdDate="
-				+ createdDate + ", isWithdrawal=" + isWithdrawal + ", withdrawDate=" + withdrawDate + "]";
+		return "MisoStudyUserVo [userNo=" + userNo + ", id=" + id + ", pwd=" + pwd + ", name=" + name + ", email="
+				+ email + ", createdDate=" + createdDate + ", isWithdrawal=" + isWithdrawal + ", withdrawDate="
+				+ withdrawDate + "]";
 	}
 }
