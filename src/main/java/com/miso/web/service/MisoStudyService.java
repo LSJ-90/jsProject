@@ -19,7 +19,9 @@ public class MisoStudyService {
 	
 	@Autowired
 	private MisoStudyDao misoStudyDao;
-
+	
+	
+	// UserAuth Service
 	public void signUp(MisoStudyUserVo newUser) {
 		String authPwd = DigestUtils.sha512Hex(newUser.getPwd());
 		newUser.setPwd(authPwd);
@@ -29,7 +31,7 @@ public class MisoStudyService {
 	public MisoStudyUserVo signIn(String id) {
 		return misoStudyDao.selectUserInfoById(id);
 	}
-
+	
 	public int checkId(String id) {
 		return misoStudyDao.countUserInfoById(id);
 	}
@@ -38,15 +40,20 @@ public class MisoStudyService {
 		return misoStudyDao.countUserInfoByEmail(email);
 	}
 	
-	/**
-	 *
-	 * @return
-	 */
+	// Board Service
 	public List<MisoStudyBoardVo> selectAllBoards() {
 		return misoStudyDao.selectAllBoards();
 	}
 
-	public MisoStudyBoardVo selectBoardByBoardNo(String boardNo) {
+	public MisoStudyBoardVo selectBoardByBoardNo(int boardNo) {
 		return misoStudyDao.selectBoardByBoardNo(boardNo);
+	}
+
+	public List<MisoStudyBoardVo> selectCommentsByBoardNo(int parseIntBoardNo) {
+		return misoStudyDao.selectCommentsByBoardNo(parseIntBoardNo);
+	}
+
+	public void insertBoard(MisoStudyBoardVo newBoard) {
+		misoStudyDao.insertBoard(newBoard);
 	}
 }

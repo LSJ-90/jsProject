@@ -102,6 +102,7 @@
 			      <th scope="col">제목</th>
 			      <th scope="col">작성자</th>
 			      <th scope="col">작성일</th>
+			      <th scope="col">수정일</th>
 			      <th scope="col">첨부파일</th>
 			      <th scope="col">조회수</th>
 			    </tr>
@@ -113,6 +114,7 @@
 			      <td>${board.title }</td>
 			      <td>${board.writerName }</td>
 			      <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createdDate }"/></td>
+			      <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updatedDate }"/></td>
 			      <td>아이콘설정</td>
 			      <td>${board.viewCount }</td>
 			    </tr>
@@ -142,10 +144,25 @@
 					</li>
 				</ul>
 			</div>
-		<button type="button" class="btn btn-outline-light btn-dark" data-bs-toggle="modal" data-bs-target="#insertBoardModal">작성</button>
+		<button type="button" id="insertBoardBtn" class="btn btn-outline-light btn-dark" data-bs-toggle="modal" data-bs-target="#insertBoardModal">작성</button>
 		</div>
+		
+		<!-- boardInsert Start -->
 		<%@include file="boardInsert.jsp" %>
-		<%@include file="boardDetail.jsp" %>
+		<!-- boardInsert End -->
+		
+		<%@include file="boardUpdate.jsp" %>
+		
+		<!-- boardDetail Start -->
+		<div class="modal fade" id="detailBoardModal" tabindex="-1" aria-labelledby="detailBoardModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl modal-dialog-scrollable">
+				<div id="boardDetailResult" class="modal-content">
+					<!-- boardDetailTable Result -->
+					<%@include file="boardDetailTable.jsp" %>
+				</div>
+			</div>
+		</div>
+		<!-- boardDetail End -->
 	</div>
 	<footer>
 		<%@include file="footer.jsp" %>
@@ -160,12 +177,15 @@
 			
 			$.ajax({
 				type: 'get',
-				url: '/projects/misostudy/detailBoard',
+				url: '/projects/misostudy/boardDetail',
 				data: {'boardNo': boardNo},
 				contentType: 'application/json; charset=utf-8', 
-				dataType: 'json',
+				dataType: 'text',
 				success: function(result) {
-					alert("성공");
+					// alert("성공");
+					// console.log(result);
+					$('#boardDetailResult').html(result);
+					$('#detailBoardModal').modal('show');
 				},
 				error : function(request, status, error) {
 					alert('실패');
@@ -174,10 +194,29 @@
 					console.log(error);
 				}
 			});
+		});
+		
+		$('#insertBoardModal').on('show.bs.modal', function (e) {
+		  	if (${empty LOGIN_USER }) {
+		  		e.preventDefault();
+				alert('로그인 후 사용 가능합니다..:(');
+				$('#signInModal').modal('show');
+			} 
+		});
+		
+		// Modal reset Controller
+		$('.modal').on('hidden.bs.modal', function(e) {
+			$(this).find('form')[0].reset();
 			
+			//SignIn
+			$('#signInResultMessage').removeClass('alert-danger');
+			$('#signInResultMessage').addClass('alert-light');
+			$('#signInResultMessage').text('로그인하여 게시판을 이용해보세요!!');
 			
-			$('#detailBoardModal').modal('show');
-			
+			//SignUp
+			$('.warning').text('');
+			$('.form-control').css('box-shadow','none');
+			$('.form-control').css('border-color','');
 		});
 	</script>
 </body>

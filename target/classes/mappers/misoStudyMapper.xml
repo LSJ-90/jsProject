@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.miso.persistence.MisoStudyDao">
-	<resultMap id="userInfoResultMap" type="com.miso.web.vo.MisoStudyUserVo">
-		<id column="USER_NO" property="userNo"/> 
-		<result column="ID" property="id"/> 
-		<result column="PWD" property="pwd"/> 
-		<result column="NAME" property="name"/> 
-		<result column="EMAIL" property="email"/> 
-		<result column="CREATED_DATE" property="createdDate"/> 
-		<result column="IS_WITHDRAWAL" property="isWithdrawal"/> 
-		<result column="WITHDRAW_DATE" property="withdrawDate"/> 
-	</resultMap>
-	
 	<sql id="whereByDeptNo">
 		WHERE DEPTNO IN
 		<foreach collection="list" item="deptNo" open="(" separator="," close=")"> 
@@ -26,7 +15,19 @@
 			close="해당 구문이 끝날 때의 사용할 문자 추가" 
 		-->
 	</sql>
-
+	
+	<!-- UserAuth Mapper -->
+	<resultMap id="userInfoResultMap" type="com.miso.web.vo.MisoStudyUserVo">
+		<id column="USER_NO" property="userNo"/> 
+		<result column="ID" property="id"/> 
+		<result column="PWD" property="pwd"/> 
+		<result column="NAME" property="name"/> 
+		<result column="EMAIL" property="email"/> 
+		<result column="CREATED_DATE" property="createdDate"/> 
+		<result column="IS_WITHDRAWAL" property="isWithdrawal"/> 
+		<result column="WITHDRAW_DATE" property="withdrawDate"/> 
+	</resultMap>
+	
 	<insert id="signUp" parameterType="com.miso.web.vo.MisoStudyUserVo">
 		INSERT INTO SJ_USERS
 			(USER_NO, ID, PWD, NAME, EMAIL) 
@@ -63,6 +64,28 @@
 	</select>
 	
 	<!-- Board Mapper -->
+	<!-- 
+	<resultMap id="boardInfoResultMap" type="com.miso.web.vo.MisoStudyBoardVo">
+		<id column="BOARD_NO" property="boardNo"/> 
+		<result column="WRITER_NO" property="writerNo"/> 
+		<result column="NAME" property="writerName"/> 
+		<result column="CREATED_DATE" property="createdDate"/> 
+		<result column="TITLE" property="title"/> 
+		<result column="CONTENT" property="content"/> 
+		<result column="VIEW_COUNT" property="viewCount"/> 
+		<result column="UPDATED_DATE" property="updatedDate"/> 
+		<result column="UPLOAD_NO" property="uploadNo"/> 
+		<result column="NAME" property="updatedDate"/> 
+	</resultMap>
+	 -->
+	 
+	<insert id="insertBoard" parameterType="com.miso.web.vo.MisoStudyBoardVo">
+		INSERT INTO SJ_BOARDS
+    		(BOARD_NO, WRITER_NO, TITLE, CONTENT) 
+		VALUES 
+    		(SJ_BOARD_SEQ.NEXTVAL, #{writerNo}, #{title}, #{content})
+	</insert>
+	
 	<select id="selectAllBoards" resultType="com.miso.web.vo.MisoStudyBoardVo">
 		SELECT 
 			A.BOARD_NO boardNo, 
@@ -85,5 +108,51 @@
 			NOT A.IS_DELETED = 'Y'
 		ORDER BY 
 			A.BOARD_NO DESC
+	</select>
+	
+	<select id="selectBoardByBoardNo" parameterType="int" resultType="com.miso.web.vo.MisoStudyBoardVo">
+		SELECT 
+			A.BOARD_NO boardNo, 
+			A.WRITER_NO writerNo, 
+		    C.NAME writerName, 
+	   	    A.CREATED_DATE createdDate, 
+			A.TITLE title, 
+			A.CONTENT content, 
+			A.VIEW_COUNT viewCount, 
+			A.UPDATED_DATE updatedDate, 
+			B.UPLOAD_NO uploadNo, 
+			B.NAME uploadName
+		FROM 
+			SJ_BOARDS A
+		
+		LEFT OUTER JOIN SJ_UPLOADS B ON B.BOARD_NO = A.BOARD_NO
+		JOIN SJ_USERS C ON C.USER_NO = A.WRITER_NO
+		
+		WHERE 
+			NOT A.IS_DELETED = 'Y'
+		AND 
+			A.BOARD_NO = #{boardNo}
+		ORDER BY 
+			A.BOARD_NO DESC
+	</select>
+	
+	<select id="selectCommentsByBoardNo" parameterType="int" resultType="com.miso.web.vo.MisoStudyBoardVo">
+		SELECT 
+			A.COMMENT_NO commentNo,
+		    A.WRITER_NO writerNo,
+		    B.NAME writerName,
+		    A.CONTENT content,
+		    A.CREATED_DATE createdDate
+		FROM 
+			SJ_COMMENTS A
+		
+		JOIN SJ_USERS B ON B.USER_NO = A.WRITER_NO
+		
+		WHERE 
+			A.BOARD_NO = #{boardNo}
+		AND 
+			NOT A.IS_DELETED = 'Y'
+		ORDER BY 
+			A.COMMENT_NO DESC
 	</select>
 </mapper>

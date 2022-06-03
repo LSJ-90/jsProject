@@ -99,7 +99,6 @@ public class MisoStudyController {
 	 */
 	@RequestMapping(value = "/projects/misostudy/boardList", method = RequestMethod.GET)
 	public String boardListInit(HttpSession session, Model model) {
-		
 		List<MisoStudyBoardVo> boardList = misoStudyService.selectAllBoards();
 		model.addAttribute("boardList", boardList);
 		
@@ -109,18 +108,25 @@ public class MisoStudyController {
 		return "/projects/misostudy/boardList";
 	}
 	
-	@RequestMapping(value = "/projects/misostudy/detailBoard", method = RequestMethod.GET)
-	public void detailBoard(@RequestParam String boardNo, Model model) {
-
-		System.out.println(boardNo);
-		MisoStudyBoardVo board = misoStudyService.selectBoardByBoardNo(boardNo);
+	@RequestMapping(value = "/projects/misostudy/boardDetail", method = RequestMethod.GET)
+	public String detailBoard(@RequestParam String boardNo, Model model) {
+		int parseIntBoardNo = Integer.parseInt(boardNo);
 		
-		// return board;
+		MisoStudyBoardVo board = misoStudyService.selectBoardByBoardNo(parseIntBoardNo); // logger.info(board.toString());
+		int viewCnt = board.getViewCount();
+		board.setViewCount(viewCnt+1);
+		model.addAttribute("board", board);
+		
+		List<MisoStudyBoardVo> comments = misoStudyService.selectCommentsByBoardNo(parseIntBoardNo);  logger.info(comments.toString());
+		model.addAttribute("comments", comments);
+		
+		return "projects/misostudy/boardDetailTable";
 	}
 	
 	@RequestMapping(value = "/projects/misostudy/insertBoard", method = RequestMethod.POST)
-	public String insertBoard(MisoStudyBoardVo newBoard, Model model) {
+	public String insertBoard(MisoStudyBoardVo newBoard, HttpSession session, Model model) {
 		logger.info(newBoard.toString());
+		misoStudyService.insertBoard(newBoard);
 			
 		return "redirect:boardList";
 	}
