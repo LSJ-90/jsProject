@@ -2,6 +2,7 @@ package com.miso.web.persistence;
 
 import java.util.List;
 
+import com.miso.web.util.Criteria;
 import com.miso.web.vo.MisoStudyBoardVo;
 import com.miso.web.vo.MisoStudyUserVo;
 
@@ -26,5 +27,11 @@ public interface MisoStudyDao {
 	List<MisoStudyBoardVo> selectCommentsByBoardNo(int parseIntBoardNo);
 
 	void insertBoard(MisoStudyBoardVo newBoard);
+
+	void updateBoard(MisoStudyBoardVo newBoard);
+
+	int selectBoardsTotalRowsCnt();
+
+	List<MisoStudyBoardVo> selectSearchBoards(Criteria criteria);
 	
 }

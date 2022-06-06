@@ -62,7 +62,7 @@
 		}
 		
 		/* BoardList */
-		#insertBoardContent {
+		#insertBoardContent, #updateBoardContent {
 			height: 340px;
 			resize: none;
 		}
@@ -94,8 +94,8 @@
 		<%@include file="signUpForm.jsp" %>
 	</header>
 	<div class="container">
-		<div class="row">
-			<table id="selectTable" class="table table table-dark table-striped table-hover">
+		<div id="selectTable" class="row">
+			<table class="table table table-dark table-striped table-hover">
 			  <thead>
 			    <tr>
 			      <th scope="col">#</th>
@@ -111,8 +111,8 @@
 			  	<c:forEach items="${boardList }" var="board">
 			    <tr class="boardVo">
 			      <th scope="row"><c:out value="${board.boardNo }"/></th>
-			      <td>${board.title }</td>
-			      <td>${board.writerName }</td>
+			      <td><c:out value="${board.title }"/></td>
+			      <td><c:out value="${board.writerName }"/></td>
 			      <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createdDate }"/></td>
 			      <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updatedDate }"/></td>
 			      <td>아이콘설정</td>
@@ -122,36 +122,39 @@
 			  	</c:forEach>
 			  </tbody>
 			</table>
+			<ul class="pagination justify-content-center">
+				<li class="page-item ${pagination.existPrev ? '' : 'disabled' }">
+					<a class="page-link" data-page="${pagination.prevPage }" aria-label="Previous"> 
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<c:forEach var="num" begin="${pagination.beginPage }" end="${pagination.endPage }">
+					<li class="page-item ${pagination.pageNo eq num ? 'active' : '' }">
+						<a class="page-link">${num }</a>
+					</li>
+				</c:forEach>
+				<li class="page-item  ${pagination.existNext ? '' : 'disabled' }">
+					<a class="page-link" data-page="${pagination.nextPage }" aria-label="Next">
+						<span aria-hidden="true">&raquo;</span>
+					</a>
+				</li>
+			</ul>
 		</div>
-		
 		<div class="row">
-			<div class="col">
-				<ul class="pagination">
-					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Previous"> 
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-					<li class="page-item"><a class="page-link" href="#">1</a></li>
-					<li class="page-item"><a class="page-link" href="#">2</a></li>
-					<li class="page-item"><a class="page-link" href="#">3</a></li>
-					<li class="page-item"><a class="page-link" href="#">4</a></li>
-					<li class="page-item"><a class="page-link" href="#">5</a></li>
-					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		<button type="button" id="insertBoardBtn" class="btn btn-outline-light btn-dark" data-bs-toggle="modal" data-bs-target="#insertBoardModal">작성</button>
+			<button type="button" id="insertBoardBtn" class="btn btn-outline-light btn-dark" data-bs-toggle="modal" data-bs-target="#insertBoardModal">작성</button>
 		</div>
 		
 		<!-- boardInsert Start -->
 		<%@include file="boardInsert.jsp" %>
 		<!-- boardInsert End -->
 		
-		<%@include file="boardUpdate.jsp" %>
+		<div class="modal fade" id="updateBoardModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="updateBoardModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-xl modal-dialog-scrollable">
+				<div id="boardUpdateResult" class="modal-content">
+					<%@include file="boardUpdate.jsp" %>
+				</div>
+			</div>
+		</div>
 		
 		<!-- boardDetail Start -->
 		<div class="modal fade" id="detailBoardModal" tabindex="-1" aria-labelledby="detailBoardModalLabel" aria-hidden="true">
@@ -170,11 +173,76 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script type="text/javascript">
-		$('.boardVo').click(function(e) {
+		// 수정 
+		$(document).on('click', '#updateConfirmBtn', function(){
+			const updateBoardForm = $('#updateBoardForm').serialize();
+			console.log($('.page-item.active').children().eq(0).text());
+			$.ajax({
+				type: 'post',
+				url: '/projects/misostudy/boardUpdate',
+				data: updateBoardForm,
+				dataType: 'text',
+				success: function(result) {
+					 // alert("성공");
+					 console.log(result);
+					 $('#boardDetailResult').html(result);
+					 const page = $('.page-item.active').children().eq(0).text();
+						$.ajax({
+							type: 'get',
+							url: '/projects/misostudy/boardListResult?page='+page,
+							dataType: 'text',
+							success: function(result) {
+								// alert('성공');
+								console.log(result);
+								$('#selectTable').empty();
+								$('#selectTable').html(result);
+							},
+							error : function(request, status, error) {
+								alert('실패');
+								console.log(request);
+								console.log(status);
+								console.log(error);
+							}
+						});
+				},
+				error : function(request, status, error) {
+					alert('실패');
+					console.log(request);
+					console.log(status);
+					console.log(error);
+				}
+			});
+		});
+	
+		// 수정폼 이동
+		$(document).on('click', '#boardUpdateBtn', function(){
+			const boardNo = $('#updateBoradNo').val();
+			console.log(boardNo);
+			$.ajax({
+				type: 'get',
+				url: '/projects/misostudy/boardUpdate',
+				data: {'boardNo' : boardNo},
+				contentType: 'application/json; charset=utf-8', 
+				dataType: 'text',
+				success: function(result) {
+					 // alert("성공");
+					 // console.log(result);
+					$('#boardUpdateResult').html(result);
+				},
+				error : function(request, status, error) {
+					alert('실패');
+					console.log(request);
+					console.log(status);
+					console.log(error);
+				}
+			});
+		});	
+	
+		// Detail Init
+		$(document).on('click', '.boardVo', function(e){
 			console.log($(e.currentTarget.nextElementSibling).val());
 			console.log(typeof $(e.currentTarget.nextElementSibling).val());
 			const boardNo = $(e.currentTarget.nextElementSibling).val();
-			
 			$.ajax({
 				type: 'get',
 				url: '/projects/misostudy/boardDetail',
@@ -186,6 +254,29 @@
 					// console.log(result);
 					$('#boardDetailResult').html(result);
 					$('#detailBoardModal').modal('show');
+				},
+				error : function(request, status, error) {
+					alert('실패');
+					console.log(request);
+					console.log(status);
+					console.log(error);
+				}
+			});
+		});
+		
+		// 페이지네이션
+		$(document).on('click', '.page-link', function(e){
+			console.log($(e.target).text());
+			const page = $(e.target).text();
+			$.ajax({
+				type: 'get',
+				url: '/projects/misostudy/boardListResult?page='+page,
+				dataType: 'text',
+				success: function(result) {
+					// alert('성공');
+					console.log(result);
+					$('#selectTable').empty();
+					$('#selectTable').html(result);
 				},
 				error : function(request, status, error) {
 					alert('실패');
@@ -217,6 +308,298 @@
 			$('.warning').text('');
 			$('.form-control').css('box-shadow','none');
 			$('.form-control').css('border-color','');
+		});
+		
+		$('#signInBtn').click(function() {
+			const signInForm = $('#signInForm').serialize();
+			$.ajax({
+				type:'post', 
+				url:'/projects/misostudy/signIn', 
+				data: signInForm,
+				contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+				dataType: 'text',
+				success : function(result) {
+					if (result === 'success') {
+						alert("로그인 성공");
+						$('#signInModal').modal('hide');
+						$('.modal-backdrop').remove();
+						$('#loginUl').empty();
+						$('#loginUl').append('<li class="nav-item"><a class="nav-link" href="/projects/misostudy/signOut" role="button">Sign out</a></li>');
+					} else {
+						$('#signInResultMessage').removeClass('alert-light');
+						$('#signInResultMessage').addClass('alert-danger');
+						$('#signInResultMessage').text(result);
+					}
+				},
+				error : function(request, status, error) {
+					alert('실패');
+					console.log(request);
+					console.log(status);
+					console.log(error);
+				}
+			}); 
+		});
+		
+		/**
+		 * 회원가입 페이지 유효성검사 스크립트
+		 */
+		
+		// 아이디 정규표현식: 아이디는 영문으로 시작하여, 소문자와 숫자를 사용해 6~12자리만 가능
+		const idRegexp = /^[a-z][a-z0-9]{5,12}$/;
+		
+		// 비밀번호 정규표현식: 8 ~ 16자 영문, 숫자, 특수문자를 최소 한가지씩 조합
+		const pwdRegexp = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/; 
+		
+		// 이름 정규표현식: 두 자 이상, 한글만 가능
+		const nameRegexp = /^[가-힣]{2,}$/;
+		
+		const emailRegexp = /^[A-Za-z0-9.\-_]+@([A-Za-z0-9-]+\.)+[A-Za-z]{2,6}$/;
+		
+		let isTrue;
+		
+		$('#signUpBtn').click(function(){
+			const signUpForm = $('#signUpForm').serialize();
+			if (signUpForm_check() == false) return;
+			$.ajax({
+				url: '/projects/misostudy/signUpForm',
+				type: 'post',
+				data: signUpForm,
+				dataType: 'text',
+				success: function(result) {
+					console.log('성공: ' + result);
+					if (result === 'success') {
+						alert("회원가입 성공");
+						$('#signUpModal').modal("hide");
+						$('.modal-backdrop').remove();
+						$('#loginUl').empty();
+						$('#loginUl').append('<li class="nav-item"><a class="nav-link" href="/projects/misostudy/signOut" role="button">Sign out</a></li>');
+					} else {
+						$('#signInResultMessage').text(result);
+					}
+				},
+				error:function(request,status,error){
+			    	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			    }
+			});
+		});
+
+		function signUpForm_check() {
+		    if (check_id() != true) { // 아이디 검사
+		        alert('[아이디 입력 오류] 올바른 아이디를 입력해 주세요.');
+		        $('#signUpUserId').focus();
+		        return false;
+		    }
+		 	if (check_pwd() != true) { // 비밀번호 검사
+		        alert('[비밀번호 입력 오류] 올바른 비밀번호를 입력해 주세요.');
+		        $('#signUpPwd').focus();
+		        return false;
+		    }
+			if (check_pwdConfirm() != true) { // 비밀번호 일치검사
+		        alert('[비밀번호 확인 오류] 비밀번호가 일치하지 않습니다. 확인해주세요.');
+		        $('#signUpPwdConfirm').focus();
+		        return false;
+		    }
+			if (check_name() != true) { // 이름 검사
+		        alert('[이름 입력 오류] 올바른 이름을 입력해 주세요.');
+		        $('#signUpName').focus();
+		        return false;
+		    }
+			if (check_email() != true) { // 이메일 검사
+		        alert('[이메일 입력 오류] 올바른 이메일을 입력해 주세요.');
+		        $('#signUpEmail').focus();
+		        return false;
+		    }
+		}
+
+		function check_id() {
+			const id = $('#signUpUserId').val();
+			$.ajax({
+				url : '/projects/misostudy/signUpForm/checkId',
+				type : 'post',
+				data : {'id' : id},
+				async: false, // 동기식으로 변경, 응답을 모두 완료한 후 
+				success : function(result) {
+					// console.log('1=중복 // 0=정상 : '+ result);							
+					// 1 : 중복
+					if (result === 1) {
+						$('#check_id').text('사용중인 아이디입니다!!  :(').css('color', 'red');
+						$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+						$('.form-control:focus').css('border-color','rgb(255 0 0)');
+						isTrue = false;
+					} else {
+						// 0 : 정상, 형식검사 시작
+						if (!(idRegexp.test(id))) {
+							$('#check_id').text('아이디는 영문으로 시작하여, 소문자와 숫자를 사용해 6~12자리까지만 가능합니다!! :(').css('color', 'rgb(255 0 0)');
+							$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+							$('.form-control:focus').css('border-color','rgb(255 0 0 / 25%)');
+							isTrue = false;
+						}
+						if (idRegexp.test(id)) {
+							$('#check_id').text('올~드디어~ 이건 가능하지 :)').css('color', 'rgb(54 150 105)');
+							$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(54 150 105 / 25%)');
+							$('.form-control:focus').css('border-color','rgb(54 150 105)');
+							isTrue = true;
+						}
+						if (id == '') {
+							$('#check_id').text('아이디를 입력해주세요!!  :(').css('color', 'rgb(255 0 0)');
+							$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+							$('.form-control:focus').css('border-color','rgb(255 0 0)');
+							isTrue = false;
+						}
+					}
+				}, 
+				error : function(request, status, error) {
+					alert('실패');
+					console.log(request);
+					console.log(status);
+					console.log(error);
+				}
+			});
+			return isTrue;						
+		}
+		function check_pwd() {
+			const pwd = $('#signUpPwd').val();
+			const pwdConfirm = $('#signUpPwdConfirm').val();
+			check_pwdConfirm();
+			if (!(pwdRegexp.test(pwd))) {
+				$('#check_pwd').text('8 ~ 16자 영문, 숫자, 특수문자를 최소 한가지씩 조합하여 8~16자리까지만 가능합니다!!  :(').css('color', 'rgb(255 0 0)');
+				$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+				$('.form-control:focus').css('border-color','rgb(255 0 0)');
+				isTrue = false;
+			} 
+			if (pwdRegexp.test(pwd)) {
+				$('#check_pwd').text('사용가능한 비밀번호 입니다!!  :)').css('color', 'rgb(54 150 105)');
+				$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(54 150 105 / 25%)');
+				$('.form-control:focus').css('border-color','rgb(54 150 105)');
+				isTrue = true;
+			}
+			if (pwd === '') {
+				$('#check_pwd').text('비밀번호를 입력해주세요!!  :(').css('color', 'rgb(255 0 0)');
+				$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+				$('.form-control:focus').css('border-color','rgb(255 0 0)');
+				isTrue = false;
+			}
+			
+			return isTrue;
+		}
+
+		function check_pwdConfirm() {
+			const pwd = $('#signUpPwd').val();
+			const pwdConfirm = $('#signUpPwdConfirm').val();
+			if (pwd != pwdConfirm || pwd === '') {
+		 		$('#check_pwdConfirm').text('불일치!! :(').css('color', 'rgb(255 0 0)');
+		 		$('#signUpPwdConfirm').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+				$('#signUpPwdConfirm').css('border-color','rgb(255 0 0)');
+				isTrue = false;
+			} else {
+				$('#check_pwdConfirm').text('일치!! :)').css('color', 'rgb(54 150 105)');
+				$('#signUpPwdConfirm').css('box-shadow','0 0 0 0.25rem rgb(54 150 105 / 25%)');
+				$('#signUpPwdConfirm').css('border-color','rgb(54 150 105)');
+				isTrue = true;
+			}
+			return isTrue;
+		}
+
+		function check_name() {
+			const name = $('#signUpName').val();
+			if (!(nameRegexp.test(name))) {
+				$('#check_name').text('한글로 입력해주세요!!  :(').css('color', 'rgb(255 0 0)');
+				$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+				$('.form-control:focus').css('border-color','rgb(255 0 0)');
+				isTrue = false;
+			} 
+			if (nameRegexp.test(name)) {
+				$('#check_name').text('안녕하세요!! [' + name + ']님  :)').css('color', 'rgb(54 150 105)');
+				$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(54 150 105 / 25%)');
+				$('.form-control:focus').css('border-color','rgb(54 150 105)');
+				isTrue = true;
+			}
+			if (name === '') {
+				$('#check_name').text('이름을 입력해주세요!!  :(').css('color', 'rgb(255 0 0)');
+				$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+				$('.form-control:focus').css('border-color','rgb(255 0 0)');
+				isTrue = false;
+			}
+			return isTrue;
+		}
+
+		function check_email() {
+			const email = $('#signUpEmail').val();
+			$.ajax({
+				url : '/projects/misostudy/signUpForm/checkEmail',
+				type : 'post',
+				data : {'email' : email},
+				async: false, // 동기식으로 변경, 응답을 모두 완료한 후 
+				success : function(result) {
+					console.log('1=중복 // 0=정상 : '+ result);							
+					// 1 : 중복
+					if (result == 1) {
+						$('#check_email').text('사용중인 이메일입니다!!  :(').css('color', 'rgb(255 0 0)');
+						$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+						$('.form-control:focus').css('border-color','rgb(255 0 0)');
+						isTrue = false;
+					} else {
+						// 0 : 정상, 형식검사 시작
+						if (!(emailRegexp.test(email))) {
+							$('#check_email').text('올바른 이메일 형식이 아닙니다!! :(').css('color', 'rgb(255 0 0)');
+							$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+							$('.form-control:focus').css('border-color','rgb(255 0 0)');
+							isTrue = false;
+						}
+						if (emailRegexp.test(email)) {
+							$('#check_email').text('사용가능한 이메일 입니다!!  :)').css('color', 'rgb(54 150 105)');
+							$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(54 150 105 / 25%)');
+							$('.form-control:focus').css('border-color','rgb(54 150 105)');
+							isTrue = true;
+						}
+						if (email == '') {
+							$('#check_email').text('이메일을 입력해주세요!!  :(').css('color', 'rgb(255 0 0)');
+							$('.form-control:focus').css('box-shadow','0 0 0 0.25rem rgb(255 0 0 / 25%)');
+							$('.form-control:focus').css('border-color','rgb(255 0 0)');
+							isTrue = false;
+						}
+					}
+				}, 
+				error : function(request, status, error) {
+					alert('실패');
+					console.log(request);
+					console.log(status);
+					console.log(error);
+				}
+			});
+			return isTrue;						
+		}
+
+		$(function(){
+			// 아이디 유효성 체크
+			$('#signUpUserId').on('keyup', function() {
+				check_id();
+				console.log('아이디체크:' + check_id());
+			});
+			
+			// 비밀번호 유효성 체크
+			$('#signUpPwd').on('keyup',function() {
+				check_pwd();
+				console.log('비번체크:' + check_pwd());
+			});
+			
+			// 비밀번호 일치 확인
+			$('#signUpPwdConfirm').on('keyup', function () {
+				check_pwdConfirm();
+				console.log('비번확인:' + check_pwdConfirm());
+			});
+
+			// 이름 유효성 체크
+			$('#signUpName').on('keyup', function () {
+				check_name();
+				console.log('이름체크:' + check_name());
+			});
+
+			// 이메일 유효성 체크
+			$('#signUpEmail').on('keyup', function () {
+				check_email();
+				console.log('이메일체크:' + check_email());
+			});
 		});
 	</script>
 </body>

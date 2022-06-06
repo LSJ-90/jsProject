@@ -64,8 +64,7 @@
 		<button type="button" id="" class="btn btn-outline-dark">삭제</button>
 	</c:if>
 </div>
+<input id="updateBoradNo" type="hidden" name="boardNo" value="${board.boardNo }"/>
 <script type="text/javascript">
-	$('#boardUpdateBtn').click(function() {
-		console.log('${board.boardNo }');
-	});
+	
 </script>
