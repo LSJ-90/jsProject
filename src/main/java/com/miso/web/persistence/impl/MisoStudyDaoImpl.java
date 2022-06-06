@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.miso.web.persistence.MisoStudyDao;
+import com.miso.web.util.Criteria;
 import com.miso.web.vo.MisoStudyBoardVo;
 import com.miso.web.vo.MisoStudyUserVo;
 
@@ -57,5 +58,20 @@ public class MisoStudyDaoImpl implements MisoStudyDao {
 	@Override
 	public void insertBoard(MisoStudyBoardVo newBoard) {
 		sqlSession.insert("insertBoard", newBoard);
+	}
+
+	@Override
+	public void updateBoard(MisoStudyBoardVo newBoard) {
+		sqlSession.update("updateBoard", newBoard);
+	}
+
+	@Override
+	public int selectBoardsTotalRowsCnt() {
+		return sqlSession.selectOne("selectBoardsTotalRowsCnt");
+	}
+
+	@Override
+	public List<MisoStudyBoardVo> selectSearchBoards(Criteria criteria) {
+		return sqlSession.selectList("selectSearchBoards", criteria);
 	}
 }

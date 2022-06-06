@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.miso.web.service.MisoStudyService;
+import com.miso.web.util.Criteria;
+import com.miso.web.util.Pagination;
 import com.miso.web.vo.MisoStudyBoardVo;
 import com.miso.web.vo.MisoStudyUserVo;
 
@@ -98,14 +100,42 @@ public class MisoStudyController {
 	 * Board Controller
 	 */
 	@RequestMapping(value = "/projects/misostudy/boardList", method = RequestMethod.GET)
-	public String boardListInit(HttpSession session, Model model) {
-		List<MisoStudyBoardVo> boardList = misoStudyService.selectAllBoards();
+	public String boardListInit(@RequestParam(required = false, defaultValue = "1") String page, Criteria criteria, HttpSession session, Model model) {
+		
+		int totalRecords = misoStudyService.selectBoardsTotalRowsCnt();
+		Pagination pagination = new Pagination(page, totalRecords);
+		criteria.setBeginIndex(pagination.getBegin());
+		criteria.setEndIndex(pagination.getEnd());
+		List<MisoStudyBoardVo> boardList = misoStudyService.selectSearchBoards(criteria);
+		
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("pagination", pagination);
 		
 		MisoStudyUserVo loginedUser = (MisoStudyUserVo) session.getAttribute("LOGIN_USER");
 		model.addAttribute("LOGIN_USER", loginedUser);
 
 		return "/projects/misostudy/boardList";
+	}
+	
+	@RequestMapping(value = "/projects/misostudy/boardListResult", method = RequestMethod.GET)
+	public String boardListResult(@RequestParam(required = false, defaultValue = "1") String page, Criteria criteria, HttpSession session, Model model) {
+		System.out.println(page);
+		int totalRecords = misoStudyService.selectBoardsTotalRowsCnt();
+		Pagination pagination = new Pagination(page, totalRecords);
+		logger.info(pagination.toString());
+		criteria.setBeginIndex(pagination.getBegin());
+		criteria.setEndIndex(pagination.getEnd());
+		logger.info(criteria.toString());
+		List<MisoStudyBoardVo> boardList = misoStudyService.selectSearchBoards(criteria);
+		logger.info(boardList.toString());
+		
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("pagination", pagination);
+		
+		MisoStudyUserVo loginedUser = (MisoStudyUserVo) session.getAttribute("LOGIN_USER");
+		model.addAttribute("LOGIN_USER", loginedUser);
+
+		return "/projects/misostudy/boardListResult";
 	}
 	
 	@RequestMapping(value = "/projects/misostudy/boardDetail", method = RequestMethod.GET)
@@ -117,10 +147,31 @@ public class MisoStudyController {
 		board.setViewCount(viewCnt+1);
 		model.addAttribute("board", board);
 		
-		List<MisoStudyBoardVo> comments = misoStudyService.selectCommentsByBoardNo(parseIntBoardNo);  logger.info(comments.toString());
+		List<MisoStudyBoardVo> comments = misoStudyService.selectCommentsByBoardNo(parseIntBoardNo);  // logger.info(comments.toString());
 		model.addAttribute("comments", comments);
 		
 		return "projects/misostudy/boardDetailTable";
+	}
+	
+	@RequestMapping(value = "/projects/misostudy/boardUpdate", method = RequestMethod.GET)
+	public String updateBoard(@RequestParam String boardNo, Model model) {
+		System.out.println(boardNo);
+		int parseIntBoardNo = Integer.parseInt(boardNo);
+		
+		MisoStudyBoardVo board = misoStudyService.selectBoardByBoardNo(parseIntBoardNo); logger.info(board.toString());
+		model.addAttribute("board", board);
+		
+		return "projects/misostudy/boardUpdate";
+	}
+	
+	@RequestMapping(value = "/projects/misostudy/boardUpdate", method = RequestMethod.POST)
+	public String updateBoard(MisoStudyBoardVo newBoard, HttpSession session, Model model) {
+		logger.info(newBoard.toString());
+		misoStudyService.updateBoard(newBoard);
+		MisoStudyBoardVo board = misoStudyService.selectBoardByBoardNo(newBoard.getBoardNo()); logger.info(board.toString());
+		model.addAttribute("board", board);
+		
+		return "/projects/misostudy/boardDetailTable";
 	}
 	
 	@RequestMapping(value = "/projects/misostudy/insertBoard", method = RequestMethod.POST)

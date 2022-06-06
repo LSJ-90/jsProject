@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.miso.web.persistence.MisoStudyDao;
+import com.miso.web.util.Criteria;
 import com.miso.web.vo.MisoStudyBoardVo;
 import com.miso.web.vo.MisoStudyUserVo;
 
@@ -55,5 +56,17 @@ public class MisoStudyService {
 
 	public void insertBoard(MisoStudyBoardVo newBoard) {
 		misoStudyDao.insertBoard(newBoard);
+	}
+
+	public void updateBoard(MisoStudyBoardVo newBoard) {
+		misoStudyDao.updateBoard(newBoard);
+	}
+
+	public int selectBoardsTotalRowsCnt() {
+		return misoStudyDao.selectBoardsTotalRowsCnt();
+	}
+
+	public List<MisoStudyBoardVo> selectSearchBoards(Criteria criteria) {
+		return misoStudyDao.selectSearchBoards(criteria);
 	}
 }
