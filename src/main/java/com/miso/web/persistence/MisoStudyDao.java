@@ -24,14 +24,18 @@ public interface MisoStudyDao {
 
 	MisoStudyBoardVo selectBoardByBoardNo(int boardNo);
 
-	List<MisoStudyBoardVo> selectCommentsByBoardNo(int parseIntBoardNo);
+	List<MisoStudyBoardVo> selectCommentsByBoardNo(int boardNo);
 
 	void insertBoard(MisoStudyBoardVo newBoard);
 
-	void updateBoard(MisoStudyBoardVo newBoard);
+	void updateBoardByBoardNo(MisoStudyBoardVo newBoard);
 
 	int selectBoardsTotalRowsCnt();
 
 	List<MisoStudyBoardVo> selectSearchBoards(Criteria criteria);
+
+	void updateViewCntByBoardNo(MisoStudyBoardVo board);
+
+	void deleteBoardByBoardNo(MisoStudyBoardVo board);
 	
 }

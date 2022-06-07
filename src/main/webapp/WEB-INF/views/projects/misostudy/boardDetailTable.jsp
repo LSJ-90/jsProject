@@ -22,7 +22,7 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td><c:out value="${board.boardNo }"/></td>
+				<td id="detailBoradNo"><c:out value="${board.boardNo }"/></td>
 				<td><c:out value="${board.writerName }"/></td>
 				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createdDate }"/></td>
 				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updatedDate }"/></td>
@@ -61,10 +61,6 @@
 	<button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">닫기</button>
 	<c:if test="${board.writerNo == LOGIN_USER.userNo }">
 		<button type="button" id="boardUpdateBtn" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#updateBoardModal">수정</button>
-		<button type="button" id="" class="btn btn-outline-dark">삭제</button>
+		<button type="button" id="boardDeleteBtn" class="btn btn-outline-dark" data-bs-dismiss="modal">삭제</button>
 	</c:if>
 </div>
-<input id="updateBoradNo" type="hidden" name="boardNo" value="${board.boardNo }"/>
-<script type="text/javascript">
-	
-</script>

@@ -61,8 +61,8 @@ public class MisoStudyDaoImpl implements MisoStudyDao {
 	}
 
 	@Override
-	public void updateBoard(MisoStudyBoardVo newBoard) {
-		sqlSession.update("updateBoard", newBoard);
+	public void updateBoardByBoardNo(MisoStudyBoardVo newBoard) {
+		sqlSession.update("updateBoardByBoardNo", newBoard);
 	}
 
 	@Override
@@ -73,5 +73,15 @@ public class MisoStudyDaoImpl implements MisoStudyDao {
 	@Override
 	public List<MisoStudyBoardVo> selectSearchBoards(Criteria criteria) {
 		return sqlSession.selectList("selectSearchBoards", criteria);
+	}
+
+	@Override
+	public void updateViewCntByBoardNo(MisoStudyBoardVo board) {
+		sqlSession.update("updateViewCntByBoardNo", board);
+	}
+
+	@Override
+	public void deleteBoardByBoardNo(MisoStudyBoardVo board) {
+		sqlSession.update("deleteBoardByBoardNo", board);
 	}
 }

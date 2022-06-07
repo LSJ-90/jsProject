@@ -13,6 +13,7 @@ public class MisoStudyBoardVo {
 	private String title;
 	private String content;
 	private int viewCount;
+	private String isDeleted;
 	private int uploadNo;
 	private String uploadName;
 	@JsonFormat(pattern = "yyyy-MM-dd") private Date createdDate;
@@ -81,6 +82,14 @@ public class MisoStudyBoardVo {
 	public int getUploadNo() {
 		return uploadNo;
 	}
+	
+	public String getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(String isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 
 	public void setUploadNo(int uploadNo) {
 		this.uploadNo = uploadNo;
@@ -114,7 +123,7 @@ public class MisoStudyBoardVo {
 	public String toString() {
 		return "MisoStudyBoardVo [boardNo=" + boardNo + ", writerNo=" + writerNo + ", commentNo=" + commentNo
 				+ ", writerName=" + writerName + ", title=" + title + ", content=" + content + ", viewCount="
-				+ viewCount + ", uploadNo=" + uploadNo + ", uploadName=" + uploadName + ", createdDate=" + createdDate
-				+ ", updateDate=" + updatedDate + "]";
+				+ viewCount + ", isDeleted=" + isDeleted + ", uploadNo=" + uploadNo + ", uploadName=" + uploadName
+				+ ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + "]";
 	}
 }

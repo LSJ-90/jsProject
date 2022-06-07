@@ -40,7 +40,7 @@
 		
 		body::after {
 			width: 100%;
-			height: 100%;
+			height: 100vh;
 			content: "";
 			background: url("../../resources/images/test.jpg");
 			background-size: cover;
@@ -71,8 +71,8 @@
 		footer {
 			color: white;
 			background-color: #212529;
-			position: fixed;
-			bottom: 0;
+			position: absolute;
+  			bottom: 0;
 			width: 100%;
 		}
 		.company {
@@ -85,9 +85,16 @@
 		.company__address span {
 		  	margin-right: 15px;
 		}
+		
+		.wrap {
+			position: relative;
+  			min-height: 100%;
+  			padding-bottom: 114px;
+		}
 	</style>
 </head>
 <body>
+	<div class="wrap">
 	<header>
 		<%@include file="navbar.jsp" %>
 		<%@include file="signInForm.jsp" %>
@@ -170,13 +177,13 @@
 	<footer>
 		<%@include file="footer.jsp" %>
 	</footer>
+	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script type="text/javascript">
 		// 수정 
 		$(document).on('click', '#updateConfirmBtn', function(){
 			const updateBoardForm = $('#updateBoardForm').serialize();
-			console.log($('.page-item.active').children().eq(0).text());
 			$.ajax({
 				type: 'post',
 				url: '/projects/misostudy/boardUpdate',
@@ -213,16 +220,51 @@
 				}
 			});
 		});
-	
+		
+		// 삭제
+		$(document).on('click', '#boardDeleteBtn', function(){
+			const boardNo = $('#detailBoradNo').text();
+			$.ajax({
+				type: 'post',
+				url: '/projects/misostudy/deleteBoard?boardNo=' + boardNo,
+				dataType: 'text',
+				success: function(result) {
+					 alert(result);
+					 const page = $('.page-item.active').children().eq(0).text();
+						$.ajax({
+							type: 'get',
+							url: '/projects/misostudy/boardListResult?page='+page,
+							dataType: 'text',
+							success: function(result) {
+								// alert('성공');
+								console.log(result);
+								$('#selectTable').empty();
+								$('#selectTable').html(result);
+							},
+							error : function(request, status, error) {
+								alert('실패');
+								console.log(request);
+								console.log(status);
+								console.log(error);
+							}
+						});
+				},
+				error : function(request, status, error) {
+					alert('실패');
+					console.log(request);
+					console.log(status);
+					console.log(error);
+				}
+			});
+		});
+		
 		// 수정폼 이동
 		$(document).on('click', '#boardUpdateBtn', function(){
-			const boardNo = $('#updateBoradNo').val();
+			const boardNo = $('#detailBoradNo').text();
 			console.log(boardNo);
 			$.ajax({
 				type: 'get',
-				url: '/projects/misostudy/boardUpdate',
-				data: {'boardNo' : boardNo},
-				contentType: 'application/json; charset=utf-8', 
+				url: '/projects/misostudy/moveUpdateForm?boardNo=' + boardNo,
 				dataType: 'text',
 				success: function(result) {
 					 // alert("성공");
@@ -245,15 +287,31 @@
 			const boardNo = $(e.currentTarget.nextElementSibling).val();
 			$.ajax({
 				type: 'get',
-				url: '/projects/misostudy/boardDetail',
-				data: {'boardNo': boardNo},
-				contentType: 'application/json; charset=utf-8', 
+				url: '/projects/misostudy/boardDetail?boardNo=' + boardNo,
 				dataType: 'text',
 				success: function(result) {
 					// alert("성공");
 					// console.log(result);
 					$('#boardDetailResult').html(result);
 					$('#detailBoardModal').modal('show');
+					const page = $('.page-item.active').children().eq(0).text();
+					$.ajax({
+						type: 'get',
+						url: '/projects/misostudy/boardListResult?page='+page,
+						dataType: 'text',
+						success: function(result) {
+							// alert('성공');
+							// console.log(result);
+							$('#selectTable').empty();
+							$('#selectTable').html(result);
+						},
+						error : function(request, status, error) {
+							alert('실패');
+							console.log(request);
+							console.log(status);
+							console.log(error);
+						}
+					});
 				},
 				error : function(request, status, error) {
 					alert('실패');

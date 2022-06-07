@@ -86,12 +86,29 @@
     		(SJ_BOARD_SEQ.NEXTVAL, #{writerNo}, #{title}, #{content})
 	</insert>
 	
-	<update id="updateBoard" parameterType="com.miso.web.vo.MisoStudyBoardVo">
+	<update id="updateBoardByBoardNo" parameterType="com.miso.web.vo.MisoStudyBoardVo">
 		UPDATE 
 			SJ_BOARDS
 		SET 
-    		TITLE = #{title}, 
-    		CONTENT = #{content},
+			<if test="title != null and title != ''">TITLE = #{title},</if>
+			<if test="content != null and content != ''">CONTENT = #{content},</if>
+    		UPDATED_DATE = SYSDATE
+    	WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<update id="updateViewCntByBoardNo" parameterType="com.miso.web.vo.MisoStudyBoardVo">
+		UPDATE 
+			SJ_BOARDS
+		SET 
+			VIEW_COUNT = #{viewCount}
+    	WHERE BOARD_NO = #{boardNo}
+	</update>
+	
+	<update id="deleteBoardByBoardNo" parameterType="com.miso.web.vo.MisoStudyBoardVo">
+		UPDATE 
+			SJ_BOARDS
+		SET 
+			IS_DELETED = #{isDeleted},
     		UPDATED_DATE = SYSDATE
     	WHERE BOARD_NO = #{boardNo}
 	</update>

@@ -50,16 +50,16 @@ public class MisoStudyService {
 		return misoStudyDao.selectBoardByBoardNo(boardNo);
 	}
 
-	public List<MisoStudyBoardVo> selectCommentsByBoardNo(int parseIntBoardNo) {
-		return misoStudyDao.selectCommentsByBoardNo(parseIntBoardNo);
+	public List<MisoStudyBoardVo> selectCommentsByBoardNo(int boardNo) {
+		return misoStudyDao.selectCommentsByBoardNo(boardNo);
 	}
 
 	public void insertBoard(MisoStudyBoardVo newBoard) {
 		misoStudyDao.insertBoard(newBoard);
 	}
 
-	public void updateBoard(MisoStudyBoardVo newBoard) {
-		misoStudyDao.updateBoard(newBoard);
+	public void updateBoardByBoardNo(MisoStudyBoardVo newBoard) {
+		misoStudyDao.updateBoardByBoardNo(newBoard);
 	}
 
 	public int selectBoardsTotalRowsCnt() {
@@ -68,5 +68,13 @@ public class MisoStudyService {
 
 	public List<MisoStudyBoardVo> selectSearchBoards(Criteria criteria) {
 		return misoStudyDao.selectSearchBoards(criteria);
+	}
+
+	public void updateViewCntByBoardNo(MisoStudyBoardVo board) {
+		misoStudyDao.updateViewCntByBoardNo(board);
+	}
+
+	public void deleteBoardByBoardNo(MisoStudyBoardVo board) {
+		misoStudyDao.deleteBoardByBoardNo(board);
 	}
 }
