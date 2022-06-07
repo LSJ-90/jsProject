@@ -119,7 +119,6 @@ public class MisoStudyController {
 	
 	@RequestMapping(value = "/projects/misostudy/boardListResult", method = RequestMethod.GET)
 	public String boardListResult(@RequestParam(required = false, defaultValue = "1") String page, Criteria criteria, HttpSession session, Model model) {
-		System.out.println(page);
 		int totalRecords = misoStudyService.selectBoardsTotalRowsCnt();
 		Pagination pagination = new Pagination(page, totalRecords);
 		logger.info(pagination.toString());
@@ -143,32 +142,32 @@ public class MisoStudyController {
 		int parseIntBoardNo = Integer.parseInt(boardNo);
 		
 		MisoStudyBoardVo board = misoStudyService.selectBoardByBoardNo(parseIntBoardNo); // logger.info(board.toString());
-		int viewCnt = board.getViewCount();
-		board.setViewCount(viewCnt+1);
+		int viewCnt = board.getViewCount() + 1;
+		board.setViewCount(viewCnt);
+		misoStudyService.updateViewCntByBoardNo(board);
 		model.addAttribute("board", board);
 		
 		List<MisoStudyBoardVo> comments = misoStudyService.selectCommentsByBoardNo(parseIntBoardNo);  // logger.info(comments.toString());
 		model.addAttribute("comments", comments);
 		
-		return "projects/misostudy/boardDetailTable";
+		return "/projects/misostudy/boardDetailTable";
 	}
 	
-	@RequestMapping(value = "/projects/misostudy/boardUpdate", method = RequestMethod.GET)
+	@RequestMapping(value = "/projects/misostudy/moveUpdateForm", method = RequestMethod.GET)
 	public String updateBoard(@RequestParam String boardNo, Model model) {
-		System.out.println(boardNo);
 		int parseIntBoardNo = Integer.parseInt(boardNo);
-		
-		MisoStudyBoardVo board = misoStudyService.selectBoardByBoardNo(parseIntBoardNo); logger.info(board.toString());
+		MisoStudyBoardVo board = misoStudyService.selectBoardByBoardNo(parseIntBoardNo); // logger.info(board.toString());
 		model.addAttribute("board", board);
 		
 		return "projects/misostudy/boardUpdate";
 	}
 	
 	@RequestMapping(value = "/projects/misostudy/boardUpdate", method = RequestMethod.POST)
-	public String updateBoard(MisoStudyBoardVo newBoard, HttpSession session, Model model) {
+	public String updateBoard(MisoStudyBoardVo newBoard, Model model) {
 		logger.info(newBoard.toString());
-		misoStudyService.updateBoard(newBoard);
-		MisoStudyBoardVo board = misoStudyService.selectBoardByBoardNo(newBoard.getBoardNo()); logger.info(board.toString());
+		misoStudyService.updateBoardByBoardNo(newBoard);
+		MisoStudyBoardVo board = misoStudyService.selectBoardByBoardNo(newBoard.getBoardNo());
+		logger.info(board.toString());
 		model.addAttribute("board", board);
 		
 		return "/projects/misostudy/boardDetailTable";
@@ -181,6 +180,14 @@ public class MisoStudyController {
 			
 		return "redirect:boardList";
 	}
+	
+	@RequestMapping(value = "/projects/misostudy/deleteBoard", method = RequestMethod.POST)
+	public @ResponseBody String deleteBoard(@RequestParam String boardNo, HttpSession session, Model model) {
+		int parseIntBoardNo = Integer.parseInt(boardNo);
+		MisoStudyBoardVo board = misoStudyService.selectBoardByBoardNo(parseIntBoardNo);
+		board.setIsDeleted("Y");
+		misoStudyService.deleteBoardByBoardNo(board);
+		
+		return "success";
+	}
 }
-
-

@@ -30,6 +30,3 @@
 		<button type="submit" id="updateConfirmBtn" class="btn btn-outline-dark"  data-bs-target="#detailBoardModal" data-bs-toggle="modal">수정</button>
 	</c:if>
 </div>
-<script type="text/javascript">
-	
-</script>
