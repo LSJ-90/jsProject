@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.miso.persistence.MisoStudyDao">
-	<sql id="whereByDeptNo">
-		WHERE DEPTNO IN
-		<foreach collection="list" item="deptNo" open="(" separator="," close=")"> 
-			#{deptNo}
-		</foreach>
-		<!-- 
-			collection="list 시에는 list로 표시 , array 시에는 array로 표시"
-			index="foreach문이 반복될때마다 1씩 증가시키면서 접근하는 값의 위치를 표시" 
-			item="사용할 속성 이름" 
-			open="해당 구문이 시작될 때 사용할 문자 추가" 
-			separator="구분자 추가" 
-			close="해당 구문이 끝날 때의 사용할 문자 추가" 
-		-->
-	</sql>
-	
 	<!-- UserAuth Mapper -->
 	<resultMap id="userInfoResultMap" type="com.miso.web.vo.MisoStudyUserVo">
 		<id column="USER_NO" property="userNo"/> 
@@ -34,6 +19,18 @@
 		VALUES 
 			(SJ_USER_SEQ.NEXTVAL, #{id}, #{pwd}, #{name}, #{email})
 	</insert>
+	
+	<update id="updateUserInfo" parameterType="com.miso.web.vo.MisoStudyUserVo">
+		UPDATE 
+			SJ_USERS
+		SET 
+			<if test="id != null and id != ''">ID = #{id},</if>
+			<if test="pwd != null and pwd != ''">PWD = #{pwd},</if>
+			<if test="name != null and name != ''">NAME = #{name},</if>
+			<if test="email != null and email != ''">EMAIL = #{email},</if>
+			<if test="isWithdrawal != null and isWithdrawal != ''">IS_WITHDRAWAL = #{isWithdrawal}</if>
+    	WHERE USER_NO = #{userNo}
+	</update>
 	
 	<select id="countUserInfoById" parameterType="String" resultType="int">
 		SELECT COUNT(*)
@@ -63,6 +60,20 @@
 		AND ID = #{id}
 	</select>
 	
+	<select id="selectUserInfoByEmail" parameterType="String" resultMap="userInfoResultMap">
+		SELECT USER_NO,
+			   ID,
+			   PWD,
+			   NAME,
+			   EMAIL,
+			   CREATED_DATE,
+			   IS_WITHDRAWAL,
+			   WITHDRAW_DATE
+		FROM SJ_USERS
+		WHERE NOT IS_WITHDRAWAL = 'Y'
+		AND EMAIL = #{email}
+	</select>
+	
 	<!-- Board Mapper -->
 	<!-- 
 	<resultMap id="boardInfoResultMap" type="com.miso.web.vo.MisoStudyBoardVo">
@@ -80,10 +91,21 @@
 	 -->
 	 
 	<insert id="insertBoard" parameterType="com.miso.web.vo.MisoStudyBoardVo">
+		<selectKey keyProperty="boardNo" resultType="int" order="BEFORE">
+			SELECT SJ_BOARD_SEQ.NEXTVAL
+			FROM DUAL
+		</selectKey>
 		INSERT INTO SJ_BOARDS
     		(BOARD_NO, WRITER_NO, TITLE, CONTENT) 
 		VALUES 
-    		(SJ_BOARD_SEQ.NEXTVAL, #{writerNo}, #{title}, #{content})
+    		(#{boardNo}, #{writerNo}, #{title}, #{content})
+	</insert>
+	
+	<insert id="insertFile" parameterType="com.miso.web.vo.MisoStudyUploadFileVo">
+		INSERT INTO SJ_UPLOADS
+    		(UPLOAD_NO, BOARD_NO, NAME) 
+		VALUES 
+			(SJ_UPLOAD_SEQ.NEXTVAL, #{boardNo}, #{uploadName})
 	</insert>
 	
 	<update id="updateBoardByBoardNo" parameterType="com.miso.web.vo.MisoStudyBoardVo">
@@ -113,51 +135,25 @@
     	WHERE BOARD_NO = #{boardNo}
 	</update>
 	
-	<select id="selectAllBoards" resultType="com.miso.web.vo.MisoStudyBoardVo">
-		SELECT 
-			A.BOARD_NO boardNo, 
-			A.WRITER_NO writerNo, 
-		    C.NAME writerName, 
-	   	    A.CREATED_DATE createdDate, 
-			A.TITLE title, 
-			A.CONTENT content, 
-			A.VIEW_COUNT viewCount, 
-			A.UPDATED_DATE updatedDate, 
-			B.UPLOAD_NO uploadNo, 
-			B.NAME uploadName
-		FROM 
-			SJ_BOARDS A
-		
-		LEFT OUTER JOIN SJ_UPLOADS B ON B.BOARD_NO = A.BOARD_NO
-		JOIN SJ_USERS C ON C.USER_NO = A.WRITER_NO
-		
-		WHERE 
-			NOT A.IS_DELETED = 'Y'
-		ORDER BY 
-			A.BOARD_NO DESC
-	</select>
-	
 	<select id="selectSearchBoards" parameterType="com.miso.web.util.Criteria" resultType="com.miso.web.vo.MisoStudyBoardVo">
-		SELECT RN, boardNo, writerNo, writerName, createdDate, title, content, viewCount, updatedDate, uploadNo, uploadName
+		SELECT RN, boardNo, writerId, writerNo, writerName, createdDate, title, content, viewCount, updatedDate
 		FROM
 		    (
 		    SELECT 
 		        ROW_NUMBER() OVER(ORDER BY A.BOARD_NO DESC) RN,
 		        A.BOARD_NO boardNo, 
-		        A.WRITER_NO writerNo, 
-		        C.NAME writerName, 
+		        A.WRITER_NO writerNo,
+		        B.ID writerId, 
+		        B.NAME writerName, 
 		        A.CREATED_DATE createdDate, 
 		        A.TITLE title, 
 		        A.CONTENT content, 
 		        A.VIEW_COUNT viewCount, 
-		        A.UPDATED_DATE updatedDate, 
-		        B.UPLOAD_NO uploadNo, 
-		        B.NAME uploadName
+		        A.UPDATED_DATE updatedDate
 		    FROM 
 		        SJ_BOARDS A
 		    
-		    LEFT OUTER JOIN SJ_UPLOADS B ON B.BOARD_NO = A.BOARD_NO
-		    JOIN SJ_USERS C ON C.USER_NO = A.WRITER_NO
+		    JOIN SJ_USERS B ON B.USER_NO = A.WRITER_NO
 		    
 		    WHERE 
 		        NOT A.IS_DELETED = 'Y'
@@ -171,8 +167,7 @@
 		FROM 
 			SJ_BOARDS A
 		
-		LEFT OUTER JOIN SJ_UPLOADS B ON B.BOARD_NO = A.BOARD_NO
-		JOIN SJ_USERS C ON C.USER_NO = A.WRITER_NO
+		JOIN SJ_USERS B ON B.USER_NO = A.WRITER_NO
 		
 		WHERE 
 			NOT A.IS_DELETED = 'Y'
@@ -181,20 +176,18 @@
 	<select id="selectBoardByBoardNo" parameterType="int" resultType="com.miso.web.vo.MisoStudyBoardVo">
 		SELECT 
 			A.BOARD_NO boardNo, 
-			A.WRITER_NO writerNo, 
-		    C.NAME writerName, 
+			A.WRITER_NO writerNo,
+			B.ID writerId, 
+		    B.NAME writerName, 
 	   	    A.CREATED_DATE createdDate, 
 			A.TITLE title, 
 			A.CONTENT content, 
 			A.VIEW_COUNT viewCount, 
-			A.UPDATED_DATE updatedDate, 
-			B.UPLOAD_NO uploadNo, 
-			B.NAME uploadName
+			A.UPDATED_DATE updatedDate 
 		FROM 
 			SJ_BOARDS A
 		
-		LEFT OUTER JOIN SJ_UPLOADS B ON B.BOARD_NO = A.BOARD_NO
-		JOIN SJ_USERS C ON C.USER_NO = A.WRITER_NO
+		JOIN SJ_USERS B ON B.USER_NO = A.WRITER_NO
 		
 		WHERE 
 			NOT A.IS_DELETED = 'Y'
@@ -208,6 +201,7 @@
 		SELECT 
 			A.COMMENT_NO commentNo,
 		    A.WRITER_NO writerNo,
+		    B.ID writerId,
 		    B.NAME writerName,
 		    A.CONTENT content,
 		    A.CREATED_DATE createdDate
@@ -223,4 +217,80 @@
 		ORDER BY 
 			A.COMMENT_NO DESC
 	</select>
+	
+	<select id="selectChartsDataByDay" resultType="com.miso.web.vo.MisoStudyChartDataVo">
+		SELECT 
+			A.createdDate createdDate, NVL(B.CNT, 0) as cnt
+		FROM 
+			(
+		     SELECT (startDate + (LEVEL)) - 1 createdDate
+		     FROM (
+		           SELECT TO_DATE('2022-06-01', 'YYYY-MM-DD') startDate 
+		           FROM DUAL
+		           )
+		     CONNECT BY LEVEL &lt;= SYSDATE - startDate + 1
+		     ) A
+		LEFT OUTER JOIN (
+		                 SELECT to_date(CREATED_DATE, 'YY/MM/DD') createdDate, 
+		                 	    COUNT(*) cnt
+		                 FROM SJ_BOARDS
+		                 group by TO_DATE(CREATED_DATE, 'YY/MM/DD')
+		                 ) B
+		ON A.createdDate = B.createdDate
+		ORDER BY A.createdDate
+	</select>
+	
+	<select id="selectChartsDataByMonth" resultType="com.miso.web.vo.MisoStudyChartDataVo">
+		SELECT 
+			   TO_DATE(A.createdDate, 'YYYY-MM') createdDate,
+			   NVL(B.CNT, 0) as cnt
+		FROM (SELECT createdDate
+		      FROM
+		          (SELECT TO_CHAR((startDate + (LEVEL)) - 1, 'YYYY-MM') createdDate
+		           FROM (SELECT TO_DATE('2021-06-01', 'YYYY-MM-DD') startDate 
+		                 FROM DUAL)
+		           CONNECT BY LEVEL &lt;= SYSDATE - startDate + 1 )
+		      GROUP BY createdDate) A
+		      
+		LEFT OUTER JOIN (SELECT TO_CHAR(TO_DATE(CREATED_DATE, 'YY/MM/DD'),'YYYY-MM') createdDate, 
+		                        COUNT(*) cnt
+		                 FROM SJ_BOARDS
+		                 group by TO_CHAR(TO_DATE(CREATED_DATE, 'YY/MM/DD'),'YYYY-MM')) B
+		ON A.createdDate = B.createdDate
+		
+		ORDER BY A.createdDate
+	</select>
+	
+	<select id="selectFileByBoardNo" parameterType="int" resultType="com.miso.web.vo.MisoStudyUploadFileVo">
+		SELECT 
+			UPLOAD_NO uploadNo, 
+			NAME uploadName
+		FROM 
+			SJ_UPLOADS
+		WHERE 
+			BOARD_NO = #{boardNo}
+	</select>
+	
+	<select id="selectUploadFileByUploadNo" parameterType="int" resultType="String">
+		SELECT 
+			NAME uploadName
+		FROM 
+			SJ_UPLOADS
+		WHERE 
+			UPLOAD_NO = #{uploadName}
+	</select>
+	
+	<select id="countUploadFileByBoardNo" parameterType="int" resultType="int">
+		SELECT 
+			COUNT(*)
+		FROM 
+			SJ_UPLOADS
+		WHERE 
+			BOARD_NO = #{boardNo}
+	</select>
+	
+	<delete id="deleteUploadFileByUploadNo" parameterType="int">
+		DELETE FROM SJ_UPLOADS  
+		WHERE UPLOAD_NO = #{uploadNo}
+	</delete>
 </mapper>

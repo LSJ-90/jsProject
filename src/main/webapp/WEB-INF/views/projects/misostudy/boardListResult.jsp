@@ -18,10 +18,14 @@
     <tr class="boardVo">
       <th scope="row"><c:out value="${board.boardNo }"/></th>
       <td>${board.title }</td>
-      <td>${board.writerName }</td>
+      <td>${board.writerId }</td>
       <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createdDate }"/></td>
       <td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updatedDate }"/></td>
-      <td>아이콘설정</td>
+      <td>
+      	<c:if test="${board.uploadCnt != 0 }">
+      		<img class="attachmentImg" alt="첨부파일 없음" src="/resources/images/premium-icon-attachments-304884.png">
+      	</c:if>
+      </td>
       <td>${board.viewCount }</td>
     </tr>
     <input type="hidden" name="boardNo" value="${board.boardNo }"/>
@@ -37,7 +41,7 @@
 	</li>
 	<c:forEach var="num" begin="${pagination.beginPage }" end="${pagination.endPage }">
 		<li class="page-item ${pagination.pageNo eq num ? 'active' : '' }">
-			<a class="page-link">${num }</a>
+			<a class="page-link" data-page="${num }">${num }</a>
 		</li>
 	</c:forEach>
 	<li class="page-item  ${pagination.existNext ? '' : 'disabled' }">

@@ -6,20 +6,25 @@
 </div>
 <div class="modal-body">
 	<form id="updateBoardForm" action="/projects/misostudy/insertBoard" method="post">
-		<div class="row">
-			<div class="col form-floating mb-3">
-			  	<input type="text" class="form-control form-control-sm" id="updateBoardTitle" name="title" value="${board.title }" placeholder="TITLE" autocomplete="off">
-			  	<label for="updateBoardTitle">TITLE</label>
-			</div>
-			<div class="col mb-3">
-		  		<input type="file" class="form-control" id="updateformFileMultiple" name="uploadName" multiple>
-			</div>
+		<div class="col form-floating mb-3">
+		  	<input type="text" class="form-control form-control-sm" id="updateBoardTitle" name="title" value="${board.title }" placeholder="TITLE" autocomplete="off">
+		  	<label for="updateBoardTitle">TITLE</label>
 		</div>
-		<div class="row">
-			<div class="form-floating mb-3">
-			  <textarea class="form-control" id="updateBoardContent" name="content" placeholder="CONTENT"><c:out value="${board.content }"/></textarea>
-			  <label for="updateBoardContent">CONTENT</label>
-			</div>
+		<div class="col mb-3">
+	  		<input type="file" class="form-control" id="updateformFileMultiple" name="uploadName" multiple>
+		</div>
+		<div class="col mb-3" style="border: 1px dotted black;">
+<!-- 			<ul> -->
+<%-- 				<c:forEach items="${uploadFileInfos }" var="uploadFileInfo" > --%>
+<!-- 						<li> -->
+<%-- 							<c:out value="${uploadFileInfo.uploadName }"/><img class="xicon" style="width: 20px;" alt="" src="/resources/images/xicon.png"> --%>
+<!-- 						</li> -->
+<%-- 				</c:forEach> --%>
+<!-- 			</ul> -->
+		</div>
+		<div class="form-floating mb-3">
+		  <textarea class="form-control" id="updateBoardContent" name="content" placeholder="CONTENT"><c:out value="${board.content }"/></textarea>
+		  <label for="updateBoardContent">CONTENT</label>
 		</div>
 		<input type="hidden" name="boardNo" value="${board.boardNo }">
 	</form>

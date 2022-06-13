@@ -1,0 +1,9 @@
+# Eclips
+	- Ctrl+H >> 전체페이지 세부 검색
+
+# WINDOW
+	- WINDOW + SHFIT +S 캡쳐
+
+# Ctrl + R >> 실행 창
+	- services.msc 서비스
+	- notepad 메모장

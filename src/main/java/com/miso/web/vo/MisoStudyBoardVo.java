@@ -1,23 +1,28 @@
 package com.miso.web.vo;
 
 import java.util.Date;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class MisoStudyBoardVo {
 	
 	private int boardNo;
-	private int writerNo;
 	private int commentNo;
+	private int writerNo;
+	private String writerId;
 	private String writerName;
 	private String title;
 	private String content;
 	private int viewCount;
 	private String isDeleted;
-	private int uploadNo;
-	private String uploadName;
 	@JsonFormat(pattern = "yyyy-MM-dd") private Date createdDate;
 	@JsonFormat(pattern = "yyyy-MM-dd") private Date updatedDate;
+	private int uploadCnt;
+	
+	private List<MultipartFile> uploadName;
 	
 	public MisoStudyBoardVo() {
 		super();
@@ -78,10 +83,6 @@ public class MisoStudyBoardVo {
 	public void setViewCount(int viewCount) {
 		this.viewCount = viewCount;
 	}
-
-	public int getUploadNo() {
-		return uploadNo;
-	}
 	
 	public String getIsDeleted() {
 		return isDeleted;
@@ -91,15 +92,11 @@ public class MisoStudyBoardVo {
 		this.isDeleted = isDeleted;
 	}
 
-	public void setUploadNo(int uploadNo) {
-		this.uploadNo = uploadNo;
-	}
-
-	public String getUploadName() {
+	public List<MultipartFile> getUploadName() {
 		return uploadName;
 	}
 
-	public void setUploadName(String uploadName) {
+	public void setUploadName(List<MultipartFile> uploadName) {
 		this.uploadName = uploadName;
 	}
 
@@ -118,12 +115,29 @@ public class MisoStudyBoardVo {
 	public void setUpdatedDate(Date updatedDate) {
 		this.updatedDate = updatedDate;
 	}
+	
+	public int getUploadCnt() {
+		return uploadCnt;
+	}
+
+	public void setUploadCnt(int uploadCnt) {
+		this.uploadCnt = uploadCnt;
+	}
+	
+	public String getWriterId() {
+		return writerId;
+	}
+
+	public void setWriterId(String writerId) {
+		this.writerId = writerId;
+	}
 
 	@Override
 	public String toString() {
-		return "MisoStudyBoardVo [boardNo=" + boardNo + ", writerNo=" + writerNo + ", commentNo=" + commentNo
-				+ ", writerName=" + writerName + ", title=" + title + ", content=" + content + ", viewCount="
-				+ viewCount + ", isDeleted=" + isDeleted + ", uploadNo=" + uploadNo + ", uploadName=" + uploadName
-				+ ", createdDate=" + createdDate + ", updatedDate=" + updatedDate + "]";
+		return "MisoStudyBoardVo [boardNo=" + boardNo + ", commentNo=" + commentNo + ", writerNo=" + writerNo
+				+ ", writerId=" + writerId + ", writerName=" + writerName + ", title=" + title + ", content=" + content
+				+ ", viewCount=" + viewCount + ", isDeleted=" + isDeleted + ", createdDate=" + createdDate
+				+ ", updatedDate=" + updatedDate + ", uploadCnt=" + uploadCnt + ", uploadName=" + uploadName + "]";
 	}
+
 }

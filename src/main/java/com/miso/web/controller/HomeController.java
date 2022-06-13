@@ -159,15 +159,6 @@ public class HomeController {
 	 * projects Init Controller
 	 * @return url
 	 */
-	@RequestMapping(value = "/projects/misostudy/home", method = RequestMethod.GET)
-	public String misoStudyInit(HttpSession session, Model model) {
-		
-		MisoStudyUserVo loginedUser = (MisoStudyUserVo) session.getAttribute("LOGIN_USER");
-		System.out.println(session.getAttribute("LOGIN_USER"));
-		model.addAttribute("LOGIN_USER", loginedUser);
-		
-		return "/projects/misostudy/home";
-	}
 }
 
 
