@@ -14,6 +14,7 @@
 			<c:choose>
 				<c:when test="${!empty LOGIN_USER}">
 					<ul id="loginUl" class="navbar-nav justify-content-end">
+						<li class="nav-item helloUser"><c:out value="${LOGIN_USER.name }"/>님 환영합니다.</li>
 						<li class="nav-item"><a class="nav-link" href="/projects/misostudy/signOut" role="button">Sign out</a></li>
 					</ul>
 				</c:when>

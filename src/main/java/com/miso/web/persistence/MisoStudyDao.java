@@ -2,8 +2,12 @@ package com.miso.web.persistence;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.miso.web.util.Criteria;
 import com.miso.web.vo.MisoStudyBoardVo;
+import com.miso.web.vo.MisoStudyChartDataVo;
+import com.miso.web.vo.MisoStudyUploadFileVo;
 import com.miso.web.vo.MisoStudyUserVo;
 
 public interface MisoStudyDao {
@@ -18,6 +22,9 @@ public interface MisoStudyDao {
 
 	MisoStudyUserVo selectUserInfoById(String id);
 	
+	MisoStudyUserVo selectUserInfoByEmail(String email);
+	
+	void updateUserInfo(MisoStudyUserVo savedUserInfo);
 	
 	// Board Dao
 	List<MisoStudyBoardVo> selectAllBoards();
@@ -37,5 +44,18 @@ public interface MisoStudyDao {
 	void updateViewCntByBoardNo(MisoStudyBoardVo board);
 
 	void deleteBoardByBoardNo(MisoStudyBoardVo board);
-	
+
+	List<MisoStudyChartDataVo> selectChartsDataByDay();
+
+	void insertFile(MisoStudyUploadFileVo uploadFileInfo);
+
+	List<MisoStudyUploadFileVo> selectFileByBoardNo(int boardNo);
+
+	String selectUploadFileByUploadNo(int uploadNo);
+
+	int countUploadFileByBoardNo(int boardNo);
+
+	void deleteUploadFileByUploadNo(int uploadNo);
+
+	List<MisoStudyChartDataVo> selectChartsDataByMonth();
 }

@@ -19,6 +19,7 @@
 						<label for="signInPassword">Password</label>
 					</div>
 				</form>
+				<a href="/projects/misostudy/findMyInfo">아이디찾기/비밀번호찾기</a>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline-dark modalClose" data-bs-dismiss="modal">Close</button>

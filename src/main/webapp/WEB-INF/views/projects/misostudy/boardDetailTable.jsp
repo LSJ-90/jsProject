@@ -8,7 +8,7 @@
 	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-<form>
+<form action="/projects/misostudy/downloadFile" method="post">
 	<table class="table">
 		<thead>
 			<tr>
@@ -23,10 +23,20 @@
 		<tbody>
 			<tr>
 				<td id="detailBoradNo"><c:out value="${board.boardNo }"/></td>
-				<td><c:out value="${board.writerName }"/></td>
+				<td><c:out value="${board.writerId }"/></td>
 				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.createdDate }"/></td>
 				<td><fmt:formatDate pattern="yyyy-MM-dd" value="${board.updatedDate }"/></td>
-				<td>아이콘설정</td>
+				<td>
+					<c:if test="${!empty uploadFileInfos }">
+						<select name="uploadNo" id="downloadBox">
+							<c:forEach items="${uploadFileInfos }" var="uploadFile">
+								<option value="${uploadFile.uploadNo }">${uploadFile.uploadName }</option>
+							</c:forEach>
+						</select>
+						<button type="submit" id="downloadFileBtn">DOWN</button>
+						
+					</c:if>
+				</td>
 				<td><c:out value="${board.viewCount }"/></td>
 			</tr>
 			
@@ -55,11 +65,11 @@
 			</c:forEach>
 		</tfoot>
 	</table>
-</form>
+	</form>
 </div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">닫기</button>
-	<c:if test="${board.writerNo == LOGIN_USER.userNo }">
+	<c:if test="${board.writerNo == LOGIN_USER.userNo or LOGIN_USER.id eq 'admin01'}">
 		<button type="button" id="boardUpdateBtn" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#updateBoardModal">수정</button>
 		<button type="button" id="boardDeleteBtn" class="btn btn-outline-dark" data-bs-dismiss="modal">삭제</button>
 	</c:if>

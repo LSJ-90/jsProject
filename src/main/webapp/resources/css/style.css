@@ -1,0 +1,132 @@
+@charset "UTF-8";
+
+/* Defalut */
+* {
+	margin: 0;
+	padding: 0;
+}
+
+ul li {
+	list-style: none;
+}
+
+a, a:link {
+	color: #000;
+	text-decoration: none;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	text-align: center;
+	position: relative;
+	z-index: 1;
+	height: 100%;
+}
+
+body::after {
+	width: 100%;
+	height: 100vh;
+	content: "";
+/* 	background: url("../../resources/images/test.jpg"); */
+/* 	background-size: cover; */
+	background-color: #000000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	opacity: 0.7;
+}
+
+.page-link, .page-item.disabled {
+	color: #999; 
+	background-color: #000;
+	border-color: #444;
+}
+
+.page-item.active .page-link, .page-item.disabled .page-link {
+	z-index: 1;
+	color: #ccc;
+	font-weight:bold;
+	background-color: #333;
+	border-color: #444;
+}
+
+.page-link:focus, .page-link:hover {
+	color: #ccc;
+	background-color: #222; 
+	border-color: #444;
+}
+
+#findUserInfoDiv {
+	width: 25%;
+}
+
+.container {
+	width: 90%;
+	margin-top: 2vh;
+}
+
+/* Home */
+.helloBoard {
+	font-size: 60px;
+	padding: 130px;
+	color: white;	
+}
+
+.helloUser {
+	color: white;
+    position: absolute;
+    right: 100px;
+    top: 17px;
+}
+
+.page-item  {
+}
+
+/* SignIn */
+#signInResultMessage {
+	text-align: center;
+}
+
+/* BoardList */
+#insertBoardContent, #updateBoardContent {
+	height: 340px;
+	resize: none;
+}
+
+.attachmentImg {
+	width: 20px;
+	height: 20px;
+}
+
+.xicon {
+	width: 20px;
+}
+
+/* Footer */
+footer {
+	color: white;
+	background-color: #212529;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+}
+.company {
+  	font-size: 12px;
+}
+.company__address {
+  	font-style: normal;
+  	line-height: 1.8;
+}
+.company__address span {
+  	margin-right: 15px;
+}
+
+.wrap {
+	position: relative;
+	min-height: 100%;
+	padding-bottom: 114px;
+}

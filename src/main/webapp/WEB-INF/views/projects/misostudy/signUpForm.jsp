@@ -30,7 +30,7 @@
 					  <div class="warning" id="check_name"></div>
 					</div>	
 					<div class="form-floating mb-3">
-					  <input type="email" class="form-control" id="signUpEmail" placeholder="Email" name="email">
+					  <input type="email" class="form-control" id="signUpEmail" placeholder="Email" name="email" autocomplete="off">
 					  <label for="signUpEmail">Email</label>
 					  <div class="warning" id="check_email"></div>
 					</div>

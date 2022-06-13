@@ -5,10 +5,13 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.miso.web.persistence.MisoStudyDao;
 import com.miso.web.util.Criteria;
 import com.miso.web.vo.MisoStudyBoardVo;
+import com.miso.web.vo.MisoStudyChartDataVo;
+import com.miso.web.vo.MisoStudyUploadFileVo;
 import com.miso.web.vo.MisoStudyUserVo;
 
 @Repository
@@ -38,6 +41,15 @@ public class MisoStudyDaoImpl implements MisoStudyDao {
 		return sqlSession.selectOne("selectUserInfoById", id);
 	}
 	
+	@Override
+	public MisoStudyUserVo selectUserInfoByEmail(String email) {
+		return sqlSession.selectOne("selectUserInfoByEmail", email);
+	}
+	
+	@Override
+	public void updateUserInfo(MisoStudyUserVo savedUserInfo) {
+		sqlSession.update("updateUserInfo", savedUserInfo);
+	}
 	
 	// Board DaoImpl
 	@Override
@@ -83,5 +95,40 @@ public class MisoStudyDaoImpl implements MisoStudyDao {
 	@Override
 	public void deleteBoardByBoardNo(MisoStudyBoardVo board) {
 		sqlSession.update("deleteBoardByBoardNo", board);
+	}
+
+	@Override
+	public void insertFile(MisoStudyUploadFileVo uploadFileInfos) {
+		sqlSession.insert("insertFile", uploadFileInfos);
+	}
+
+	@Override
+	public List<MisoStudyUploadFileVo> selectFileByBoardNo(int boardNo) {
+		return sqlSession.selectList("selectFileByBoardNo", boardNo);
+	}
+
+	@Override
+	public String selectUploadFileByUploadNo(int uploadNo) {
+		return sqlSession.selectOne("selectUploadFileByUploadNo", uploadNo);
+	}
+
+	@Override
+	public int countUploadFileByBoardNo(int boardNo) {
+		return sqlSession.selectOne("countUploadFileByBoardNo", boardNo);
+	}
+
+	@Override
+	public void deleteUploadFileByUploadNo(int uploadNo) {
+		sqlSession.delete("deleteUploadFileByUploadNo", uploadNo);
+	}
+	
+	@Override
+	public List<MisoStudyChartDataVo> selectChartsDataByDay() {
+		return sqlSession.selectList("selectChartsDataByDay");
+	}
+	
+	@Override
+	public List<MisoStudyChartDataVo> selectChartsDataByMonth() {
+		return sqlSession.selectList("selectChartsDataByMonth");
 	}
 }

@@ -1,13 +1,19 @@
 {
   "ecmaVersion": 5,
   "plugins": {
-    "guess-types": {
-      
-    },
     "outline": {
       
     },
+    "es_modules": {
+      
+    },
+    "doc_comment": {
+      
+    },
     "browser-extension": {
+      
+    },
+    "ckeditor4.4.x": {
       
     },
     "jquery-ui1-12": {
