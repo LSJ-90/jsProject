@@ -403,4 +403,17 @@ public class MisoStudyController {
 		
 		return "success";
 	}
+	
+	/**
+	 * chartBoard Controller
+	 */
+	@RequestMapping(value = "/projects/misostudy/chartBoard", method = RequestMethod.GET)
+	public String chartBoardInit(Model model) {
+		return "/projects/misostudy/chartBoard";
+	}
+	
+	@RequestMapping(value = "/projects/misostudy/chartBoard2", method = RequestMethod.GET)
+	public String chartBoard2Init(Model model) {
+		return "/projects/misostudy/chartBoard2";
+	}
 }

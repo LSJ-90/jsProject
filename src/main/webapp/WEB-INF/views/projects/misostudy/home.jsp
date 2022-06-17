@@ -32,6 +32,7 @@
 				<div class="helloBoard">어서오세요.<br> 회원가입 후 게시판을 이용해보세요!!</div>
 			</c:otherwise>
 		</c:choose>
+		<a class="myGithubLink" href="https://github.com/LSJ-90/jsProject">프로젝트 소스보기</a>
 	</div>
 	<footer>
 		<%@include file="footer.jsp" %>
@@ -78,6 +79,9 @@
 	      ]
 	    };
 	 	boardCntByDayEchart.setOption(optionDayEchart);
+	 	
+	 	
+	 	
 	 	
 	 	const createdDates2 = ${createdDates2 };
 	 	const createdDateCntInfos2 = ${createdDateCntInfos2 };

@@ -40,6 +40,7 @@ body::after {
 	opacity: 0.7;
 }
 
+/* 페이지네이션 CSS */
 .page-link, .page-item.disabled {
 	color: #999; 
 	background-color: #000;
@@ -59,6 +60,16 @@ body::after {
 	background-color: #222; 
 	border-color: #444;
 }
+
+.myGithubLink { 
+	color: rgba(255,255,255,.55);
+}
+
+.myGithubLink:hover { 
+	color: rgba(255,255,255,.75);
+}
+
+
 
 #findUserInfoDiv {
 	width: 25%;
