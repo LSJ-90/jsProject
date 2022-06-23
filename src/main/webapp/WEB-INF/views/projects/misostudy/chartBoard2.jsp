@@ -76,17 +76,38 @@
 	<script type="text/javascript">
 		
 		/*
-		 * BarAndLine, horizontalBar,
+		 * 작성자: 이승준
+		 * 함수명: makeEcharts(seriesType, location, jsonData, xAxisName, yAxisLeftName, yAxisRightName, xAxisCategory);
+		 *		-seriesType(string): 그려질 차트 타입(horizontalBar, multifleLine, barAndLine, scatter)
+		 * 		-locatino(string): 차트를 위치시킬 id명
+		 * 		-jsonData[{},{}]: 차트에 이용될 데이터
+		 * 		-xAxisName(string): x축 이름
+		 * 		-yAxisLeftName(string): 왼쪽 y축 이름  
+		 * 		-yAxisRightName(string): 오른쪽 y축 이름(지정하지 않을 시 '')  
+		 *		-xAxisCategory[]: x축에 사용될 데이터
 		 */
-// 		function makeEcharts(seriesType, location, jsonData, xAxisCategory, xAxisName, yAxisLeftName, yAxisRightName) {
+		function makeEcharts(seriesType, location, jsonData, xAxisName, yAxisLeftName, yAxisRightName, xAxisCategory) {
+// 			console.log("seriesType: " + typeof seriesType);
+// 			console.log("location: " + typeof location);
+// 			console.log("jsonData: " + typeof jsonData);
+// 			console.log("xAxisName: " + typeof xAxisName);
+// 			console.log("yAxisLeftName: " + typeof yAxisLeftName);
+// 			console.log("yAxisRightName: " + typeof yAxisRightName);
+// 			console.log("xAxisCategory: " + typeof xAxisCategory);
 			
-// 			if (seriesType === 'horizontalBar') {
-// 				horizontalBarGraph(location, jsonData, xAxisName, yAxisLeftName);
-// 			} 
-// 			else if (seriesType === 'multifleLine') {
-// 				multifleLineGraph(location, jsonData, xAxisName, yAxisLeftName, xAxisCategory);
-// 			}
-// 		}
+			if (seriesType === 'horizontalBar') {
+				return horizontalBarGraph(location, jsonData, xAxisName, yAxisLeftName);
+			} 
+			if (seriesType === 'multifleLine') {
+				return multifleLineGraph(location, jsonData, xAxisName, yAxisLeftName, xAxisCategory);
+			}
+			if (seriesType === 'barAndLine') {
+				return barAndLineGraph(location, jsonData, xAxisName, yAxisLeftName, yAxisRightName);
+			}
+			if (seriesType === 'scatter') {
+				return scatterGraph(location, jsonData, xAxisName, yAxisLeftName);
+			}
+		}
 		
 		/*
 		 * 작성자: 이승준
@@ -115,32 +136,36 @@
 			
 			// 차트옵션
 			var option = {
-				tooltip: {
+				tooltip : {
 					trigger : "axis",
 					axisPointer : {
-						type : "shadow"
+						type : "shadow",
+						shadowStyle : {
+							color: 'rgba(0, 0, 0, 0.1)'
+						}
 					}
 				},
 				grid: {
-					containLabel: true,
-					tooltip: {
-						axisPointer: {
-							type: "line" // none, line, shadow, cross
-						}
-					}
+					containLabel : true
 				},
 				xAxis : {
 					type: 'value',
 					name: xAxisName,
 				    nameLocation: 'middle',
 				    nameTextStyle: {
-				      lineHeight: 60
+				      lineHeight: 60,
+				      fontWeight : 'bold',
+				      fontSize : 13
 				    }
 				},
 				yAxis: {
 					data: standardList,
 					name: yAxisName,
 					nameLocation: 'start',
+					nameTextStyle: {
+				      fontWeight : 'bold',
+				      fontSize : 13
+				    },
 					inverse: true
 				},
 				series: [{
@@ -156,7 +181,8 @@
 							   {offset : 0, color : '#1472ff'}, 
 							   {offset : 0.5, color : '#61a0ff'}, 
 							   {offset : 1, color : '#83bff6'}]
-						)
+						),
+						borderRadius : [0,10,10,0]
 					}
 				}]
 			};
@@ -196,22 +222,28 @@
 // 			console.log("referenceValueList:" + referenceValueList);
 			
 			// 차트옵션
-			option = {
-				tooltip: {
-					trigger: 'axis',
-					axisPointer: {
-						type : 'line'
+			var option = {
+				tooltip : {
+					trigger : 'axis',
+					axisPointer : {
+						type : 'shadow',
+						shadowStyle : {
+							color: 'rgba(0, 0, 0, 0.1)'
+						}
 					}
 				},
 				legend : {
-					data: [yAxisLeftName, yAxisRightName]
+					data : [yAxisLeftName, yAxisRightName]
 				},
 				xAxis : [{
 					type: 'category',
 					name: xAxisName,
 					nameLocation: 'middle',
 					nameTextStyle: {
-				      lineHeight: 60
+				    	lineHeight: 60,
+				    	fontWeight : 'bold',
+					    fontSize : 13,
+					    
 				    },
 					data: standardList
 				}],
@@ -221,7 +253,11 @@
 					position : 'left',
 					axisLine : {
 						show : true
-					}
+					},
+					nameTextStyle: {
+				    	fontWeight : 'bold',
+					    fontSize : 13
+				    }
 				},
 				{
 					type : 'value',
@@ -229,18 +265,33 @@
 					position : 'right',
 					axisLine : {
 						show : true
-					}
+					},
+					nameTextStyle: {
+				    	fontWeight : 'bold',
+					    fontSize : 13
+				    }
 				}],
 				series : [{
 					name : yAxisLeftName,
 					type : 'bar',
-					data : resultList
+					data : resultList,
+					itemStyle: {
+						color: new echarts.graphic.LinearGradient(0.5, 0, 0.5, 1,[
+							   {offset : 0, color : '#1472ff'}, 
+							   {offset : 0.5, color : '#61a0ff'}, 
+							   {offset : 1, color : '#83bff6'}]
+						),
+						borderRadius : [10,10,0,0]
+					}
 				},
 				{
 					name : yAxisRightName,
 					type : 'line',
 					yAxisIndex : 1,
-					data : referenceValueList
+					data : referenceValueList,
+					itemStyle: {
+						color: '#F6BA83'
+					}
 				}]
 			};
 			// 차트 생성
@@ -249,12 +300,12 @@
 		
 		/*
 		 * 작성자: 이승준
-		 * 함수명: multifleLineGraph(location, jsonData, xAxisCategory, xAxisName, yAxisName);
+		 * 함수명: multifleLineGraph(location, jsonData, xAxisName, yAxisName, xAxisCategory);
 		 * 		-locatino: 차트를 위치시킬 id명
 		 * 		-jsonData: 차트에 이용될 데이터
-		 *		-xAxisCategory: x축에 사용될 데이터
 		 * 		-xAxisName: x축 이름
 		 * 		-yAxisName: y축 이름 
+		 *		-xAxisCategory: x축에 사용될 데이터
 		 * JSON DATA
 		 *  	-결과의 기준이 되는 값 : standardValue
 		 *      -기준별 결과 값 : resultValue[]
@@ -278,7 +329,7 @@
  			// console.log(standardList);
  			// console.log(resultList);
  			
-//			// 기준데이터의 최대 문장길이 구하기
+// 			// 기준데이터의 최대 문장길이 구하기
 // 			var standardValueLengthList = new Array();
 // 			for (var standardValue of standardList) {
 // 				standardValueLengthList.push(standardValue.length);
@@ -287,24 +338,53 @@
 // 			console.log(maxLength);
 			
 			// 차트옵션	
-			option = {
+			var option = {
 				color : makeRandomColor(standardList),
 				tooltip : {
 					trigger : 'axis',
 					order : 'valueDesc',
+					position: 
+						// {contentSize: [10, 100], viewSize: [10, 10]}
+						
+						function (pos, params, el, elRect, size) {
+//  						console.log(pos);
+//  						console.log(pos[0]);
+//  						console.log(pos[0]);
+// 						console.log(params);
+// 						console.log(el);
+// 						console.log(elRect);
+// 						console.log(size);
+						
+				 		const obj = {
+				            top: 10
+				        };
+// 				        console.log(typeof (pos[0] < size.viewSize[0] / 2));
+				 		obj[  ['left', 'right']   [(pos[0] < size.viewSize[0] / 2)]   ] = 30;
+// 				        obj[ ['left', 'right'][1]  ]
+// 				       => obj[ 'right' ] = 30;
+// 				       obj.right = 30;
+				        
+				        console.log(obj);
+				       // console.log(obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]]);
+				        
+				        return obj;
+			        }
 				},
 				legend : {
-					type : 'scroll',
-					formatter : function (name) {
-						var formatName = name;
+					textStyle: {
+						overflow: "truncate",
+						width: '130'
+				    },
+				    bottom: '0%',
+					width: '80%'
+//  					formatter : function (name) {
+//  						var formatName = name;
 						
-						if (name.length > 15 ) {
-							formatName = name.substr(0,15) + '...'
-						}
+// // 						if (name.length > 15 ) {
+// // 							formatName = name.substr(0,15) + '...'
+// // 						}
 						
-						return formatName;
-						
-//						// 기준데이터의 최대길이만큼 빈공간을 더해주기
+// 						// 기준데이터의 최대길이만큼 빈공간을 더해주기
 // 						var gap = maxLength - name.length;
 // 						var space = ' ';
 // 						if (name.length <= maxLength) {
@@ -314,13 +394,12 @@
 // 							}
 // 							console.log(name + ": " + formatName.length);
 // 						}
-
-					},
-					bottom: '0%',
-					width: '80%'
+// 						return formatName;
+//  					}
 				},
 				grid : {
 					containLabel : true,
+					bottom : '25%'
 				},
 				dataZoom: {
 				    start: 0,
@@ -332,7 +411,9 @@
 					name : xAxisName,
 					nameLocation : 'middle',
 					nameTextStyle : {
-				      lineHeight : 60
+					    lineHeight : 40,
+					    fontWeight : 'bold',
+					    fontSize : 13
 				    },
 					data : xAxisCategory
 				},
@@ -341,7 +422,9 @@
 					name : yAxisName,
 					nameLocation : 'middle',
 					nameTextStyle : {
-					      lineHeight: 80
+						lineHeight: 80,
+					    fontWeight : 'bold',
+					    fontSize : 13
 				    },
 				},
 				series : resultList
@@ -369,22 +452,18 @@
  			// console.log(resultList);
 			
 			// 차트옵션	
-			option = {
+			var option = {
 				color : makeRandomColor(standardList),
 				tooltip : {
 					trigger : 'axis',
 					order : 'valueDesc',
 				},
 				legend : {
-					type: 'scroll',
-					formatter: function (name) {
-						console.log(standardList.length);
-						var formatName = name;
-						if (name.length > 20 ) {
-							formatName = name.substr(0,20) + '...'
-						}
-						return formatName;
-					},
+					textStyle: {
+						overflow: "truncate",
+						width: '130'
+				    },
+// 					type: 'scroll',
 					orient: 'vertical',
 					right: '0%',
 					top: '10%'
@@ -400,19 +479,24 @@
 				    type: "inside"
 			    },
 				xAxis : {
-					type : 'time',
+					type : 'category',
 					name : xAxisName,
-					nameLocation: 'middle',
-					nameTextStyle: {
-				      lineHeight: 60
+					nameLocation : 'middle',
+					nameTextStyle : {
+				      lineHeight : 60,
+				      fontWeight : 'bold',
+				      fontSize : 13
 				    },
+				    data : xAxisCategory
 				},
 				yAxis : {
 					type : 'value',
 					name : yAxisName,
 					nameLocation: 'middle',
 					nameTextStyle: {
-					      lineHeight: 80
+					      lineHeight: 80,
+					      fontWeight : 'bold',
+					      fontSize : 13
 				    },
 				},
 				series : resultList
@@ -439,22 +523,29 @@
 			// 데이터 컨트롤
 			var standardList = new Array();
 			var resultList = new Array();
-			
-			if (typeof jsonData[0].resultValue == 'undefined') {
+			console.log(Object.keys(jsonData[0]).length);
+// 			if (typeof jsonData[0].etcValue === 'undefined') {
+			if (Object.keys(jsonData[0]).length == 2) {
 				echarts.util.each(jsonData, function(data) {
-					standardList.push([data.standardValue,data.patentCnt]);
+					standardList.push([data.standardValue,data.resultValue]);
 				});
 				resultList.push({
-					type: 'scatter',
-					data: standardList
+					type : 'scatter',
+					data : standardList,
+					itemStyle : {
+						color : '#ee6666'
+					}
 				});
 			} else {
 				echarts.util.each(jsonData, function(data) {
 					standardList.push(data.standardValue);
 					resultList.push({
-						name: data.standardValue,
-						type: 'scatter',
-						data: [[data.patentCnt, data.resultValue]]
+						name : data.standardValue,
+						type : 'scatter',
+						emphasis : {
+							focus: 'series'
+						},
+						data : [[data.patentCnt, data.resultValue]]
 					});
 				});
 			}
@@ -462,21 +553,30 @@
  			// console.log(resultList);
 			
 			// 차트옵션	
-			option = {
+			var option = {
 				color : makeRandomColor(standardList),
 				legend : {
-					
+					textStyle: {
+						overflow: "truncate",
+						width: '130',
+				    },
+				    bottom: '0%',
+					width: '80%'
 				},
 				grid : {
 					containLabel : true
 				},
-				tooltip: { 
+				tooltip: {
+					trigger : 'item',
+					axisPointer : {
+						type : 'cross'
+					},
 					formatter: function(params) {
-						// console.log(params);
+						// console.log(params.marker);
 				    	if (params.seriesName === 'series\u00000') {
-			        		return (xAxisName + ': ' + params.value[0] + '<br/>' +  yAxisName + ': ' +params.value[1]);
+				    		return (xAxisName + ': ' + params.value[0] + '<br/>' +  yAxisName + ': ' +params.value[1]);
 			      		} else {
-			      			return (params.seriesName + '<br/>' + xAxisName + ': ' + params.value[0] + '<br/>' +  yAxisName + ': ' +params.value[1]);
+			      			return (params.marker + params.seriesName + '<br/>' + xAxisName + ': ' + params.value[0] + '<br/>' +  yAxisName + ': ' +params.value[1]);
 			      		}
 				 	}
 				},
@@ -485,7 +585,9 @@
 					name : xAxisName,
 					nameLocation : 'middle',
 					nameTextStyle : {
-				      lineHeight : 60
+				      lineHeight : 60,
+				      fontWeight : 'bold',
+				      fontSize : 13
 				    },
 				    min : 0,
 					splitLine : {
@@ -497,7 +599,9 @@
 					name : yAxisName,
 					nameLocation : 'middle',
 					nameTextStyle : {
-				      lineHeight : 60
+				      lineHeight : 80,
+				      fontWeight : 'bold',
+				      fontSize : 13
 				    },
 				    min: 0,
 					splitLine : {
@@ -729,57 +833,77 @@
 		];
 		
 		var ex16 = [
-			{"standardValue" : 1198, "patentCnt" : 1},
-			{"standardValue" : 1054, "patentCnt" : 1},
-			{"standardValue" : 1037, "patentCnt" : 1},
-			{"standardValue" : 1015, "patentCnt" : 1},
-			{"standardValue" : 952, "patentCnt" : 1},
-			{"standardValue" : 941, "patentCnt" : 1},
-			{"standardValue" : 938, "patentCnt" : 1},
-			{"standardValue" : 902, "patentCnt" : 1},
-			{"standardValue" : 857, "patentCnt" : 1},
-			{"standardValue" : 856, "patentCnt" : 1},
-			{"standardValue" : 846, "patentCnt" : 1},
-			{"standardValue" : 840, "patentCnt" : 1},
-			{"standardValue" : 763, "patentCnt" : 1},
-			{"standardValue" : 753, "patentCnt" : 1},
-			{"standardValue" : 746, "patentCnt" : 1},
-			{"standardValue" : 744, "patentCnt" : 1},
-			{"standardValue" : 744, "patentCnt" : 1},
-			{"standardValue" : 729, "patentCnt" : 1},
-			{"standardValue" : 726, "patentCnt" : 1},
-			{"standardValue" : 724, "patentCnt" : 1},
-			{"standardValue" : 721, "patentCnt" : 1},
-			{"standardValue" : 719, "patentCnt" : 1},
-			{"standardValue" : 713, "patentCnt" : 1},
-			{"standardValue" : 705, "patentCnt" : 1},
-			{"standardValue" : 684, "patentCnt" : 2},
-			{"standardValue" : 667, "patentCnt" : 1},
-			{"standardValue" : 659, "patentCnt" : 1},
-			{"standardValue" : 639, "patentCnt" : 1},
-			{"standardValue" : 605, "patentCnt" : 1},
-			{"standardValue" : 5, "patentCnt" : 2104},
-			{"standardValue" : 2, "patentCnt" : 7025},
-			{"standardValue" : 42, "patentCnt" : 49}
+			{"standardValue" : 1198, "resultValue" : 1},
+			{"standardValue" : 1054, "resultValue" : 1},
+			{"standardValue" : 1037, "resultValue" : 1},
+			{"standardValue" : 1015, "resultValue" : 1},
+			{"standardValue" : 952, "resultValue" : 1},
+			{"standardValue" : 941, "resultValue" : 1},
+			{"standardValue" : 938, "resultValue" : 1},
+			{"standardValue" : 902, "resultValue" : 1},
+			{"standardValue" : 857, "resultValue" : 1},
+			{"standardValue" : 856, "resultValue" : 1},
+			{"standardValue" : 846, "resultValue" : 1},
+			{"standardValue" : 840, "resultValue" : 1},
+			{"standardValue" : 763, "resultValue" : 1},
+			{"standardValue" : 753, "resultValue" : 1},
+			{"standardValue" : 746, "resultValue" : 1},
+			{"standardValue" : 744, "resultValue" : 1},
+			{"standardValue" : 744, "resultValue" : 1},
+			{"standardValue" : 729, "resultValue" : 1},
+			{"standardValue" : 726, "resultValue" : 1},
+			{"standardValue" : 724, "resultValue" : 1},
+			{"standardValue" : 721, "resultValue" : 1},
+			{"standardValue" : 719, "resultValue" : 1},
+			{"standardValue" : 713, "resultValue" : 1},
+			{"standardValue" : 705, "resultValue" : 1},
+			{"standardValue" : 684, "resultValue" : 2},
+			{"standardValue" : 667, "resultValue" : 1},
+			{"standardValue" : 659, "resultValue" : 1},
+			{"standardValue" : 639, "resultValue" : 1},
+			{"standardValue" : 605, "resultValue" : 1},
+			{"standardValue" : 5, "resultValue" : 2104},
+			{"standardValue" : 2, "resultValue" : 7025},
+			{"standardValue" : 42, "resultValue" : 49}
 		];
-		barAndLineGraph('chartTest1', ex1, '연도', '특허 수(전체)', '특허 수(기준국가)');
-		// makeEcharts('horizontalBar', 'chartTest2', ex2, , '', '특허 수', '국적');
-		horizontalBarGraph('chartTest2', ex2, '특허 수', '국적');
-		multifleLineGraph('chartTest3', ex3, '연도', '특허 수', exYear);
-		multifleLineGraph2('chartTest3_1', ex3, '연도', '특허 수', exYear);
-		horizontalBarGraph('chartTest4', ex4, '활동도 지수', '국적');
-		horizontalBarGraph('chartTest5', ex5, '이끌림 지수', '국적');
-		horizontalBarGraph('chartTest6', ex6_7, '수준 지수', '국적');
-		scatterGraph('chartTest7', ex6_7, '특허 수', '수준 지수');
-		scatterGraph('chartTest8', ex8, '특허 수', '평균 패밀리 크기');
-		horizontalBarGraph('chartTest9', ex9, '특허 수', '출원인');
-		multifleLineGraph('chartTest10', ex10, '연도', '특허 수', exYear);
-		horizontalBarGraph('chartTest11', ex11, '활동도 지수', '출원인');
-		horizontalBarGraph('chartTest12', ex12, '이끌림 지수', '출원인');
-		horizontalBarGraph('chartTest13', ex13_14, '수준 지수', '출원인');
-		scatterGraph('chartTest14', ex13_14, '특허 수', '수준 지수');
-		scatterGraph('chartTest15', ex15, '특허 수', '평균 패밀리 크기');
-		scatterGraph('chartTest16', ex16, '피 인용 수', '특허 수');
+		
+		// barAndLineGraph('chartTest1', ex1, '연도', '특허 수(전체)', '특허 수(기준국가)');
+		// horizontalBarGraph('chartTest2', ex2, '특허 수', '국적');
+		//multifleLineGraph('chartTest3', ex3, '연도', '특허 수', exYear);
+		
+		// multifleLineGraph2('chartTest3_1', ex3, '연도', '특허 수', exYear);
+		// makeEcharts('multifleLine', 'chartTest3', ex3, '연도', '특허 수', '', exYear);
+		
+		// horizontalBarGraph('chartTest4', ex4, '활동도 지수', '국적');
+		// horizontalBarGraph('chartTest5', ex5, '이끌림 지수', '국적');
+		// horizontalBarGraph('chartTest6', ex6_7, '수준 지수', '국적');
+		// scatterGraph('chartTest7', ex6_7, '특허 수', '수준 지수');
+		// scatterGraph('chartTest8', ex8, '특허 수', '평균 패밀리 크기');
+		// horizontalBarGraph('chartTest9', ex9, '특허 수', '출원인');
+		// multifleLineGraph('chartTest10', ex10, '연도', '특허 수', exYear);
+		// horizontalBarGraph('chartTest11', ex11, '활동도 지수', '출원인');
+		// horizontalBarGraph('chartTest12', ex12, '이끌림 지수', '출원인');
+		// horizontalBarGraph('chartTest13', ex13_14, '수준 지수', '출원인');
+		// scatterGraph('chartTest14', ex13_14, '특허 수', '수준 지수');
+		// scatterGraph('chartTest15', ex15, '특허 수', '평균 패밀리 크기');
+		// scatterGraph('chartTest16', ex16, '피 인용 수', '특허 수');
+		
+		makeEcharts('barAndLine', 'chartTest1', ex1, '연도', '특허 수(전체)', '특허 수(기준국가)');
+		makeEcharts('horizontalBar', 'chartTest2', ex2, '특허 수', '국적');
+		makeEcharts('multifleLine', 'chartTest3', ex3, '연도', '특허 수', '', exYear);
+		makeEcharts('horizontalBar', 'chartTest4', ex4, '활동도 지수', '국적');
+		makeEcharts('horizontalBar', 'chartTest5', ex5, '이끌림 지수', '국적');
+		makeEcharts('horizontalBar', 'chartTest6', ex6_7, '수준 지수', '국적');
+		makeEcharts('scatter', 'chartTest7', ex6_7, '특허 수', '수준 지수');
+		makeEcharts('scatter', 'chartTest8', ex8, '특허 수', '평균 패밀리 크기');
+		makeEcharts('horizontalBar', 'chartTest9', ex9, '특허 수', '출원인');
+		makeEcharts('multifleLine', 'chartTest10', ex10, '연도', '특허 수', '', exYear);
+		makeEcharts('horizontalBar', 'chartTest11', ex11, '활동도 지수', '출원인');
+		makeEcharts('horizontalBar', 'chartTest12', ex12, '이끌림 지수', '출원인');
+		makeEcharts('horizontalBar', 'chartTest13', ex13_14, '수준 지수', '출원인');
+		makeEcharts('scatter', 'chartTest14', ex13_14, '특허 수', '수준 지수');
+		makeEcharts('scatter', 'chartTest15', ex15, '특허 수', '평균 패밀리 크기');
+		makeEcharts('scatter', 'chartTest16', ex16, '피 인용 수', '특허 수');
 	</script>
 	<script src="/resources/js/common.js"></script>
 </body>
