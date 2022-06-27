@@ -670,8 +670,24 @@
 			{"standardValue" : "Switzerland", "resultValue" : "1246", "etcValue" : "1246", "rank" : "10"}
 		];
 		
-		var ex3 = [
-			{"standardValue" : "United States of America", "resultValue" : ["3217", "3806", "4369", "4474", "4481", "5037", "5104", "6139", "6441", "6139", "2375"], "etcValue" : "51582"},
+		var ex3 = 
+		
+// 		xValues 
+		
+// 		  {
+// 		    xValues : ["2012", "2013", ... , "2022"],
+			
+// 			yValues : [
+// 		 	  		    {
+// 		   				  "seriesName" : "United States of America", 
+// 		  				  "seriesValues" : [3217, 3806, ... , 2375]
+// 		  			    },
+		  			
+// 		  			    ...
+// 		  			  ]
+// 		  }	
+		  
+		
 			{"standardValue" : "Japan", "resultValue" : ["822", "865", "852", "964", "874", "952", "830", "923", "935", "823", "326"], "etcValue" : "9166"},
 			{"standardValue" : "Korea, Republic", "resultValue" : ["418", "502", "595", "836", "922", "1071", "933", "990", "1105", "1027", "430"], "etcValue" : "8829"},
 			{"standardValue" : "China", "resultValue" : ["101", "125", "179", "224", "254", "341", "329", "505", "479", "579", "335"], "etcValue" : "3451"},

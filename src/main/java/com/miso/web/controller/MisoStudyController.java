@@ -32,14 +32,15 @@ import com.miso.web.util.Criteria;
 import com.miso.web.util.Pagination;
 import com.miso.web.vo.ChartBarAndLineVo;
 import com.miso.web.vo.ChartHorizontalBarVo;
-import com.miso.web.vo.ChartLineMultifleVo;
-import com.miso.web.vo.ChartScatterMultifleVo;
+import com.miso.web.vo.ChartLineMultipleVo;
+import com.miso.web.vo.YvaluesVo;
+import com.miso.web.vo.ChartScatterMultipleVo;
 import com.miso.web.vo.ChartScatterSingleVo;
 import com.miso.web.vo.MisoStudyBoardVo;
 import com.miso.web.vo.MisoStudyChartDataVo;
 import com.miso.web.vo.MisoStudyUploadFileVo;
 import com.miso.web.vo.MisoStudyUserVo;
-import com.miso.web.vo.YvalueVo;
+import com.miso.web.vo.YvaluesVo;
 
 // TODO: 컨트롤러 서비스 분리해보기
 @Controller
@@ -419,21 +420,24 @@ public class MisoStudyController {
 		return "/projects/misostudy/chartBoard";
 	}
 	
-//	@RequestMapping(value = "/projects/misostudy/getChartData", method = RequestMethod.GET)
+//	@RequestMapping(value = "/projects/misostudy/getChartData", method = RequestMethod.POST)
 //	public @ResponseBody String getChartData(Model model) {
 //		
 //		String testData = "["
-//		       		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"United States of America\", \"legendYvalues\" : [3217, 3806, 4369, 4474, 4481, 5037, 5104, 6139, 6441, 6139, 2375]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Japan\", \"legendYvalues\" : [822, 865, 852, 964, 874, 952, 830, 923, 935, 823, 326]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Korea, Republic\", \"legendYvalues\" : [418, 502, 595, 836, 922, 1071, 933, 990, 1105, 1027, 430]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"China\", \"legendYvalues\" : [101, 125, 179, 224, 254, 341, 329, 505, 479, 579, 335]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Taiwan\", \"legendYvalues\" : [292, 301, 336, 328, 316, 328, 298, 319, 304, 291, 130]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Germany\", \"legendYvalues\" : [170, 190, 232, 252, 214, 295, 320, 426, 420, 328, 121]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"United Kingdom\", \"legendYvalues\" : [56, 77, 103, 121, 138, 160, 180, 232, 228, 207, 85]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"France\", \"legendYvalues\" : [97, 124, 125, 156, 135, 165, 164, 193, 182, 157, 59]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Netherlands\", \"legendYvalues\" : [110, 133, 151, 174, 158, 147, 149, 134, 144, 118, 58]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Switzerland\", \"legendYvalues\" : [67, 107, 97, 105, 111, 137, 128, 143, 148, 133, 70]}}"
+//		       		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"United States of America\", \"seriesValues\" : [3217, 3806, 4369, 4474, 4481, 5037, 5104, 6139, 6441, 6139, 2375]}},"
+//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Japan\", \"seriesValues\" : [822, 865, 852, 964, 874, 952, 830, 923, 935, 823, 326]}},"
+//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Korea, Republic\", \"seriesValues\" : [418, 502, 595, 836, 922, 1071, 933, 990, 1105, 1027, 430]}},"
+//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"China\", \"seriesValues\" : [101, 125, 179, 224, 254, 341, 329, 505, 479, 579, 335]}},"
+//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Taiwan\", \"seriesValues\" : [292, 301, 336, 328, 316, 328, 298, 319, 304, 291, 130]}},"
+//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Germany\", \"seriesValues\" : [170, 190, 232, 252, 214, 295, 320, 426, 420, 328, 121]}},"
+//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"United Kingdom\", \"seriesValues\" : [56, 77, 103, 121, 138, 160, 180, 232, 228, 207, 85]}},"
+//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"France\", \"seriesValues\" : [97, 124, 125, 156, 135, 165, 164, 193, 182, 157, 59]}},"
+//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Netherlands\", \"seriesValues\" : [110, 133, 151, 174, 158, 147, 149, 134, 144, 118, 58]}},"
+//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Switzerland\", \"seriesValues\" : [67, 107, 97, 105, 111, 137, 128, 143, 148, 133, 70]}}"
 //		    		+ "]";
+//		
+//		// System.out.println(testData);
+//		
 //		return testData;
 //	}
 	
@@ -473,7 +477,7 @@ public class MisoStudyController {
 		List<ChartHorizontalBarVo> testData7 = new ArrayList<ChartHorizontalBarVo>();
 		List<ChartHorizontalBarVo> testData8 = new ArrayList<ChartHorizontalBarVo>();
 		
-		testData1.add(new ChartHorizontalBarVo(51582, "United States of America"));
+		testData1.add(new ChartHorizontalBarVo(51582, "United States of AmericaUnited States of AmericaUnited States of AmericaUnited States of AmericaUnited States of AmericaUnited States of AmericaUnited States of AmericaUnited States of America"));
 		testData1.add(new ChartHorizontalBarVo(9166, "Japan"));
 		testData1.add(new ChartHorizontalBarVo(8829, "Korea, Republic"));
 		testData1.add(new ChartHorizontalBarVo(3451, "China"));
@@ -572,141 +576,191 @@ public class MisoStudyController {
 		return testDataList;
 	}
 	
-	@RequestMapping(value = "/projects/misostudy/chartLineMultifle", method = RequestMethod.POST)
-	public @ResponseBody List<List<ChartLineMultifleVo>> getChartDataLineMultifle() {
-		List<List<ChartLineMultifleVo>> testDataList =  new ArrayList<List<ChartLineMultifleVo>>();
+	@RequestMapping(value = "/projects/misostudy/chartLineMultiple", method = RequestMethod.POST)
+	public @ResponseBody List<ChartLineMultipleVo> getChartDataLineMultiple() {
+		List<ChartLineMultipleVo> testDataList =  new ArrayList<ChartLineMultipleVo>();
 		
-		List<ChartLineMultifleVo> testData1 = new ArrayList<ChartLineMultifleVo>();
-		List<ChartLineMultifleVo> testData2 = new ArrayList<ChartLineMultifleVo>();
+		List<YvaluesVo> yValues1 = new ArrayList<YvaluesVo>();
+		List<YvaluesVo> yValues2 = new ArrayList<YvaluesVo>();
 		
 		String[] xValues = {"2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022"};
 		
-		int[] legendYvalues1 = {3217, 3806, 4369, 4474, 4481, 5037, 5104, 6139, 6441, 6139, 2375};
-		int[] legendYvalues2 = {822, 865, 852, 964, 874, 952, 830, 923, 935, 823, 326};
-		int[] legendYvalues3 = {418, 502, 595, 836, 922, 1071, 933, 990, 1105, 1027, 430};
-		int[] legendYvalues4 = {101, 125, 179, 224, 254, 341, 329, 505, 479, 579, 335};
-		int[] legendYvalues5 = {292, 301, 336, 328, 316, 328, 298, 319, 304, 291, 130};
-		int[] legendYvalues6 = {170, 190, 232, 252, 214, 295, 320, 426, 420, 328, 121};
-		int[] legendYvalues7 = {56, 77, 103, 121, 138, 160, 180, 232, 228, 207, 85};
-		int[] legendYvalues8 = {97, 124, 125, 156, 135, 165, 164, 193, 182, 157, 59};
-		int[] legendYvalues9 = {110, 133, 151, 174, 158, 147, 149, 134, 144, 118, 58};
-		int[] legendYvalues10 = {67, 107, 97, 105, 111, 137, 128, 143, 148, 133, 70};
+		int[] seriesValues1 = {3217, 3806, 4369, 4474, 4481, 5037, 5104, 6139, 6441, 6139, 2375};
+		int[] seriesValues2 = {822, 865, 852, 964, 874, 952, 830, 923, 935, 823, 326};
+		int[] seriesValues3 = {418, 502, 595, 836, 922, 1071, 933, 990, 1105, 1027, 430};
+		int[] seriesValues4 = {101, 125, 179, 224, 254, 341, 329, 505, 479, 579, 335};
+		int[] seriesValues5 = {292, 301, 336, 328, 316, 328, 298, 319, 304, 291, 130};
+		int[] seriesValues6 = {170, 190, 232, 252, 214, 295, 320, 426, 420, 328, 121};
+		int[] seriesValues7 = {56, 77, 103, 121, 138, 160, 180, 232, 228, 207, 85};
+		int[] seriesValues8 = {97, 124, 125, 156, 135, 165, 164, 193, 182, 157, 59};
+		int[] seriesValues9 = {110, 133, 151, 174, 158, 147, 149, 134, 144, 118, 58};
+		int[] seriesValues10 = {67, 107, 97, 105, 111, 137, 128, 143, 148, 133, 70};
 
-		YvalueVo yValue1 = new YvalueVo("United States of America", legendYvalues1);
-		YvalueVo yValue2 = new YvalueVo("Japan", legendYvalues2);
-		YvalueVo yValue3 = new YvalueVo("Korea, Republic", legendYvalues3);
-		YvalueVo yValue4 = new YvalueVo("China", legendYvalues4);
-		YvalueVo yValue5 = new YvalueVo("Taiwan", legendYvalues5);
-		YvalueVo yValue6 = new YvalueVo("Germany", legendYvalues6);
-		YvalueVo yValue7 = new YvalueVo("United Kingdom", legendYvalues7);
-		YvalueVo yValue8 = new YvalueVo("France", legendYvalues8);
-		YvalueVo yValue9 = new YvalueVo("Netherlands", legendYvalues9);
-		YvalueVo yValue10 = new YvalueVo("Switzerland", legendYvalues10);
+		YvaluesVo yValue1 = new YvaluesVo("United States of America", seriesValues1);
+		YvaluesVo yValue2 = new YvaluesVo("Japan", seriesValues2);
+		YvaluesVo yValue3 = new YvaluesVo("Korea, Republic", seriesValues3);
+		YvaluesVo yValue4 = new YvaluesVo("China", seriesValues4);
+		YvaluesVo yValue5 = new YvaluesVo("Taiwan", seriesValues5);
+		YvaluesVo yValue6 = new YvaluesVo("Germany", seriesValues6);
+		YvaluesVo yValue7 = new YvaluesVo("United Kingdom", seriesValues7);
+		YvaluesVo yValue8 = new YvaluesVo("France", seriesValues8);
+		YvaluesVo yValue9 = new YvaluesVo("Netherlands", seriesValues9);
+		YvaluesVo yValue10 = new YvaluesVo("Switzerland", seriesValues10);
 		
-		testData1.add(new ChartLineMultifleVo(xValues, yValue1));
-		testData1.add(new ChartLineMultifleVo(xValues, yValue2));
-		testData1.add(new ChartLineMultifleVo(xValues, yValue3));
-		testData1.add(new ChartLineMultifleVo(xValues, yValue4));
-		testData1.add(new ChartLineMultifleVo(xValues, yValue5));
-		testData1.add(new ChartLineMultifleVo(xValues, yValue6));
-		testData1.add(new ChartLineMultifleVo(xValues, yValue7));
-		testData1.add(new ChartLineMultifleVo(xValues, yValue8));
-		testData1.add(new ChartLineMultifleVo(xValues, yValue9));
-		testData1.add(new ChartLineMultifleVo(xValues, yValue10));
-		testDataList.add(testData1);
+		yValues1.add(yValue1);
+		yValues1.add(yValue2);
+		yValues1.add(yValue3);
+		yValues1.add(yValue4);
+		yValues1.add(yValue5);
+		yValues1.add(yValue6);
+		yValues1.add(yValue7);
+		yValues1.add(yValue8);
+		yValues1.add(yValue9);
+		yValues1.add(yValue10);
 		
-		int[] legendYvalues11 = {137, 168, 203, 287, 322, 338, 293, 263, 320, 320, 123};
-		int[] legendYvalues12 = {88, 104, 140, 126, 102, 166, 203, 287, 388, 363, 76};
-		int[] legendYvalues13 = {9, 21, 44, 47, 74, 143, 228, 358, 457, 338, 107};
-		int[] legendYvalues14 = {24, 25, 20, 33, 52, 92, 83, 197, 173, 203, 84};
-		int[] legendYvalues15 = {4, 24, 34, 52, 59, 103, 83, 108, 159, 199, 81};
-		int[] legendYvalues16 = {63, 81, 98, 89, 68, 89, 70, 75, 104, 97, 32};
-		int[] legendYvalues17 = {65, 77, 65, 46, 58, 62, 80, 50, 59, 61, 15};
-		int[] legendYvalues18 = {29, 38, 70, 72, 67, 72, 71, 61, 65, 36, 22};
-		int[] legendYvalues19 = {47, 54, 68, 51, 70, 47, 56, 60, 45, 62, 16};
-		int[] legendYvalues20 = {9, 17, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+//		int[] seriesValues11 = {137, 168, 203, 287, 322, 338, 293, 263, 320, 320, 123};
+//		int[] seriesValues12 = {88, 104, 140, 126, 102, 166, 203, 287, 388, 363, 76};
+//		int[] seriesValues13 = {9, 21, 44, 47, 74, 143, 228, 358, 457, 338, 107};
+//		int[] seriesValues14 = {24, 25, 20, 33, 52, 92, 83, 197, 173, 203, 84};
+//		int[] seriesValues15 = {4, 24, 34, 52, 59, 103, 83, 108, 159, 199, 81};
+//		int[] seriesValues16 = {63, 81, 98, 89, 68, 89, 70, 75, 104, 97, 32};
+//		int[] seriesValues17 = {65, 77, 65, 46, 58, 62, 80, 50, 59, 61, 15};
+//		int[] seriesValues18 = {29, 38, 70, 72, 67, 72, 71, 61, 65, 36, 22};
+//		int[] seriesValues19 = {47, 54, 68, 51, 70, 47, 56, 60, 45, 62, 16};
+//		int[] seriesValues20 = {9, 17, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues11 = {50, 50, 203, 287, 322, 338, 293, 263, 320, 320, 123};
+		int[] seriesValues12 = {100, 100, 140, 126, 102, 166, 203, 287, 388, 363, 76};
+		int[] seriesValues13 = {150, 150, 44, 47, 74, 143, 228, 358, 457, 338, 107};
+		int[] seriesValues14 = {200, 200, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues15 = {250, 250, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues16 = {300, 300, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues17 = {350, 350, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues18 = {400, 400, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues19 = {450, 450, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues20 = {500, 500, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues21 = {550, 550, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues22 = {600, 600, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues23 = {650, 650, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues24 = {700, 700, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues25 = {750, 750, 16, 23, 41, 75, 70, 74, 79, 95, 58};
+		int[] seriesValues26 = {800, 800, 68, 51, 70, 47, 56, 60, 45, 62, 16};
+		int[] seriesValues27 = {850, 850, 20, 33, 52, 92, 83, 197, 173, 203, 84};
+		int[] seriesValues28 = {900, 900, 34, 52, 59, 103, 83, 108, 159, 199, 81};
+		int[] seriesValues29 = {950, 950, 98, 89, 68, 89, 70, 75, 104, 97, 32};
+		int[] seriesValues30 = {1000, 1000, 65, 46, 58, 62, 80, 50, 59, 61, 15};
+		int[] seriesValues31 = {1050, 1050, 70, 72, 67, 72, 71, 61, 65, 36, 22};
+		int[] seriesValues32 = {1100000000, 1100, 16, 23, 41, 75, 70, 74, 79, 95, 58};
 		
-		YvalueVo yValue11 = new YvalueVo("United States of America", legendYvalues11);
-		YvalueVo yValue12 = new YvalueVo("Japan", legendYvalues12);
-		YvalueVo yValue13 = new YvalueVo("Korea, Republic", legendYvalues13);
-		YvalueVo yValue14 = new YvalueVo("China", legendYvalues14);
-		YvalueVo yValue15 = new YvalueVo("Taiwan", legendYvalues15);
-		YvalueVo yValue16 = new YvalueVo("Germany", legendYvalues16);
-		YvalueVo yValue17 = new YvalueVo("United Kingdom", legendYvalues17);
-		YvalueVo yValue18 = new YvalueVo("France", legendYvalues18);
-		YvalueVo yValue19 = new YvalueVo("Netherlands", legendYvalues19);
-		YvalueVo yValue20 = new YvalueVo("Switzerland", legendYvalues20);
+		YvaluesVo yValue11 = new YvaluesVo("SAMSUNG ELECTRONICS CO LTD", seriesValues11);
+		YvaluesVo yValue12 = new YvaluesVo("IBM", seriesValues12);
+		YvaluesVo yValue13 = new YvaluesVo("AT & T IP I LP", seriesValues13);
+		YvaluesVo yValue14 = new YvaluesVo("INTEL CORP", seriesValues14);
+		YvaluesVo yValue15 = new YvaluesVo("SAMSUNG DISPLAY CO LTD", seriesValues15);
+		YvaluesVo yValue16 = new YvaluesVo("UNIV CALIFORNIA", seriesValues16);
+		YvaluesVo yValue17 = new YvaluesVo("GENENTECH INC", seriesValues17);
+		YvaluesVo yValue18 = new YvaluesVo("AT & T MOBILITY II LLC", seriesValues18);
+		YvaluesVo yValue19 = new YvaluesVo("MASSACHUSETTS INST TECHNOLOGYMASSACHUSETTS INST TECHNOLOGYMASSACHUSETTS INST TECHNOLOGYMASSACHUSETTS INST TECHNOLOGYMASSACHUSETTS INST TECHNOLOGY", seriesValues19);
+		YvaluesVo yValue20 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG", seriesValues20);
+		YvaluesVo yValue21 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG1", seriesValues21);
+		YvaluesVo yValue22 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG2", seriesValues22);
+		YvaluesVo yValue23 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG3", seriesValues23);
+		YvaluesVo yValue24 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG4", seriesValues24);
+		YvaluesVo yValue25 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG4", seriesValues25);
+		YvaluesVo yValue26 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG5", seriesValues26);
+		YvaluesVo yValue27 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG6", seriesValues27);
+		YvaluesVo yValue28 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG7", seriesValues28);
+		YvaluesVo yValue29 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG8", seriesValues29);
+		YvaluesVo yValue30 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG9", seriesValues30);
+		YvaluesVo yValue31 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG10", seriesValues31);
+		YvaluesVo yValue32 = new YvaluesVo("TAIWAN SEMICONDUCTOR MFG11", seriesValues32);
 		
-		testData2.add(new ChartLineMultifleVo(xValues, yValue11));
-		testData2.add(new ChartLineMultifleVo(xValues, yValue12));
-		testData2.add(new ChartLineMultifleVo(xValues, yValue13));
-		testData2.add(new ChartLineMultifleVo(xValues, yValue14));
-		testData2.add(new ChartLineMultifleVo(xValues, yValue15));
-		testData2.add(new ChartLineMultifleVo(xValues, yValue16));
-		testData2.add(new ChartLineMultifleVo(xValues, yValue17));
-		testData2.add(new ChartLineMultifleVo(xValues, yValue18));
-		testData2.add(new ChartLineMultifleVo(xValues, yValue19));
-		testData2.add(new ChartLineMultifleVo(xValues, yValue20));
-		testDataList.add(testData2);
+		yValues2.add(yValue11);
+		yValues2.add(yValue12);
+		yValues2.add(yValue13);
+		yValues2.add(yValue14);
+		yValues2.add(yValue15);
+		yValues2.add(yValue16);
+		yValues2.add(yValue17);
+		yValues2.add(yValue18);
+		yValues2.add(yValue19);
+		yValues2.add(yValue20);
+		yValues2.add(yValue21);
+		yValues2.add(yValue22);
+		yValues2.add(yValue23);
+		yValues2.add(yValue24);
+		yValues2.add(yValue25);
+		yValues2.add(yValue26);
+		yValues2.add(yValue27);
+		yValues2.add(yValue28);
+		yValues2.add(yValue29);
+		yValues2.add(yValue30);
+		yValues2.add(yValue31);
+		yValues2.add(yValue32);
+		
+		ChartLineMultipleVo chartLineMultipleVo1 =  new ChartLineMultipleVo(xValues, yValues1);
+		ChartLineMultipleVo chartLineMultipleVo2 =  new ChartLineMultipleVo(xValues, yValues2);
 
+		testDataList.add(chartLineMultipleVo1);
+		testDataList.add(chartLineMultipleVo2);
+		
 		return testDataList;
 	}
 	
-	@RequestMapping(value = "/projects/misostudy/chartScatterMultifle", method = RequestMethod.POST)
-	public @ResponseBody List<List<ChartScatterMultifleVo>> getChartDataScatterMultifle() {
-		List<List<ChartScatterMultifleVo>> testDataList =  new ArrayList<List<ChartScatterMultifleVo>>();
+	@RequestMapping(value = "/projects/misostudy/chartScatterMultiple", method = RequestMethod.POST)
+	public @ResponseBody List<List<ChartScatterMultipleVo>> getChartDataScatterMultiple() {
+		List<List<ChartScatterMultipleVo>> testDataList =  new ArrayList<List<ChartScatterMultipleVo>>();
 		
-		List<ChartScatterMultifleVo> testData1 = new ArrayList<ChartScatterMultifleVo>();
-		List<ChartScatterMultifleVo> testData2 = new ArrayList<ChartScatterMultifleVo>();
-		List<ChartScatterMultifleVo> testData3 = new ArrayList<ChartScatterMultifleVo>();
-		List<ChartScatterMultifleVo> testData4 = new ArrayList<ChartScatterMultifleVo>();
+		List<ChartScatterMultipleVo> testData1 = new ArrayList<ChartScatterMultipleVo>();
+		List<ChartScatterMultipleVo> testData2 = new ArrayList<ChartScatterMultipleVo>();
+		List<ChartScatterMultipleVo> testData3 = new ArrayList<ChartScatterMultipleVo>();
+		List<ChartScatterMultipleVo> testData4 = new ArrayList<ChartScatterMultipleVo>();
 
-		testData1.add(new ChartScatterMultifleVo(51582, 1.479, "United States of America"));
-		testData1.add(new ChartScatterMultifleVo(1246, 0.613, "Switzerland"));
-		testData1.add(new ChartScatterMultifleVo(1476, 0.534, "Netherlands"));
-		testData1.add(new ChartScatterMultifleVo(3243, 0.508, "Taiwan"));
-		testData1.add(new ChartScatterMultifleVo(1587, 0.489, "United Kingdom"));
-		testData1.add(new ChartScatterMultifleVo(2968, 0.485, "Germany"));
-		testData1.add(new ChartScatterMultifleVo(9166, 0.411, "Japan"));
-		testData1.add(new ChartScatterMultifleVo(8829, 0.339, "Korea, Republic"));
-		testData1.add(new ChartScatterMultifleVo(1557, 0.321, "France"));
-		testData1.add(new ChartScatterMultifleVo(3451, 0.203, "China"));
+		testData1.add(new ChartScatterMultipleVo(51582, 1.479, "United States of AmericaUnited States of AmericaUnited States of AmericaUnited States of AmericaUnited States of AmericaUnited States of AmericaUnited States of AmericaUnited States of AmericaUnited States of AmericaUnited States of America"));
+		testData1.add(new ChartScatterMultipleVo(1246, 0.613, "Switzerland"));
+		testData1.add(new ChartScatterMultipleVo(1476, 0.534, "Netherlands"));
+		testData1.add(new ChartScatterMultipleVo(3243, 0.508, "Taiwan"));
+		testData1.add(new ChartScatterMultipleVo(1587, 0.489, "United Kingdom"));
+		testData1.add(new ChartScatterMultipleVo(2968, 0.485, "Germany"));
+		testData1.add(new ChartScatterMultipleVo(9166, 0.411, "Japan"));
+		testData1.add(new ChartScatterMultipleVo(8829, 0.339, "Korea, Republic"));
+		testData1.add(new ChartScatterMultipleVo(1557, 0.321, "France"));
+		testData1.add(new ChartScatterMultipleVo(3451, 0.203, "China"));
 		testDataList.add(testData1);
 		
-		testData2.add(new ChartScatterMultifleVo(1246, 9.293, "Switzerland"));
-		testData2.add(new ChartScatterMultifleVo(2968, 6.989, "Germany"));
-		testData2.add(new ChartScatterMultifleVo(1587, 6.885, "United Kingdom"));
-		testData2.add(new ChartScatterMultifleVo(1557, 5.781, "France"));
-		testData2.add(new ChartScatterMultifleVo(1476, 5.249, "Netherlands"));
-		testData2.add(new ChartScatterMultifleVo(9166, 4.26, "Japan"));
-		testData2.add(new ChartScatterMultifleVo(51582, 3.555, "United States of America"));
-		testData2.add(new ChartScatterMultifleVo(8829, 2.985, "Korea, Republic"));
-		testData2.add(new ChartScatterMultifleVo(3451, 2.887, "China"));
-		testData2.add(new ChartScatterMultifleVo(3243, 2.477, "Taiwan"));
+		testData2.add(new ChartScatterMultipleVo(1246, 9.293, "Switzerland"));
+		testData2.add(new ChartScatterMultipleVo(2968, 6.989, "Germany"));
+		testData2.add(new ChartScatterMultipleVo(1587, 6.885, "United Kingdom"));
+		testData2.add(new ChartScatterMultipleVo(1557, 5.781, "France"));
+		testData2.add(new ChartScatterMultipleVo(1476, 5.249, "Netherlands"));
+		testData2.add(new ChartScatterMultipleVo(9166, 4.26, "Japan"));
+		testData2.add(new ChartScatterMultipleVo(51582, 3.555, "United States of America"));
+		testData2.add(new ChartScatterMultipleVo(8829, 2.985, "Korea, Republic"));
+		testData2.add(new ChartScatterMultipleVo(3451, 2.887, "China"));
+		testData2.add(new ChartScatterMultipleVo(3243, 2.477, "Taiwan"));
 		testDataList.add(testData2);
 		
-		testData3.add(new ChartScatterMultifleVo(1826, 6.773, "AT & T IP I LP"));
-		testData3.add(new ChartScatterMultifleVo(576, 2.266, "MASSACHUSETTS INST TECHNOLOGY"));
-		testData3.add(new ChartScatterMultifleVo(603, 1.711, "AT & T MOBILITY II LLC"));
-		testData3.add(new ChartScatterMultifleVo(638, 1.018, "GENENTECH INC"));
-		testData3.add(new ChartScatterMultifleVo(557, 0.972, "TAIWAN SEMICONDUCTOR MFG"));
-		testData3.add(new ChartScatterMultifleVo(866, 0.861, "UNIV CALIFORNIA"));
-		testData3.add(new ChartScatterMultifleVo(2043, 0.558, "IBM"));
-		testData3.add(new ChartScatterMultifleVo(2774, 0.55, "SAMSUNG ELECTRONICS CO LTD"));
-		testData3.add(new ChartScatterMultifleVo(986, 0.313, "INTEL CORP"));
-		testData3.add(new ChartScatterMultifleVo(906, 0.187, "SAMSUNG DISPLAY CO LTD"));
+		testData3.add(new ChartScatterMultipleVo(1826, 6.773, "AT & T IP I LP"));
+		testData3.add(new ChartScatterMultipleVo(576, 2.266, "MASSACHUSETTS INST TECHNOLOGY"));
+		testData3.add(new ChartScatterMultipleVo(603, 1.711, "AT & T MOBILITY II LLC"));
+		testData3.add(new ChartScatterMultipleVo(638, 1.018, "GENENTECH INC"));
+		testData3.add(new ChartScatterMultipleVo(557, 0.972, "TAIWAN SEMICONDUCTOR MFG"));
+		testData3.add(new ChartScatterMultipleVo(866, 0.861, "UNIV CALIFORNIA"));
+		testData3.add(new ChartScatterMultipleVo(2043, 0.558, "IBM"));
+		testData3.add(new ChartScatterMultipleVo(2774, 0.55, "SAMSUNG ELECTRONICS CO LTD"));
+		testData3.add(new ChartScatterMultipleVo(986, 0.313, "INTEL CORP"));
+		testData3.add(new ChartScatterMultipleVo(906, 0.187, "SAMSUNG DISPLAY CO LTD"));
 		testDataList.add(testData3);
 		
-		testData4.add(new ChartScatterMultifleVo(638, 16.194, "GENENTECH INC"));
-		testData4.add(new ChartScatterMultifleVo(576, 3.332, "MASSACHUSETTS INST TECHNOLOGY"));
-		testData4.add(new ChartScatterMultifleVo(866, 3.3, "UNIV CALIFORNIA"));
-		testData4.add(new ChartScatterMultifleVo(2774, 2.572, "SAMSUNG ELECTRONICS CO LTD"));
-		testData4.add(new ChartScatterMultifleVo(986, 2.496, "INTEL CORP"));
-		testData4.add(new ChartScatterMultifleVo(906, 2.446, "SAMSUNG DISPLAY CO LTD"));
-		testData4.add(new ChartScatterMultifleVo(557, 2.341, "TAIWAN SEMICONDUCTOR MFG"));
-		testData4.add(new ChartScatterMultifleVo(1826, 2.086, "AT & T IP I LP"));
-		testData4.add(new ChartScatterMultifleVo(2043, 1.697, "IBM"));
-		testData4.add(new ChartScatterMultifleVo(603, 1.381, "AT & T MOBILITY II LLC"));
+		testData4.add(new ChartScatterMultipleVo(638, 16.194, "GENENTECH INC"));
+		testData4.add(new ChartScatterMultipleVo(576, 3.332, "MASSACHUSETTS INST TECHNOLOGY"));
+		testData4.add(new ChartScatterMultipleVo(866, 3.3, "UNIV CALIFORNIA"));
+		testData4.add(new ChartScatterMultipleVo(2774, 2.572, "SAMSUNG ELECTRONICS CO LTD"));
+		testData4.add(new ChartScatterMultipleVo(986, 2.496, "INTEL CORP"));
+		testData4.add(new ChartScatterMultipleVo(906, 2.446, "SAMSUNG DISPLAY CO LTD"));
+		testData4.add(new ChartScatterMultipleVo(557, 2.341, "TAIWAN SEMICONDUCTOR MFG"));
+		testData4.add(new ChartScatterMultipleVo(1826, 2.086, "AT & T IP I LP"));
+		testData4.add(new ChartScatterMultipleVo(2043, 1.697, "IBM"));
+		testData4.add(new ChartScatterMultipleVo(603, 1.381, "AT & T MOBILITY II LLC"));
 		testDataList.add(testData4);
 		
 		return testDataList;
