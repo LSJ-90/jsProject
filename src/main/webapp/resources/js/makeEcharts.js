@@ -1,27 +1,51 @@
 /*
+ * makeEcharts.js: 알맞는 데이터를 매칭시키면 해당하는 그래프를 그릴 수 있는 함수의 모음 
  * 작성자: 이승준
- * 함수명: chart_barHorizontal(location, jsonData, xName, yName);
+ * 제작기간: 2022.06.13 ~
+ */
+
+/*
+ * 함수명: echart_BarHorizontal(location, jsonData, xName, yName): 수평 바 그래프를 그리는 함수
  * 		-locatino: 차트를 위치시킬 id명
  * 		-jsonData: 차트에 이용될 데이터
  * 		-xName: x축 이름
  * 		-yName: y축 이름  
  */
-function chart_barHorizontal(location, jsonData, xName, yName) {
-	// 차트위치생성
+function echart_BarHorizontal(location, jsonData, xName, yName) {
+	/*
+	 * 차트 인스턴스 초기화
+	 * echarts.init()의 인자는 차트가 그려질 위치의 DOM 요소
+	 */
 	var chartLocationInit = echarts.init(document.getElementById(location));
 	
 	// 데이터 핸들러
 	var xAxisData = new Array();
 	var yAxisData = new Array();
+	var yValueFormat;
 	echarts.util.each(jsonData, function(data) {
 		xAxisData.push(data.xValue);
+		
+		if (data.yValue.length > 25 ) { 
+			data.yValue = data.yValue.substr(0,25) + '...';
+		}
 		yAxisData.push(data.yValue);
 	});
-	// console.log("xAxisData:" + xAxisData);
-	// console.log("yAxisData:" + yAxisData);
+	// console.log(xAxisData);
+	// console.log(yAxisData);
 	
 	// 차트옵션
 	var option = {
+		toolbox: {
+			itemSize : 25,
+		    feature: {
+		    	restore : {},
+		    	saveAsImage: {
+		    		name : 'testImage'
+		    	}
+		    },
+		    showTitle: false,
+		    show: true
+		},
 		tooltip : {
 			trigger : "axis",
 			axisPointer : {
@@ -32,8 +56,14 @@ function chart_barHorizontal(location, jsonData, xName, yName) {
 			}
 		},
 		grid: {
-			containLabel : true
+			containLabel : true,
+			top : '8%'
 		},
+		dataZoom: {
+		    type : "inside",
+		    yAxisIndex : [0],
+		    minSpan : 10
+	    },
 		xAxis : {
 			type: 'value',
 			name: xName,
@@ -45,22 +75,26 @@ function chart_barHorizontal(location, jsonData, xName, yName) {
 		    }
 		},
 		yAxis: {
-			data: yAxisData,
-			name: yName,
-			nameLocation: 'start',
-			nameTextStyle: {
+			type : 'category',
+			data : yAxisData,
+			name : yName,
+			nameLocation : 'start',
+			nameTextStyle : {
 		      fontWeight : 'bold',
 		      fontSize : 13
 		    },
-			inverse: true
+			inverse : true,
 		},
-		series: [{
-			data: xAxisData,
-			type: 'bar',
-			label: {
-				show: true,
-				position: 'right',
-				color: 'rgba(0, 0, 0, 1)'
+		series : [{
+			data : xAxisData,
+			type : 'bar',
+			label : {
+				show : true,
+				position : 'right',
+				color : 'rgba(0, 0, 0, 1)',
+				formatter : function(params) {
+					return echart_UtilMakePattern(params.data);
+				}
 			},
 			itemStyle: {
 				color: new echarts.graphic.LinearGradient(1, 0.5, 0, 0.5,[
@@ -78,18 +112,21 @@ function chart_barHorizontal(location, jsonData, xName, yName) {
 }
 
 /*
- * 작성자: 이승준
- * 함수명: chart_barAndLine(location, jsonData, xName, yNameLeft, yNameRight);
+ * 함수명: echart_BarAndLine(location, jsonData, xName, yNameLeft, yNameRight): 바, 라인 두 가지의 복합 그래프를 그리는 함수
  * 		-locatino: 차트를 위치시킬 id명
  * 		-jsonData: 차트에 이용될 데이터
  * 		-xName: x축 이름
  * 		-yNameLeft: 왼쪽 y축 이름  
  * 		-yNameRight: 오른쪽 y축 이름  
  */
-function chart_barAndLine(location, jsonData, xName, yNameLeft, yNameRight) {
-	// 차트위치생성
+function echart_BarAndLine(location, jsonData, xName, yNameLeft, yNameRight) {
+	
+	/*
+	 * 차트 인스턴스 초기화 
+	 * echarts.init()의 인자는 차트가 그려질 위치의 DOM 요소
+	 */
 	var chartLocationInit = echarts.init(document.getElementById(location));
-
+	
 	// 데이터 핸들러
 	var xAxisData = new Array();
 	var yAxisLeftData = new Array();
@@ -99,12 +136,23 @@ function chart_barAndLine(location, jsonData, xName, yNameLeft, yNameRight) {
 		yAxisLeftData.push(data.yValueLeft);
 		yAxisRightData.push(data.yValueRight);
 	});
-	// console.log("xAxisData:" + xAxisData);
-	// console.log("yAxisLeftData:" + yAxisLeftData);
-	// console.log("yAxisRightData:" + yAxisRightData);
+	// console.log(xAxisData);
+	// console.log(yAxisLeftData);
+	// console.log(yAxisRightData);
 	
 	// 차트옵션
 	var option = {
+		toolbox: {
+			itemSize : 25,
+		    feature: {
+		    	restore : {},
+		    	saveAsImage: {
+		    		name : 'testImage'
+		    	}
+		    },
+		    showTitle: false,
+		    show: true
+		},
 		tooltip : {
 			trigger : 'axis',
 			axisPointer : {
@@ -115,8 +163,27 @@ function chart_barAndLine(location, jsonData, xName, yNameLeft, yNameRight) {
 			}
 		},
 		legend : {
-			data : [yNameLeft, yNameRight]
+			data : [yNameLeft, yNameRight],
+			top : '5%'
 		},
+		grid: {
+			containLabel : true,
+			top : '15%',
+			bottom : '10%'
+		},
+		dataZoom: [{
+			id : 'dataZoomXLeft',
+	        type : 'inside',
+	        xAxisIndex : [0],
+	        minSpan : 10,
+	        filterMode : 'empty'
+	    },
+	    {
+            id : 'dataZoomXRight',
+            type : 'inside',
+            xAxisIndex : [0],
+            filterMode : 'empty'
+	    }],
 		xAxis : [{
 			type : 'category',
 			name : xName,
@@ -181,33 +248,26 @@ function chart_barAndLine(location, jsonData, xName, yNameLeft, yNameRight) {
 }
 		
 /*
- * 작성자: 이승준
- * 함수명: chart_lineMultiple(location, jsonData, xName, yName);
+ * 함수명: echart_LineMultiple(location, jsonData, xName, yName): 여러 라인그래프를 그리는 함수
  * 		-locatino: 차트를 위치시킬 id명
  * 		-jsonData: 차트에 이용될 데이터
  * 		-xName: x축 이름
  * 		-yName: y축 이름 
  */		
-function chart_lineMultiple(location, jsonData, xName, yName) {
-	// 차트위치생성
+function echart_LineMultiple(location, jsonData, xName, yName) {
+	/*
+	 * 차트 인스턴스 초기화 
+	 * echarts.init()의 인자는 차트가 그려질 위치의 DOM 요소
+	 */
 	var chartLocationInit = echarts.init(document.getElementById(location));
 	
 	// 데이터 컨트롤
-	var xAxisData = new Array();
-	var yAxisData = new Array();
 	var seriesList = new Array();
-	
-	xAxisData = jsonData[0].xValues;
-	
-	echarts.util.each(jsonData, function(data) {
-		yAxisData.push(data.yValue);
-	});
-	
-	echarts.util.each(yAxisData, function(data) {
+	echarts.util.each(jsonData.yValues, function(data) {
 		seriesList.push({
 			name: data.seriesName,
 			type: 'line',
-			data: data.seriesValues
+			data: data.seriesValues	
 		});
 	});
 	// console.log(xAxisData);
@@ -215,35 +275,60 @@ function chart_lineMultiple(location, jsonData, xName, yName) {
 	
 	// 차트옵션	
 	var option = {
-		color : makeRandomColor(seriesList.length),
+		color : echart_UtilMakeRandomColor(seriesList.length),
+		toolbox: {
+			itemSize : 25,
+		    feature: {
+		    	restore : {},
+		    	saveAsImage: {
+		    		name : 'testImage'
+		    	}
+		    },
+		    showTitle: false,
+		    show: true
+		},
 		tooltip : {
 			trigger : 'axis',
 			order : 'valueDesc',
-			position: function (point, params, dom, rect, size) {
+			position : function (point, params, dom, rect, size) {
 	          var obj = {
 	            top: 10
 	          };
 	          obj[['left', 'right'][+(point[0] < size.viewSize[0] / 2)]] = 30;
 	          return obj;
-	        }
+	        },
+        	formatter : function(params) {
+        		return echart_UtilTooltipFormatter(params);
+			},
 		},
 		legend : {
-			textStyle: {
-				overflow: "truncate",
-				width: '130'
+			textStyle : {
+				overflow : 'truncate',
+				width : 130
 		    },
-		    bottom: '0%',
-			width: '80%'
+		    bottom : '0%',
+			width : '80%',
+			tooltip : {
+				show : true,
+				trigger : 'axis'
+			}
 		},
 		grid : {
 			containLabel : true,
 			bottom : '25%'
 		},
-		dataZoom: {
-		    start: 0,
-		    end: 100,
-		    type: "inside"
+		dataZoom: [{
+			id : 'dataZoomX',
+	        type : 'inside',
+	        xAxisIndex : [0],
+	        filterMode : 'empty'
 	    },
+	    {
+            id : 'dataZoomY',
+            type : 'inside',
+            yAxisIndex : [0],
+            filterMode : 'empty'
+	    }],
 		xAxis : {
 			type : 'category',
 			name : xName,
@@ -253,16 +338,19 @@ function chart_lineMultiple(location, jsonData, xName, yName) {
 			    fontWeight : 'bold',
 			    fontSize : 13
 		    },
-			data : xAxisData
+			data : jsonData.xValues
 		},
 		yAxis : {
 			type : 'value',
 			name : yName,
-			nameLocation : 'middle',
+			nameLocation : 'end',
 			nameTextStyle : {
-				lineHeight: 80,
+				lineHeight: 10,
 			    fontWeight : 'bold',
 			    fontSize : 13
+		    },
+		    dataZoom: {
+			    yAxisIndex : [0,2]
 		    },
 		},
 		series : seriesList
@@ -272,41 +360,64 @@ function chart_lineMultiple(location, jsonData, xName, yName) {
 }
 		
 /*
- * 작성자: 이승준
- * 함수명: chart_scatterSingle(location, jsonData, xName, yName);
+ * 함수명: echart_ScatterSingle(location, jsonData, xName, yName): 하나의 시리즈로 scatter그래프를 그리는 함수
  * 		-locatino: 차트를 위치시킬 id명
  * 		-jsonData: 차트에 이용될 데이터
  * 		-xName: x축 이름
  * 		-yName: y축 이름
  */
-function chart_scatterSingle(location, jsonData, xName, yName) {
-	// 차트위치 가져오기
+function echart_ScatterSingle(location, jsonData, xName, yName) {
+	/**
+	 * 차트 인스턴스 초기화 
+	 * echarts.init()의 인자는 차트가 그려질 위치의 DOM 요소
+	 */
 	var chartLocationInit = echarts.init(document.getElementById(location));
-	
+
 	// 데이터 컨트롤
 	var seriesData = new Array();
 	echarts.util.each(jsonData, function(data) {
 		seriesData.push([data.xValue,data.yValue]);
 	});
-	// console.log("seriesData: " + seriesData);
+	// console.log(seriesData);
 	
 	// 차트옵션	
 	var option = {
-		grid : {
-			containLabel : true,
-			top : '5%',
-			bottom : '25%'
-		},
 		tooltip: {
 			trigger : 'item',
 			axisPointer : {
 				type : 'cross'
 			},
 			formatter: function(params) {
-				// console.log(params.marker);
-		    	return (xName + ': ' + params.value[0] + '<br/>' +  yName + ': ' +params.value[1]);
+				return echart_UtilTooltipFormatter(params, xName, yName);
 		 	},
 		},
+		toolbox: {
+			itemSize : 25,
+		    feature: {
+		    	restore : {},
+		    	saveAsImage: {
+		    		name : 'testImage'
+		    	}
+		    },
+		    showTitle: false,
+		    show: true
+		},
+		grid : {
+			containLabel : true,
+			top : '8%'
+		},
+		dataZoom: [{
+			id: 'dataZoomX',
+	        type: 'inside',
+	        xAxisIndex: [0],
+	        filterMode: 'empty'
+	    },
+	    {
+            id: 'dataZoomY',
+            type: 'inside',
+            yAxisIndex: [0],
+            filterMode: 'empty'
+	    }],
 		xAxis : {
 			type : 'value',
 			name : xName,
@@ -324,9 +435,8 @@ function chart_scatterSingle(location, jsonData, xName, yName) {
 		yAxis : {
 			type : 'value',
 			name : yName,
-			nameLocation : 'middle',
+			nameLocation : 'end',
 			nameTextStyle : {
-		      lineHeight : 80,
 		      fontWeight : 'bold',
 		      fontSize : 13
 		    },
@@ -347,19 +457,21 @@ function chart_scatterSingle(location, jsonData, xName, yName) {
 	chartLocationInit.setOption(option);
 }
 
-
 /*
- * 작성자: 이승준
- * 함수명: chart_scatterMultiple(location, jsonData, xName, yName);
+ * 함수명: echart_ScatterMultiple(location, jsonData, xName, yName): 여러 시리즈로 scatter그래프를 그리는 함수
  * 		-locatino: 차트를 위치시킬 id명
  * 		-jsonData: 차트에 이용될 데이터
  * 		-xName: x축 이름
  * 		-yName: y축 이름
  */
-function chart_scatterMultiple(location, jsonData, xName, yName) {
-	// 차트위치 가져오기
-	var chartLocationInit = echarts.init(document.getElementById(location));
+function echart_ScatterMultiple(location, jsonData, xName, yName) {
 	
+	/**
+	 * 차트 인스턴스 초기화 
+	 * echarts.init()의 인자는 차트가 그려질 위치의 DOM 요소
+	 */
+	var chartLocationInit = echarts.init(document.getElementById(location));
+	// console.log(JSON.parse(jsonData));
 	// 데이터 컨트롤
 	var seriesList = new Array();
 	echarts.util.each(jsonData, function(data) {
@@ -376,22 +488,17 @@ function chart_scatterMultiple(location, jsonData, xName, yName) {
 	
 	// 차트옵션	
 	var option = {
-		color : makeRandomColor(seriesList.length),
-		legend : {
-			textStyle: {
-				overflow: "truncate",
-				width: '130',
+		color : echart_UtilMakeRandomColor(seriesList.length),
+		toolbox: {
+			itemSize : 25,
+		    feature: {
+		    	restore : {},
+		    	saveAsImage: {
+		    		name : 'testImage'
+		    	}
 		    },
-		    bottom: '0%',
-			width: '80%',
-			tooltip: {
-				trigger : 'item'
-			}
-		},
-		grid : {
-			containLabel : true,
-			top : '5%',
-			bottom : '25%'
+		    showTitle: false,
+		    show: true
 		},
 		tooltip: {
 			trigger : 'item',
@@ -399,9 +506,52 @@ function chart_scatterMultiple(location, jsonData, xName, yName) {
 				type : 'cross'
 			},
 			formatter: function(params) {
-				// console.log(params.marker);
-	      		return (params.marker + params.seriesName + '<br/>' + xName + ': ' + params.value[0] + '<br/>' +  yName + ': ' +params.value[1]);
-		 	},
+				return echart_UtilTooltipFormatter(params, xName, yName);
+		 	}
+		},
+		legend : {
+			textStyle: {
+				overflow: "truncate",
+				width: 130,
+		    },
+		    bottom: '0%',
+			width: '80%',
+			tooltip: {
+				show : true,
+				trigger : 'item',
+				formatter: function(params) {
+					console.log(params);
+					var formatResult;
+					var series = chartLocationInit.getOption().series;
+					
+					for (var i=0; i<series.length; i++) {
+						console.log(series[i]);
+						if (series[i].name === params.name) {
+							formatResult = params.name + '<br/>'
+							   			 + xName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(series[i].data[0][0]) + '</strong><br/>'
+							   			 + yName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(series[i].data[0][1]) + '</strong><br/>';
+						}
+					}
+					return formatResult;
+			 	}
+			}
+		},
+		dataZoom: [{
+			id: 'dataZoomX',
+	        type: 'inside',
+	        xAxisIndex: [0],
+	        filterMode: 'empty'
+	    },
+	    {
+            id: 'dataZoomY',
+            type: 'inside',
+            yAxisIndex: [0],
+            filterMode: 'empty'
+	    }],
+		grid : {
+			containLabel : true,
+			top : '8%',
+			bottom : '25%'
 		},
 		xAxis : {
 			type : 'value',
@@ -420,9 +570,8 @@ function chart_scatterMultiple(location, jsonData, xName, yName) {
 		yAxis : {
 			type : 'value',
 			name : yName,
-			nameLocation : 'middle',
+			nameLocation : 'end',
 			nameTextStyle : {
-		      lineHeight : 80,
 		      fontWeight : 'bold',
 		      fontSize : 13
 		    },
@@ -438,29 +587,105 @@ function chart_scatterMultiple(location, jsonData, xName, yName) {
 	chartLocationInit.setOption(option);
 }
 
-/* TODO: 밝은 색이 나올 경우 새로고침을 하여 원하는 색으로 만들어하는 문제가 있음
+/* TODO: 랜덤색상이 밝은색이 나오거나 기본값의 색과 비슷하다면 육안으로 보기 힘듬 
+ * 		  이때 전체 페이지를 새로고침을 하여 원하는 색으로 바꿈으로서 해결할 수 있으나, 근본적인 해결책은 되지 못함.
  * 	   
- * makeRandomColor(dataLength);
- * 		: data 길이만큼의 랜덤색상을 생성해주는 함수
- *  	: echarts의 origin color(9가지)로 모든 데이터를 표현할 수 없을 때 사용 권장
+ * echart_UtilMakeRandomColor(dataLength): 데이터의 길이만큼의 랜덤색상을 생성해주는 함수
+ * 		-dataLength: 데이터길이
+ * 		
+ *  	: echarts의 origin color(9가지)지만 11가지 색상을 임의로 추가하여 기본값을 20가지의 색으로 설정하였음
  * 
  * returnType 
  *		: Array	  
  */
-function makeRandomColor(dataLength) {
-	var colorBox = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
-	for (var i=9; i<dataLength; i++) {
-		var newColor = '#' + Math.round(Math.random() * 0xffffff).toString(16);
-		if (!colorBox.includes(newColor) && newColor.length > 6) {
-			// console.log("newColor:" + newColor);
-			colorBox[i] = newColor;
-		} 
-		else {
-			// console.log("badColor:" + newColor);
-			i--;
-		}	
+function echart_UtilMakeRandomColor(dataLength) {
+	var colorBox = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', 
+					'#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#580056',
+					'#005802', '#7CEA9A', '#7AB460', '#3BA272', '#A23B6B',
+					'#DE9173', '#66EEEE', '#588AFA', '#B075CC', '#C6AA54'
+				   ];
+	if (colorBox.length < dataLength) {
+		for (var i=colorBox.length; i<dataLength; i++) {
+			var newColor = '#' + Math.round(Math.random() * 0xffffff).toString(16);
+			if (!colorBox.includes(newColor) && newColor.length > 6) {
+				// console.log("newColor:" + newColor);
+				colorBox[i] = newColor;
+			} 
+			else {
+				// console.log("badColor:" + newColor);
+				i--;
+			}	
+		}
+		// console.log(colorBox);
+		// console.log(colorBox.length);
 	}
-	// console.log(colorBox);
-	// console.log(colorBox.length);
 	return colorBox;
+}
+
+/* TODO: 상황에 따라 추가 예정(현재는 숫자에 대한 패턴만을 만듬 00,000,000)	
+ * 
+ * echart_UtilMakePattern(value): 정규표현식과 같은 패턴식을 사용하여 포맷팅하는 함수
+ * 		-value: 패턴을 만들 값	
+ * 
+ * returnType 
+ *		: String	   	
+ */
+function echart_UtilMakePattern(value) {
+	var regExpNum = /\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g;
+	var patternNum = value.toString().replace(regExpNum,",");
+	return patternNum;
+}
+
+/* TODO: (overflow: truncate)가 버그로 인해 Tooltip에서는 작동하지 않아 함수를 작성하게됨.(legend에서는 정상작동)
+ * 	   : https://github.com/apache/echarts/issues/16699
+ * 
+ * echart_UtilTooltipFormatter(params, xName, yName): ToolTip의 시리즈명이 maxlength 이상의 길이만큼을 '...'으로 변경하는 함수
+ * 		-params: formmater에서 가져온 params(=데이터)
+ * 		-xName: 그래프 설정 당시 x축 이름
+ * 		-yName: 그래프 설정 당시 x축 이름
+ * 
+ * returnType 
+ *		: String
+ */
+function echart_UtilTooltipFormatter(params, xName, yName) {
+	var maxlength = 25;		// 최대 길이 설정
+	var truncateSeriesName;	// truncate된 시리즈명
+	var formatResult;		// 최종 결과
+	
+	if (Array.isArray(params)) {
+		// 각 데이터 내림차순 정렬
+		params.sort(function(a, b) {
+			// console.log(a);
+			// console.log(b);
+			return b.data-a.data;
+		});
+		
+		formatResult = '<div style="font-size: 18px; padding-bottom: 10px;">' + params[0].name + '</div>';
+		
+		for (var param of params) {
+			if (param.seriesName.length > maxlength ) { 
+				truncateSeriesName = param.seriesName.substr(0,maxlength) + '...';
+				
+			} else {
+				truncateSeriesName = param.seriesName;
+			}
+			formatResult += param.marker + '  ' + truncateSeriesName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(param.data) + '</strong><br/>';
+		}
+	} else {
+
+		if (params.seriesName === 'series\u00000') {
+			truncateSeriesName = '';
+		} else {
+			if (params.seriesName.length > maxlength) {
+				truncateSeriesName = params.seriesName.substr(0,maxlength) + '...';
+			} else {
+				truncateSeriesName = params.seriesName
+			}
+		}
+		formatResult = params.marker + '  ' + truncateSeriesName + '<br/>'
+				       + xName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(params.value[0]) + '</strong><br/>'
+				       + yName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(params.value[1]) + '</strong><br/>';
+	}
+	// console.log(testFormat);
+	return formatResult;
 }

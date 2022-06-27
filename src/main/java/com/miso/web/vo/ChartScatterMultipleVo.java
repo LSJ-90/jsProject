@@ -1,14 +1,14 @@
 package com.miso.web.vo;
 
-public class ChartScatterMultifleVo {
+public class ChartScatterMultipleVo {
 	
 	private double xValue;
 	private double yValue;
 	private String seriesName;
 	
-	public ChartScatterMultifleVo() {}
+	public ChartScatterMultipleVo() {}
 
-	public ChartScatterMultifleVo(double xValue, double yValue, String seriesName) {
+	public ChartScatterMultipleVo(double xValue, double yValue, String seriesName) {
 		super();
 		this.xValue = xValue;
 		this.yValue = yValue;
