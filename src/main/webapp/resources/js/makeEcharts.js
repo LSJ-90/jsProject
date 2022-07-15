@@ -17,7 +17,6 @@ function echart_BarHorizontal(location, jsonData, xName, yName) {
 	 * echarts.init()의 인자는 차트가 그려질 위치의 DOM 요소
 	 */
 	var chartLocationInit = echarts.init(document.getElementById(location));
-	
 	// 데이터 핸들러
 	var xAxisData = new Array();
 	var yAxisData = new Array();
@@ -120,7 +119,6 @@ function echart_BarHorizontal(location, jsonData, xName, yName) {
  * 		-yNameRight: 오른쪽 y축 이름  
  */
 function echart_BarAndLine(location, jsonData, xName, yNameLeft, yNameRight) {
-	
 	/*
 	 * 차트 인스턴스 초기화 
 	 * echarts.init()의 인자는 차트가 그려질 위치의 DOM 요소
@@ -262,6 +260,8 @@ function echart_LineMultiple(location, jsonData, xName, yName) {
 	var chartLocationInit = echarts.init(document.getElementById(location));
 	
 	// 데이터 컨트롤
+	var testSeriesNameList = new Array();
+	var testSeriesNameLengthList = new Array();
 	var seriesList = new Array();
 	echarts.util.each(jsonData.yValues, function(data) {
 		seriesList.push({
@@ -270,6 +270,7 @@ function echart_LineMultiple(location, jsonData, xName, yName) {
 			data: data.seriesValues	
 		});
 	});
+	
 	// console.log(xAxisData);
 	// console.log(yAxisData);
 	
@@ -298,7 +299,7 @@ function echart_LineMultiple(location, jsonData, xName, yName) {
 	          return obj;
 	        },
         	formatter : function(params) {
-        		return echart_UtilTooltipFormatter(params);
+        		return echart_UtilTooltipFormatter(chartLocationInit, params, xName, yName);
 			},
 		},
 		legend : {
@@ -308,10 +309,6 @@ function echart_LineMultiple(location, jsonData, xName, yName) {
 		    },
 		    bottom : '0%',
 			width : '80%',
-			tooltip : {
-				show : true,
-				trigger : 'axis'
-			}
 		},
 		grid : {
 			containLabel : true,
@@ -388,7 +385,7 @@ function echart_ScatterSingle(location, jsonData, xName, yName) {
 				type : 'cross'
 			},
 			formatter: function(params) {
-				return echart_UtilTooltipFormatter(params, xName, yName);
+				return echart_UtilTooltipFormatter(chartLocationInit, params, xName, yName);
 		 	},
 		},
 		toolbox: {
@@ -501,38 +498,28 @@ function echart_ScatterMultiple(location, jsonData, xName, yName) {
 		    show: true
 		},
 		tooltip: {
+			borderColor: 'rgba(0, 0, 0, 0.3)',
 			trigger : 'item',
 			axisPointer : {
 				type : 'cross'
 			},
 			formatter: function(params) {
-				return echart_UtilTooltipFormatter(params, xName, yName);
+				return echart_UtilTooltipFormatter(chartLocationInit, params, xName, yName);
 		 	}
 		},
 		legend : {
-			textStyle: {
-				overflow: "truncate",
-				width: 130,
+			textStyle : {
+				overflow : "truncate",
+				width : 130,
 		    },
-		    bottom: '0%',
-			width: '80%',
-			tooltip: {
+		    bottom : '0%',
+			width : '80%',
+			tooltip : {
+				borderColor: 'rgba(0, 0, 0, 0.3)',
 				show : true,
 				trigger : 'item',
 				formatter: function(params) {
-					console.log(params);
-					var formatResult;
-					var series = chartLocationInit.getOption().series;
-					
-					for (var i=0; i<series.length; i++) {
-						console.log(series[i]);
-						if (series[i].name === params.name) {
-							formatResult = params.name + '<br/>'
-							   			 + xName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(series[i].data[0][0]) + '</strong><br/>'
-							   			 + yName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(series[i].data[0][1]) + '</strong><br/>';
-						}
-					}
-					return formatResult;
+					return echart_UtilTooltipFormatter(chartLocationInit, params, xName, yName);
 			 	}
 			}
 		},
@@ -639,7 +626,33 @@ function echart_UtilMakePattern(value) {
 /* TODO: (overflow: truncate)가 버그로 인해 Tooltip에서는 작동하지 않아 함수를 작성하게됨.(legend에서는 정상작동)
  * 	   : https://github.com/apache/echarts/issues/16699
  * 
- * echart_UtilTooltipFormatter(params, xName, yName): ToolTip의 시리즈명이 maxlength 이상의 길이만큼을 '...'으로 변경하는 함수
+ * echart_UtilOverflowTruncate(str): maxlength 이상의 길이의 문자열을 자른 후 '...'으로 변경하는 함수
+ * 		-str: 문자열
+ * 
+ * returnType 
+ *		: String
+ */
+function echart_UtilOverflowTruncate(str) {
+	var maxlength = 25;		// 최대 길이 설정
+	var truncateStr;	// truncate된 시리즈명
+	
+	if (str === 'series\u00000') {
+		truncateStr = '';
+	} else {
+		if (str.length > maxlength) {
+			truncateStr = str.substr(0,maxlength) + '...';
+		} else {
+			truncateStr = str;
+		}
+	}
+	
+	return truncateStr;
+}
+
+/* TODO: legend와 series에서의 formmater의 매개변수(params)의 데이터가 달라 이를 componentType으로 구분지어 로직을 구현
+ * 
+ * echart_UtilTooltipFormatter(chartDom, params, xName, yName): ToolTip의 format함수
+ * 		-chartDom: 차트의 DOM
  * 		-params: formmater에서 가져온 params(=데이터)
  * 		-xName: 그래프 설정 당시 x축 이름
  * 		-yName: 그래프 설정 당시 x축 이름
@@ -647,45 +660,62 @@ function echart_UtilMakePattern(value) {
  * returnType 
  *		: String
  */
-function echart_UtilTooltipFormatter(params, xName, yName) {
-	var maxlength = 25;		// 최대 길이 설정
-	var truncateSeriesName;	// truncate된 시리즈명
-	var formatResult;		// 최종 결과
+function echart_UtilTooltipFormatter(chartDom, params, xName, yName) {
+	// 필요 변수 셋팅
+	var mouseoverName;
+	var marker;
+	var series = chartDom.getOption().series;
+	var colors = chartDom.getOption().color;
+	var legend = chartDom.getOption().legend[0];
+	var formatResult;
+	// console.log(params);
 	
-	if (Array.isArray(params)) {
-		// 각 데이터 내림차순 정렬
-		params.sort(function(a, b) {
-			// console.log(a);
-			// console.log(b);
-			return b.data-a.data;
-		});
-		
-		formatResult = '<div style="font-size: 18px; padding-bottom: 10px;">' + params[0].name + '</div>';
-		
-		for (var param of params) {
-			if (param.seriesName.length > maxlength ) { 
-				truncateSeriesName = param.seriesName.substr(0,maxlength) + '...';
-				
-			} else {
-				truncateSeriesName = param.seriesName;
+	// componentType이 legend이 경우
+	if (params.componentType === 'legend') {
+		mouseoverName = params.name;
+		if (legend.selected[mouseoverName] || typeof legend.selected[mouseoverName] === 'undefined') {
+			for (var i=0; i<series.length; i++) {
+				// 포맷팅
+				if (series[i].name === mouseoverName) {
+					
+					marker ='<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:' + colors[i] + ';"></span>';
+					
+					formatResult = marker + echart_UtilOverflowTruncate(mouseoverName) + '<br/>'
+					   			 + xName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(series[i].data[0][0]) + '</strong><br/>'
+					   			 + yName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(series[i].data[0][1]) + '</strong><br/>';
+				}
 			}
-			formatResult += param.marker + '  ' + truncateSeriesName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(param.data) + '</strong><br/>';
 		}
-	} else {
-
-		if (params.seriesName === 'series\u00000') {
-			truncateSeriesName = '';
+	}  
+	
+	// componentType이 series이거나 그 외일 경우
+	else  {
+		// params가 배열일 경우
+		if (Array.isArray(params)) {
+			
+			// 데이터 내림차순 정렬
+			params.sort(function(a, b) {
+				return b.data-a.data;
+			});
+			
+			// 포맷팅
+			formatResult = '<div style="font-size: 18px; padding-bottom: 10px;">' + params[0].name + '</div>';
+			for (var param of params) {
+				moseoverName = param.seriesName;
+				formatResult += param.marker + '  ' + echart_UtilOverflowTruncate(moseoverName) 
+							 + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(param.data) + '</strong><br/>';
+			}
+		
+		// params가 배열이 아닌 경우
 		} else {
-			if (params.seriesName.length > maxlength) {
-				truncateSeriesName = params.seriesName.substr(0,maxlength) + '...';
-			} else {
-				truncateSeriesName = params.seriesName
-			}
+			
+			//포맷팅
+			mouseoverName = params.seriesName;
+			formatResult = params.marker + '  ' + echart_UtilOverflowTruncate(mouseoverName) + '<br/>'
+						 + xName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(params.value[0]) + '</strong><br/>'
+						 + yName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(params.value[1]) + '</strong><br/>';
 		}
-		formatResult = params.marker + '  ' + truncateSeriesName + '<br/>'
-				       + xName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(params.value[0]) + '</strong><br/>'
-				       + yName + '<strong style="float: right; padding-left: 20px;">' + echart_UtilMakePattern(params.value[1]) + '</strong><br/>';
 	}
-	// console.log(testFormat);
+	
 	return formatResult;
 }
