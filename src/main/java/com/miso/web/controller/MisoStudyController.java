@@ -420,27 +420,6 @@ public class MisoStudyController {
 		return "/projects/misostudy/chartBoard";
 	}
 	
-//	@RequestMapping(value = "/projects/misostudy/getChartData", method = RequestMethod.POST)
-//	public @ResponseBody String getChartData(Model model) {
-//		
-//		String testData = "["
-//		       		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"United States of America\", \"seriesValues\" : [3217, 3806, 4369, 4474, 4481, 5037, 5104, 6139, 6441, 6139, 2375]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Japan\", \"seriesValues\" : [822, 865, 852, 964, 874, 952, 830, 923, 935, 823, 326]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Korea, Republic\", \"seriesValues\" : [418, 502, 595, 836, 922, 1071, 933, 990, 1105, 1027, 430]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"China\", \"seriesValues\" : [101, 125, 179, 224, 254, 341, 329, 505, 479, 579, 335]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Taiwan\", \"seriesValues\" : [292, 301, 336, 328, 316, 328, 298, 319, 304, 291, 130]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Germany\", \"seriesValues\" : [170, 190, 232, 252, 214, 295, 320, 426, 420, 328, 121]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"United Kingdom\", \"seriesValues\" : [56, 77, 103, 121, 138, 160, 180, 232, 228, 207, 85]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"France\", \"seriesValues\" : [97, 124, 125, 156, 135, 165, 164, 193, 182, 157, 59]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Netherlands\", \"seriesValues\" : [110, 133, 151, 174, 158, 147, 149, 134, 144, 118, 58]}},"
-//		    		+	"{\"xValues\" : [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022], \"yValue\" : {\"legendValue\" : \"Switzerland\", \"seriesValues\" : [67, 107, 97, 105, 111, 137, 128, 143, 148, 133, 70]}}"
-//		    		+ "]";
-//		
-//		// System.out.println(testData);
-//		
-//		return testData;
-//	}
-	
 	@RequestMapping(value = "/projects/misostudy/chartBarAndLine", method = RequestMethod.POST)
 	public @ResponseBody List<List<ChartBarAndLineVo>> getChartDataBarAndLine() {
 		List<List<ChartBarAndLineVo>> testDataList =  new ArrayList<List<ChartBarAndLineVo>>();
@@ -813,5 +792,10 @@ public class MisoStudyController {
 	@RequestMapping(value = "/projects/misostudy/chartBoard2", method = RequestMethod.GET)
 	public String chartBoard2Init(Model model) {
 		return "/projects/misostudy/chartBoard2";
+	}
+	
+	@RequestMapping(value = "/projects/misostudy/chartBoardExcelJs", method = RequestMethod.GET)
+	public String chartBoardExcelJsInit(Model model) {
+		return "/projects/misostudy/chartBoardExcelJs";
 	}
 }

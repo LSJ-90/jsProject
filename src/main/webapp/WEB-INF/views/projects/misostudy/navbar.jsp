@@ -12,6 +12,7 @@
 				<li class="nav-item"><a class="nav-link" href="/projects/misostudy/boardList">게시판</a></li>
 				<li class="nav-item"><a class="nav-link" href="/projects/misostudy/chartBoard">차트게시판</a></li>
 				<li class="nav-item"><a class="nav-link" href="/projects/misostudy/chartBoard2">차트게시판2</a></li>
+				<li class="nav-item"><a class="nav-link" href="/projects/misostudy/chartBoardExcelJs">차트게시판3</a></li>
 			</ul>
 			<c:choose>
 				<c:when test="${!empty LOGIN_USER}">

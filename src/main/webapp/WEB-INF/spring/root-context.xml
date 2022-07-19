@@ -26,6 +26,11 @@
 <!-- 		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/> -->
 <!-- 		<property name="username" value="hr"/> -->
 <!-- 		<property name="password" value="qwer1234"/> -->
+
+<!-- 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/> -->
+<!-- 		<property name="url" value="jdbc:log4jdbc:oracle:thin:@203.250.196.166:1521:VKISTI2"/> -->
+<!-- 		<property name="username" value="compas"/> -->
+<!-- 		<property name="password" value="Compas+2011"/> -->
 	</bean>	
 	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
