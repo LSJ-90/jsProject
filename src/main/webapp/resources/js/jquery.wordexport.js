@@ -14,7 +14,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
             };
             // Clone selected element before manipulating it
             var markup = $(this).clone();
-
+            
             // Remove hidden elements from the output
             markup.each(function() {
                 var self = $(this);
