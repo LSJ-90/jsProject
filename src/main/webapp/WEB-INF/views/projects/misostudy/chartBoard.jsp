@@ -23,13 +23,16 @@
 		<%@include file="signInForm.jsp" %>
 		<%@include file="signUpForm.jsp" %>
 	</header>
-	<div id="testExportDoc" class="container">
-<!-- 	<input id="patent_number"> -->
+	
 	<button id="wordDownBtn">워드다운</button>
 	<button id="excelDownBtn">엑셀다운</button>
+	
+	<%@include file="docHeaderFile.jsp" %>
+	<div class="container testExportDoc">
 		<h2 id="testContentTitle" style="padding:0px 0; font-weight:bold; font-size:17px; color:#333;">1.연도별 특허 수</h2>
 		<p style="margin:0; padding:0; text-align:center; font-weight:bold;">표 1. 연도별 특허 수</p>
-		<table id="testTable1" class="testTable_1" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
+		<table class="testExportExcel" id="testTable1" class="testTable_1" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
+			<caption>He-Man and Skeletor facts</caption>
 			<tr>
 				<th width="25%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">연도</th>
 				<th width="25%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">특허 수</th>
@@ -114,14 +117,15 @@
 				<td style="border:1px solid #666; text-align:center; padding:2px 0;">430</td>
 			</tr>
 		</table>
+		
 		<p>그림 1. 연도별 특허 출원 추이</p>
 		<div class="echart" id="chartTest1"></div>
-		<div class="testImg"></div>
+		
 		
 		<h2 style="padding:0px 0; font-weight:bold; font-size:17px; color:#333;">2. 출원인 국적별 분석 (특허권 보유 국가 분석)</h2>
 		<h3 style="padding:0px 0; font-weight:bold; font-size:14px; color:#333;">2-1. 출원인 국적별 특허 수</h3>
 		<p style="margin:0; padding:0; text-align:center; font-weight:bold;">표 2. 출원인 국적별 특허 수</p>
-		<table id="testTable2" class="testTable_2" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
+		<table class="testExportExcel" id="testTable2" class="testTable_2" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
 			<tr>
 				<th width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">순위</th>
 				<th width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">출원인 국적</th>
@@ -203,11 +207,11 @@
 		
 		<p>그림 2. 출원인 국적별 특허 수</p>
 		<div class="echart" id="chartTest2"></div>
-		<div class="testImg"></div>
+		
 		
 		<h3 style="padding:0px 0; font-weight:bold; font-size:14px; color:#333;">2-2. 출원인 국적별 연도별 특허 수</h3>
 		<p style="margin:0; padding:0; text-align:center; font-weight:bold;">표 3. 출원인 국적별 연도별 특허 수</p>
-		<table id="testTable3" class="testTable_2" width="100%" border="1" bordercolor="#666666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
+		<table class="testExportExcel" id="testTable3" class="testTable_2" width="100%" border="1" bordercolor="#666666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
 			<tr>
 				<th style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">연도</th>
 
@@ -530,9 +534,9 @@
 		
 		<p>그림 3. 출원인 국적별 연도별 특허 수</p>
 		<div class="echart" id="chartTest3"></div>
-		<div class="testImg"></div>
 		
-		<table id="testTable4" class="testTable_3" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
+		
+		<table class="testExportExcel" id="testTable4" class="testTable_3" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
 			<tr>
 				<th width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">출원인 국적</th>
 				<th width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">특허 수</th>
@@ -636,10 +640,10 @@
 		
 		<p>그림 4. 출원인 국적별 활동도 지수</p>
 		<div class="echart" id="chartTest4"></div>
-		<div class="testImg"></div>
+		
 		
 		<p style="margin:0; padding:0; text-align:center; font-weight:bold;">표 5. 출원인 국적별 이끌림 지수</p>
-		<table id="testTable5" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
+		<table class="testExportExcel" id="testTable5" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
 			<tr>
 				<th width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">출원인 국적</th>
 				<th width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">특허 피인용 수</th>
@@ -743,10 +747,10 @@
 		
 		<p>그림 5. 출원인 국적별 이끌림 지수</p>
 		<div class="echart" id="chartTest5"></div>
-		<div class="testImg"></div>
+		
 		
 		<p style="margin:0; padding:0; text-align:center; font-weight:bold;">표 6. 출원인 국적별 특허 수준 지수</p>
-		<table id="testTable6" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">	
+		<table class="testExportExcel" id="testTable6" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">	
 			<tr>
 				<th width="40%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">국가</th>
 				<th width="20%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">특허 수</th>
@@ -828,14 +832,13 @@
 		
 		<p>그림 6. 출원인 국적별 특허 수준 지수</p>
 		<div class="echart" id="chartTest6"></div>
-		<div class="testImg"></div>
+		
 		
 		<p>그림 7. 출원인 국적별 특허 수 대비 수준 지수</p>
 		<div class="echart" id="chartTest7"></div>
-		<div class="testImg"></div>
 		
 		<p style="margin:0; padding:0; text-align:center; font-weight:bold;">표 7. 출원인 국적별 평균 패밀리 크기</p>
-		<table id="testTable7" width="100%" border="1" bordercolor="#666666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">	
+		<table class="testExportExcel" id="testTable7" width="100%" border="1" bordercolor="#666666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">	
 			<tr>
 				<th width="40%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">국가</th>
 				<th width="20%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">특허 수</th>
@@ -917,399 +920,17 @@
 		
 		<p>그림 8. 특허 수 대비 평균 패밀리 크기</p>
 		<div class="echart" id="chartTest8"></div>
-		<div class="testImg"></div>
-		
-		<p style="margin:0; padding:0; text-align:center; font-weight:bold;">표 8. 출원인별 특허 수</p>
-		<table id="testTable8" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">	
-			<tr>
-				<th width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">순위</th>
-				<th width="50%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">출원인</th>
-				<th width="20%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">특허 수</th>
-				<th width="20%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">비중 (%)</th>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">1</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">SAMSUNG ELECTRONICS CO LTD</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">2,651</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">2.85</td>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">2</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">IBM</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">1,967</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">2.12</td>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">3</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">AT & T IP I LP</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">1,719</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">1.85</td>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">4</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">INTEL CORP</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">902</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">0.97</td>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">5</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">UNIV CALIFORNIA</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">834</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">0.9</td>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">6</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">SAMSUNG DISPLAY CO LTD</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">825</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">0.89</td>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">7</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">GENENTECH INC</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">623</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">0.67</td>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">8</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">AT & T MOBILITY II LLC</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">581</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">0.62</td>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">9</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">MASSACHUSETTS INST TECHNOLOGY</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">560</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">0.6</td>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">10</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">TAIWAN SEMICONDUCTOR MFG</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">499</td>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">0.54</td>
-			</tr>
-
-		</table>
 		
 		<p>그림 9. 출원인별 특허 수</p>
 		<div class="echart" id="chartTest9"></div>
-		<div class="testImg"></div>
 		
-		<p style="margin:0; padding:0; text-align:center; font-weight:bold">표 9. 출원인별 연도별 특허 수 </p>
-		<table id="testTable9" width="100%" border="1" bordercolor="666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
-			<tr>
-				<th style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">연도</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2012</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2013</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2014</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2015</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2016</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2017</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2018</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2019</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2020</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2021</th>
-
-				<th width="7.407407407407407%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">총합</th>
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">SAMSUNG ELECTRONICS CO LTD</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">137</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">168</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">203</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">287</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">322</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">338</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">293</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">263</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">320</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">320</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">2,651</td>
-
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">IBM</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">88</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">104</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">140</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">126</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">102</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">166</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">203</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">287</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">388</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">363</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">1,967</td>
-
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">AT & T IP I LP</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">9</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">21</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">44</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">47</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">74</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">143</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">228</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">358</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">457</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">338</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">1,719</td>
-
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">INTEL CORP</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">24</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">25</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">20</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">33</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">52</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">92</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">83</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">197</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">173</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">203</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">902</td>
-
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">UNIV CALIFORNIA</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">63</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">81</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">98</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">89</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">68</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">89</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">70</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">75</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">104</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">97</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">834</td>
-
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">SAMSUNG DISPLAY CO LTD</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">4</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">24</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">34</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">52</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">59</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">103</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">83</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">108</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">159</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">199</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">825</td>
-
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">GENENTECH INC</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">65</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">77</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">65</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">46</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">58</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">62</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">80</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">50</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">59</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">61</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">623</td>
-
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">AT & T MOBILITY II LLC</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">29</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">38</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">70</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">72</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">67</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">72</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">71</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">61</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">65</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">36</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">581</td>
-
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">MASSACHUSETTS INST TECHNOLOGY</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">47</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">54</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">68</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">51</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">70</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">47</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">56</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">60</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">45</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">62</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">560</td>
-
-			</tr>
-
-			<tr>
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">TAIWAN SEMICONDUCTOR MFG</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">9</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">17</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">16</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">23</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">41</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">75</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">70</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">74</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">79</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">95</td>
-
-				<td style="border:1px solid #666; text-align:center; padding:2px 0;">499</td>
-
-			</tr>
-
-		</table>
 		
 		<p>그림 10. 출원인별 연도별 특허 수</p>
 		<div class="echart" id="chartTest10"></div>
-		<div class="testImg"></div>
 		
 		<p style="margin:0; padding:0; text-align:center; font-weight:bold;">표 10. 출원인별 활동도 지수</p>
-		<table id="testTable10" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
+		<table class="testExportExcel" id="testTable10" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
+			
 			<tr>
 				<th width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">출원인</th>
 				<th width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">특허 수</th>
@@ -1413,27 +1034,152 @@
 		
 		<p>그림 11. 출원인별 활동도 지수</p>
 		<div class="echart" id="chartTest11"></div>
-		<div class="testImg"></div>
+		
 		
 		<p>그림 12. 출원인별 이끌림 지수</p>
 		<div class="echart" id="chartTest12"></div>
-		<div class="testImg"></div>
+		
+	</div> 
+	
+	<!-- test space start-->
+	<div class="container">
+		<h2 style="padding:0px 0; font-weight:bold; font-size:17px; color:#333;">1. Phân tích IPC theo đối thủ cạnh tranh</h2>
+		<h3 style="padding:0px 0; font-weight:bold; font-size:14px; color:#333;">1-1. Trạng thái IPC theo đối thủ cạnh tranh (toàn diện)</h3>
+		<p style="margin:0; padding:0; text-align:center; font-weight:bold;">Bảng 2. Trạng thái IPC theo đối thủ cạnh tranh</p>
+		<table class="testExportExcel" width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
+			<colgroup>
+				<col />
+				<col />
+				<col />
+				<col />
+	
+				<col width="16%" />
+	
+				<col width="16%" />
+	
+				<col width="16%" />
+	
+			</colgroup>
+			<tr>
+				<th rowspan="2" width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">IPC</th>
+				<th rowspan="2" width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">Số bằng sáng chế của tất cả những người được chuyển giao trong lĩnh vực công nghệ</th>
+				<th rowspan="2" width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">Tổng số bằng sáng chế của đối thủ cạnh tranh chính</th>
+				<th rowspan="2" width="10%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">Thị phần bằng sáng chế của đối thủ cạnh tranh chính(%)</th>
+				<th colspan="3" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">Đối thủ chính</th>
+			</tr>
+			<tr>
+	
+				<th width="6%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">1</th>
+	
+				<th width="6%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">2</th>
+	
+				<th width="6%" style="border:1px solid #666; text-align:center; font-weight:bold; padding:2px 0; background:#F0F0F0;">3</th>
+	
+			</tr>
+	
+			<tr>
+	
+			<td style="border:1px solid #666; text-align:center; padding:2px 0; font-weight:bold" title="">Total</td>
+	
+				
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >20,412</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >6,791</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;">33.27</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >4,436</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >1,159</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >1,196</td>
+	
+			</tr>
+	
+			<tr>
+	
+			<td style="border:1px solid #666; text-align:center; padding:2px 0; font-weight:bold" title="">G06F</td>
+	
+				
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >3,675</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >1,425</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;">38.78</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >1,125</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >102</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >198</td>
+	
+			</tr>
+	
+			<tr>
+	
+			<td style="border:1px solid #666; text-align:center; padding:2px 0; font-weight:bold" title="">G21K</td>
+	
+				
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >4</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >1</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >25</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >0</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >1</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >0</td>
+	
+			</tr>
+	
+			<tr>
+	
+			<td style="border:1px solid #666; text-align:center; padding:2px 0; font-weight:bold" title="">G09C</td>
+	
+				
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >1</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >1</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >100</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >1</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >0</td>
+	
+				<td style="border:1px solid #666; text-align:center; padding:2px 0;" >0</td>
+	
+			</tr>
+	
+		</table>
 		
 		<p>그림 13. 출원인별 특허 수준 지수</p>
 		<div class="echart" id="chartTest13"></div>
-		<div class="testImg"></div>
+		
 		
 		<p>그림 14. 출원인별 특허 수 대비 수준 지수</p>
 		<div class="echart" id="chartTest14"></div>
-		<div class="testImg"></div>
+		
+	</div>
+	<!-- test space end -->
+	
+	<div class="container testExportDoc">
+		<input type="hidden" value="1231313132">
+		<%@ include file="./NewFile.jsp" %>
 		
 		<p>그림 15. 특허 수 대비 평균 패밀리 크기(출원인별)</p>
 		<div class="echart" id="chartTest15"></div>
-		<div class="testImg"></div>
 		
 		<p>그림 16. 피인용 수에 따른 특허 수의 분포</p>
 		<div class="echart" id="chartTest16"></div>
-		<div class="testImg"></div>
+		
+		<%@ include file="./NewFile2.jsp" %>
 	</div>
 	
 	<!-- bootstrap -->
@@ -1442,14 +1188,13 @@
 	<!-- jquery.wordexport -->
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<script type="text/javascript" src="/resources/js/FileSaver.js"></script>
-	<script type="text/javascript" src="/resources/js/jquery.wordexport.js"></script>
+<!-- 	<script type="text/javascript" src="/resources/js/jquery.wordexport.js"></script> -->
+	<script type="text/javascript" src="/resources/js/word.export.js"></script>
 	
-	<!-- xlsx, sheetJS -->
+	<!-- xlsx(sheetJS) -->
 <!-- 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
-<!-- 	<script type="text/javascript" src="/resources/js/shim.min.js"></script> -->
-<!-- 	<script type="text/javascript" src="/resources/js/xlsx.full.min.js"></script> -->
-	<script type="text/javascript" src="/resources/js/xlsx.bundle.js"></script>
-	<script type="text/javascript" src="/resources/js/xlsx.personal.util.js"></script>
+	<script type="text/javascript" src="/resources/js/xlsx.export.js"></script>
+	<script type="text/javascript" src="/resources/js/xlsx.export.util.js"></script>
 	
 	<!-- echarts -->
 <!-- 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script> -->
@@ -1459,58 +1204,30 @@
        
 		// EXPORT DOC TEST CODE
 		$("#wordDownBtn").click(function() {
-        	var myPromise = new Promise(function(resolve, reject) {
-        		// echarts tooltip div 내용 비우기
-        		$(".echart").each(function() {
-       				console.log($(this).children());
-					$(this).children().last().empty();
-				});
-        		
-        		// canvas로  라이브러리에 보낼 temp Image 만들기
-        		var canvas = document.getElementsByTagName("canvas");
-	        	var classCharts = document.getElementsByClassName("testImg");
-	        	for (var i=0; i<canvas.length; i++) {
-	        	    var tempImg = new Image();
-	        		tempImg.src = canvas[i].toDataURL();
-	        		tempImg.width = 800;
-	        		tempImg.height = 500;
-	        		classCharts[i].append(tempImg);
-	        	}
-	        	//TODO: 
-	        	resolve();
-	        	reject();
-       		});
-        		 
-       		myPromise.then(function() {
-       			// export 실행
-       			$("#testExportDoc").wordExport();
-       			
-       			// temp Image 삭제
-       			var tempImgs = $("#testExportDoc").find("img");
-   		        if (tempImgs.length > 0) {
-   		            for (var i=0; i<tempImgs.length; i++) {
-   		            	tempImgs[i].remove();
-   		        	}
-   				}
-       		});
+    		// export할 부분 전부 가져오기
+    		var exportDoms = $(".testExportDoc");
+        	
+    		// doc export
+    		exportDoc(exportDoms, "테스트 워드파일");
+    		
         });
-		
 		
 		// EXPORT EXCEL TEST CODE
 		$("#excelDownBtn").click(function() {
-			var tableDomArray = document.getElementsByTagName("table");
-			console.log(document.getElementsByTagName("table"));
+			var tableDomArr = $(".testExportExcel");
+			console.log(tableDomArr);
 			
 			var sheetArr = [
-				{"name" : "시트 첫 번 째", "value" : excelHandler.getWorksheetBySingleTable(tableDomArray[0])},
-				{"name" : "시트 두 번 째", "value" : excelHandler.getWorksheetByMultipleTable([tableDomArray[1], tableDomArray[2], tableDomArray[3], tableDomArray[4]])},
-				{"name" : "시트 세 번 째", "value" : excelHandler.getWorksheetByMultipleTable([tableDomArray[5], tableDomArray[6], tableDomArray[7]])},
-				{"name" : "시트 네 번 째", "value" : excelHandler.getWorksheetBySingleTable(tableDomArray[8])},
-				{"name" : "시트 다섯 번 째", "value" : excelHandler.getWorksheetBySingleTable(tableDomArray[9])},
-				{"name" : "시트 여섯 번 째", "value" : excelHandler.getWorksheetBySingleTable(tableDomArray[3])}
+ 				{"name" : "시트 첫 번 째", "value" : createSheet([tableDomArr[0]])},
+ 				{"name" : "시트 두 번 째", "value" : createSheet([tableDomArr[1], tableDomArr[2], tableDomArr[3], tableDomArr[4]])},
+ 				{"name" : "시트 세 번 째", "value" : createSheet([tableDomArr[5], tableDomArr[6], tableDomArr[7]])},
+ 				{"name" : "시트 네 번 째", "value" : createSheet([tableDomArr[8]])},
+ 				{"name" : "시트 다섯 번 째", "value" : createSheet([tableDomArr[9], tableDomArr[8], tableDomArr[9], tableDomArr[10]])},
+ 				{"name" : "시트 여섯 번 째", "value" : createSheet([tableDomArr[3]])},
+				{"name" : "시트 일곱 번 째", "value" : createSheet([tableDomArr[10], tableDomArr[9]])}
 			];
 			
-			excelFileExport(sheetArr);
+			exportExcel(sheetArr);
 		});
 		
 		/*
