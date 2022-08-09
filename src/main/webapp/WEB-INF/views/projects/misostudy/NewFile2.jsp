@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <p style="margin:0; padding:0; text-align:center; font-weight:bold;">표 18. 고 피인용 특허 목록</p>
-	<table class="testExportExcel" width="100%" border="1" bordercolor="#666666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
+	<table class="testExportExcel5" width="100%" border="1" bordercolor="#666666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
 		<colgroup>
 			<col width="10%" />
 			<col />

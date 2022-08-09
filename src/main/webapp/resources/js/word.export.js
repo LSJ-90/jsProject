@@ -4,7 +4,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
      * wordExport: DOC파일로 내보내는 메서드
      */
 	(function($) {
-        $.fn.wordExport = function(fileName) {
+        $.fn.wordExport = function(coverpage, fileName) {
             fileName = typeof fileName !== 'undefined' ? fileName : "jQuery-Word-Export";
             var defalut = {
                 mhtml: {
@@ -22,7 +22,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
             for (var i=0; i<$(this).length; i++) {
             	markup.push($(this).eq(i).clone());
             }
-            // console.log(markup);
+            console.log(markup);
             
             // Remove hidden elements from the output
             for (var i=0; i<markup.length; i++) {
@@ -85,16 +85,16 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
             var styles = "";
             
             // Aggregate parts of the file together 
-            var markupHtml = "";
+            var markupHtml = coverpage;
             for (var i=0; i<markup.length; i++) {
             	markupHtml += markup[i].html();
             }
-            // console.log(markupHtml);
-            
+            console.log(markupHtml);
+         
             var fileContent = defalut.mhtml.top.replace("_html_", defalut.mhtml.head.replace("_styles_", styles) 
             			    + defalut.mhtml.body.replace("_body_", markupHtml)) 
             			    + mhtmlBottom;
-            
+            console.log(fileContent);
             // Create a Blob with the file contents
             var blob = new Blob([fileContent], {type: "application/msword;charset=utf-8"});
             saveAs(blob, fileName + ".doc");
@@ -106,7 +106,8 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
      * 		- exportDomArr: export할 DOM의 배열
      * 		- fileNm: 파일명
      */
-    function exportDoc(exportDomArr, fileNm) {
+    function exportDoc(exportDomArr, coverpage, fileNm) {
+    	console.log(coverpage);
 		var exportPromise = new Promise(function(resolve, reject) {
     		// export할 div 내의 echart가 그려진 canvas태그 찾기
     		var canvas = exportDomArr.find("canvas");
@@ -120,19 +121,20 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
         		tempImg.height = 400;
         		canvas[i].append(tempImg);
         	}
-    		//TODO: 
-        	resolve();
+        	resolve(coverpage);
+        	//TODO: reject()
         	reject();
    		});
     		 
     	exportPromise
-    	.then(function() {
+    	.then(function(coverpage) {
    			// export 실행
-   			exportDomArr.wordExport(fileNm);
+			exportDomArr.wordExport(coverpage, fileNm);
    			// temp Image 삭제
 		    exportDomArr.find("img").remove();
 			// console.log(tempImgs);
    		})
+   		//TODO: reject()
    		.catch(function() {
    			
    		});
