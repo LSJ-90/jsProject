@@ -134,15 +134,24 @@ var optionUtils = {
 //    	}
 //	},	
 	
-	fill_color_headers : function(sheet) {
+	fill_color_headers : function(sheet, rowspanMaxArr) {
 		var column = "Z";
 		var row = -1;
 		var isHeader = false;
+		var fullRef = XLSX.utils.decode_range(sheet["!fullref"]);
+		var lastProperty = XLSX.utils.encode_cell(fullRef.e);
+		var headerPropertyArr = new Array();
 		
 		for (var property in sheet) { 
+			
+			if (property == lastProperty) {
+				break;
+			}
+			
+			var p_row = Number(property.match("[0-9]+")); 
+			
 			var p_column;
 			var array_column = property.match("[A-Z]+");
-			var p_row = Number(property.match("[0-9]+")); 
 			
 			if (array_column != null && p_row != null) {
 				p_column = array_column[0];
@@ -157,20 +166,24 @@ var optionUtils = {
 					isHeader = true;
 				}
 				
-				console.log("sheet: ", sheet);
-				console.log("property: ", property);
-				console.log("column: ", column);
-				console.log("p_column: ", p_column);
-				console.log("row: ", row);
-				console.log("p_row: ", p_row);
-				console.log("isHeader: ", isHeader);
-				console.log("column != p_column: ", column != p_column);
-				console.log("-----------------------------");
+//				console.log("sheet: ", sheet);
+//				console.log("property: ", property);
+//				console.log("array_column: ", array_column);
+//				console.log("column: ", column);
+//				console.log("p_column: ", p_column);
+//				console.log("row: ", row);
+//				console.log("p_row: ", p_row);
+//				console.log("isHeader: ", isHeader);
+//				console.log("column != p_column: ", column != p_column);
+//				console.log("-----------------------------");
 				
 				if (isHeader) {
 					sheet[property].s = {
 		    			fill: {
 			    			fgColor: { rgb: "DCDCDC" } 
+				    	},
+				    	font: {
+				    		bold: true
 				    	},
 				    	alignment: {
 				    		horizontal: 'center',
@@ -190,16 +203,14 @@ var optionUtils = {
 		 		            	color: '000000',
 		 		          	},
 		 		          	bottom: {
-		 		            	style: 'thick',
+		 		            	style: 'thin',
 		 		            	color: '000000',
 		 		          	}
 		 		        }
 			    	}
 				}
-				
 				row = p_row;
 				column = p_column;
-				
 			}
     	}
 	},	

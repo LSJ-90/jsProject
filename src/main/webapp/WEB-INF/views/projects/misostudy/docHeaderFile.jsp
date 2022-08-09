@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<div class="container testExportDoc">
+<div class="container">
 	<div style="position:relative;">
 		<p class=MsoNormal align=center style='margin-left:.05pt;text-align:center'><a name="project_name"></a><span lang=EN-US style='font-size:20.0pt'>&nbsp;</span></p>
 		<p class=MsoNormal align=center style='text-align:center'><span style='font-size:20.0pt'>sampleTest10에 대한</span></p>
@@ -22,6 +22,8 @@
 		<p class=MsoNormal align=center style='text-align:center'><span style='font-size:20.0pt'>한국과학기술정보연구원</span></p>
 		<p class=MsoNormal align=center style='text-align:center'><span style='font-size:20.0pt'>데이터분석본부 미래기술분석센터</span></p>
 	</div>
+	<br style="page-break-before:always"><br/>
+	
 	<div>
 		<table width="100%" border="1" bordercolor="#666" cellspacing="0" cellpadding="0" style="border:1px solid #666; border-collapse:collapse;">
 			<tr><th  style="border:1px solid #666; background:#F0F0F0; padding:10px; font-size:18px; font-weight:bold;">목차</th></tr>
@@ -54,4 +56,5 @@
 		</table>
 	</div>
 	<div style="height:50px;"></div>
+	<br clear="all" style="mso-special-character:line-break;page-break-before:always">
 </div>

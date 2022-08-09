@@ -798,4 +798,9 @@ public class MisoStudyController {
 	public String chartBoardExcelJsInit(Model model) {
 		return "/projects/misostudy/chartBoardExcelJs";
 	}
+	
+	@RequestMapping(value = "/projects/misostudy/docHeaderFile", method = RequestMethod.GET)
+	public String docHeaderFileInit(Model model) {
+		return "/projects/misostudy/docHeaderFile";
+	}
 }
