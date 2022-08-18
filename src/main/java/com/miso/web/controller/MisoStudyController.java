@@ -800,7 +800,7 @@ public class MisoStudyController {
 	}
 	
 	@RequestMapping(value = "/projects/misostudy/docHeaderFile", method = RequestMethod.GET)
-	public String docHeaderFileInit(Model model) {
+	public String docHeaderFileInit() {
 		return "/projects/misostudy/docHeaderFile";
 	}
 }

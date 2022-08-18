@@ -1039,7 +1039,7 @@
     		
     		// doc export
     		$.get("/projects/misostudy/docHeaderFile", function(coverpage) {
-	   			exportDoc(exportDomArr, coverpage, "모델3파일입니다");
+	   			exportDoc(exportDomArr, coverpage, "WORD_SAMPLE");
         	});
         });
 		
@@ -1082,7 +1082,7 @@
 			optionUtils.set_fit_columns(sheetArr, 50);
 			
 			// excel export
-			exportExcel(sheetArr, "TEST");
+			exportExcel(sheetArr, "EXCEL_SAMPLE");
 		});
 		
 		/*
